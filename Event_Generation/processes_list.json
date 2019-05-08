@@ -5,7 +5,7 @@
         "Abbr": "tt",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > t t~, ( t > b w+, w+ > l+ vl ), ( t~ > b~ w-, w- > l- vl~ )"],
-        "CS": -999.0
+        "CS": 1.1709
     },
     {
         "Name": "bkg_VBF_wz_bbll",
@@ -13,7 +13,7 @@
         "Abbr": "wz",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve e+ w- z, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z, w+ > l+ vl, z > b b~"],
-        "CS": -999.0
+        "CS": 2.713
     },
     {
         "Name": "bkg_VBF_zz_bbll",
@@ -21,7 +21,7 @@
         "Abbr": "zz",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > b b~"],
-        "CS": -999.0
+        "CS": 2.0686
     },
     {
         "Name": "bkg_VBF_zz_tatall",
@@ -29,7 +29,7 @@
         "Abbr": "zz",
         "Decay" : "tatall",
         "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > ta- ta+"],
-        "CS": -999.0
+        "CS": 0.4610
     },
     {
         "Name": "ee_VBF_wh_InterOnly",
@@ -37,7 +37,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHWW^2==1 CHZZ^2==1","e- e+ > w- > ve e+ l- vl~ h  CHWW^2==1 CHZZ^2==1"],
-        "CS": -999.0
+        "CS": -97.3915
     },
     {
         "Name": "ee_VBF_wh_WOnly",
@@ -45,7 +45,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHZZ==0", "e- e+ > w- > ve e+ l- vl~ h CHZZ==0"],
-        "CS": -999.0
+        "CS": 71.924
     },
     {
         "Name": "ee_VBF_wh_ZOnly",
@@ -53,7 +53,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHWW==0","e- e+ > w- > ve e+ l- vl~ h CHWW==0"],
-        "CS": -999.0
+        "CS": 54.9895
     },
     {
         "Name": "ee_VBF_zh_InterOnly",
@@ -61,7 +61,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHWW^2==1 CHZZ^2==1"],
-        "CS": -999.0
+        "CS": -31.631
     },
     {
         "Name": "ee_VBF_zh_WOnly",
@@ -69,7 +69,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHZZ==0"],
-        "CS": -999.0
+        "CS": -27.554
     },
     {
         "Name": "ee_VBF_zh_ZOnly",
@@ -77,7 +77,8 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHWW==0"],
-        "CS": -999.0
+        "CS": 20.007
     }
-  ]
+  ],
+"Description": "sqrts=3TeV, P(e-)=-0.8, P(e+)=0.0"
 }
