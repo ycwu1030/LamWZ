@@ -1,0 +1,14 @@
+*.root
+*.o
+*.x
+.DS_Store
+*.x.dSYM
+*~
+Event_Generation/bkg*/
+Event_Generation/ee_VBF*/
+Event_Generation/py.py
+Event_Generation/tmp_madevent.dat
+Event_Generation/Events/bkg*/
+Event_Generation/Events/ee_VBF*/
+Event_Generation/Events/PreAna/
+Event_Generation/Events/Plots/
