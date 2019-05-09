@@ -35,14 +35,17 @@ parser.add_argument('-r',dest='flag_r',action='store_true') #Running the MG5
 parser.add_argument('-delphes',dest='flag_delphes',action='store_true')
 parser.add_argument('-channel',dest='decays',default='bbll')
 parser.add_argument('-i',dest='processfile',default='processes_list.json')
+parser.add_argument('-s',dest='selection',type=simplejson.loads,default='{}')
 args = parser.parse_args()
-# print(args)
+#print(args)
 
 flag_g = args.flag_g
 flag_r = args.flag_r
 flag_delphes = args.flag_delphes
 decays = args.decays
 processfile = args.processfile
+selection = args.selection
+MATCH=True
 
 with open(processfile,'r') as f:
     ProcessesList=(simplejson.load(f))['Processes']
@@ -65,6 +68,18 @@ if flag_r:
     for i in range(len(ProcessesList)):
         tag=time.strftime("%m%d_%H")
         Process=ProcessesList[i]
+        SECS=selection.keys()
+        if len(SECS) == 0:
+            MATCH=True
+        else:
+            for key in SECS:
+                if Process[key] == selection[key]:
+                    MATCH*=True
+                else:
+                    MATCH*=False
+        if not MATCH:
+            print 'Skip: ',Process['Name'],MATCH
+            continue
         if Process['Decay'] == 'None':
             Process['Decay'] = decays
         with open('tmp_madevent.dat','w') as MECOM:

@@ -27,9 +27,6 @@ void Analysis(int i);
 void LoadingRootFile(TChain *ch,string InputDir,int id);
 int main(int argc, char const *argv[])
 {
-// Usage:
-// ./TauPlot config_file
-// In the configure file, it indicates the files that will be used to draw the plot.
 // Set Plot Style;
 	SetPlotStyle();
     TChain *ch = new TChain("LamWZPreAna");
@@ -164,7 +161,7 @@ int main(int argc, char const *argv[])
     ssttop>>dirtop;
     cout<<dirtop<<endl;
     createdir(dirtop.c_str());
-	sst<<dirtop<<"/Plots_LamWZ";
+	sst<<dirtop<<"/Plots_LamWZ_0508_1152";
 	sst>>dir;
 	createdir(dir.c_str());
 

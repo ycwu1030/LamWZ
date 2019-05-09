@@ -1,6 +1,7 @@
 *.root
 *.o
 *.x
+*.log
 .DS_Store
 *.x.dSYM
 *~
