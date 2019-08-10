@@ -87,5 +87,9 @@ with open(ProcessesFile,'r') as f:
             with open(Outdir+'/events_proc_%d.dat'%(processID),'r') as log:
                 nevents = log.read()
             process['NEvents']+=int(nevents)
+            try:
+                os.remove(Outdir+'/events_proc_%d.dat'%(processID))
+            except OSError:
+                pass
     with open(Outdir+'/processes_in_this_dict.json','w') as logall:
         simplejson.dump(ProcessesList,logall)
