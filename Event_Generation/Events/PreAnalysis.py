@@ -59,6 +59,7 @@ def GenerateFileName(rootdir,nameprefix):
             break
     return finalname
 
+ProcessesInfo={}
 with open(ProcessesFile,'r') as f:
     ProcessesList = (simplejson.load(f))['Processes']
     for process in ProcessesList:
@@ -78,6 +79,8 @@ with open(ProcessesFile,'r') as f:
             else:
                 BRall = BRall*BRZll
             CS=process['CS']*BRall
+        if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != mode_str
+            continue
         for rootfile in rootfiles:
             filename=rootfile.split('/')[-1]
             RandomID=(filename.split('.')[0]).split('_')[-2:]
@@ -91,5 +94,7 @@ with open(ProcessesFile,'r') as f:
                 os.remove(Outdir+'/events_proc_%d.dat'%(processID))
             except OSError:
                 pass
+        if process['NEvents'] != 0:
+            ProcessesInfo['%d'%(processID)] = process
     with open(Outdir+'/processes_in_this_dict.json','w') as logall:
-        simplejson.dump(ProcessesList,logall)
+        simplejson.dump(ProcessesInfo,logall)
