@@ -83,7 +83,7 @@ with open(ProcessesFile,'r') as f:
             RandomID=(filename.split('.')[0]).split('_')[-2:]
             OutfilePrefix = '_'.join([process['Abbr'],process['BkgSigTag'],decay,RandomID[0],RandomID[1]])
             outfilename=GenerateFileName(Outdir,OutfilePrefix)
-            subprocess.call('%s %s %s %d %f'%(Analysis,rootfile,Outdir,outfilename,processID,CS,mode_int),shell=True)
+            subprocess.call('%s %s %s %s %d %f %d'%(Analysis,rootfile,Outdir,outfilename,processID,CS,mode_int),shell=True)
             with open(Outdir+'/events_proc_%d.dat'%(processID),'r') as log:
                 nevents = log.read()
             process['NEvents']+=int(nevents)
