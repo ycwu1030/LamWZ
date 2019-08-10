@@ -49,17 +49,22 @@ public :
    Double_t        ResonanceEta;
    Double_t        ResonancePhi;
    Double_t        ResonanceMass;
+   Double_t        VPT;
+   Double_t        VEta;
+   Double_t        VPhi;
+   Double_t        VMass;
+   Double_t        MET;
    Double_t        MET_Phi;
    Double_t        MET_Eta;
    Int_t           NBJet;
    Double_t        HT;
-   Double_t        MET;
    Int_t           NLep_Af;
    Int_t           NEle_Af;
+   Int_t           NMuon_Af;
    Double_t        Mbb;
    Double_t        Mll;
-   Double_t        Anglebl;
-   Double_t        dRbl;
+   Double_t        AnglebV;
+   Double_t        dRbV;
 
    // List of branches
    TBranch        *b_Cate;   //!
@@ -85,17 +90,22 @@ public :
    TBranch        *b_ResonanceEta;   //!
    TBranch        *b_ResonancePhi;   //!
    TBranch        *b_ResonanceMass;   //!
+   TBranch        *b_VPT;   //!
+   TBranch        *b_VEta;   //!
+   TBranch        *b_VPhi;   //!
+   TBranch        *b_VMass;   //!
+   TBranch        *b_MET;   //!
    TBranch        *b_MET_Phi;   //!
    TBranch        *b_MET_Eta;   //!
    TBranch        *b_NBJet;   //!
    TBranch        *b_HT;   //!
-   TBranch        *b_MET;   //!
    TBranch        *b_NLep_Af;   //!
    TBranch        *b_NEle_Af;   //!
+   TBranch        *b_NMuon_Af;   //!
    TBranch        *b_Mbb;   //!
    TBranch        *b_Mll;   //!
-   TBranch        *b_Anglebl;   //!
-   TBranch        *b_dRbl;   //!
+   TBranch        *b_AnglebV;   //!
+   TBranch        *b_dRbV;   //!
 
    LamWZPreAna(TTree *tree=0);
    virtual ~LamWZPreAna();
@@ -160,8 +170,8 @@ void LamWZPreAna::initialize(binning *bn)
    bn->add(50,0,1000,"MET","MET [GeV]",&MET);
    bn->add(50,0,400,"Mbb","M_{bb} [GeV]",&Mbb);
    bn->add(50,0,400,"Mll","M_{ll} [GeV]",&Mll);
-   bn->add(50,0,3.1415926,"Anglebl","#theta_{bl}",&Anglebl);
-   bn->add(50,0,10,"dRbl","#Delta R_{bl}",&dRbl);
+   bn->add(50,0,3.1415926,"Anglebl","#theta_{bl}",&AnglebV);
+   bn->add(50,0,10,"dRbl","#Delta R_{bl}",&dRbV);
 
 }
 
@@ -226,17 +236,22 @@ void LamWZPreAna::Init(TTree *tree)
    fChain->SetBranchAddress("ResonanceEta", &ResonanceEta, &b_ResonanceEta);
    fChain->SetBranchAddress("ResonancePhi", &ResonancePhi, &b_ResonancePhi);
    fChain->SetBranchAddress("ResonanceMass", &ResonanceMass, &b_ResonanceMass);
+   fChain->SetBranchAddress("VPT", &VPT, &b_VPT);
+   fChain->SetBranchAddress("VEta", &VEta, &b_VEta);
+   fChain->SetBranchAddress("VPhi", &VPhi, &b_VPhi);
+   fChain->SetBranchAddress("VMass", &VMass, &b_VMass);
+   fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_Phi", &MET_Phi, &b_MET_Phi);
    fChain->SetBranchAddress("MET_Eta", &MET_Eta, &b_MET_Eta);
    fChain->SetBranchAddress("NBJet", &NBJet, &b_NBJet);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
-   fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("NLep_Af", &NLep_Af, &b_NLep_Af);
    fChain->SetBranchAddress("NEle_Af", &NEle_Af, &b_NEle_Af);
+   fChain->SetBranchAddress("NMuon_Af", &NMuon_Af, &b_NMuon_Af);
    fChain->SetBranchAddress("Mbb", &Mbb, &b_Mbb);
    fChain->SetBranchAddress("Mll", &Mll, &b_Mll);
-   fChain->SetBranchAddress("Anglebl", &Anglebl, &b_Anglebl);
-   fChain->SetBranchAddress("dRbl", &dRbl, &b_dRbl);
+   fChain->SetBranchAddress("AnglebV", &AnglebV, &b_AnglebV);
+   fChain->SetBranchAddress("dRbV", &dRbV, &b_dRbV);
    Notify();
 }
 
