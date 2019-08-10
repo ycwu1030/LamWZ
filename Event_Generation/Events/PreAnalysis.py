@@ -25,10 +25,21 @@ BRWlv=0.2172
 BRhbb=0.5809
 BRhtata=0.06256
 
+parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
+parser.add_argument('-o',dest='outdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna')
+parser.add_argument('-m',dest='mode',default='wh')
+args = parser.parse_args()
+
 ProcessesFile="../processes_list.json"
 decay="bbll"
 Analysis='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAnalysis/LamWZPreAnalysis.x'
-Outdir='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna'
+Outdir=args.outdir
+mode_str=args.mode
+if mode_str == 'wh':
+    mode_int = 1
+else:
+    mode_int = 2
+
 if not os.path.exists(Outdir):
     os.makedirs(Outdir)
 
@@ -41,8 +52,8 @@ def GenerateFileName(rootdir,nameprefix):
     fileid=0
     finalname=''
     while not good:
-        finalname='%s/%s_%d.root'%(rootdir,nameprefix,fileid)
-        if finalname in rootfiles:
+        finalname='%s_%d.root'%(nameprefix,fileid)
+        if '%s/%s'%(rootdir,finalname) in rootfiles:
             fileid = fileid + 1
         else:
             break
@@ -52,8 +63,9 @@ with open(ProcessesFile,'r') as f:
     ProcessesList = (simplejson.load(f))['Processes']
     for process in ProcessesList:
         print "Processing process: ",process['Name']
+        process['NEvents']=0
         rootfiles = ListRootFiles(process['Name']+'/Delphes',decay)
-        ChannelID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
+        processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         if process['BkgSigTag'] == 'bkg':
             CS=process['CS']
         else:
@@ -71,4 +83,9 @@ with open(ProcessesFile,'r') as f:
             RandomID=(filename.split('.')[0]).split('_')[-2:]
             OutfilePrefix = '_'.join([process['Abbr'],process['BkgSigTag'],decay,RandomID[0],RandomID[1]])
             outfilename=GenerateFileName(Outdir,OutfilePrefix)
-            subprocess.call('%s %s %s %d %f'%(Analysis,rootfile,outfilename,ChannelID,CS),shell=True)
+            subprocess.call('%s %s %s %d %f'%(Analysis,rootfile,Outdir,outfilename,processID,CS,mode_int),shell=True)
+            with open(Outdir+'/events_proc_%d.dat'%(processID),'r') as log:
+                nevents = log.read()
+            process['NEvents']+=int(nevents)
+    with open(Outdir+'/processes_in_this_dict.json','w') as logall:
+        simplejson.dump(ProcessesList,logall)
