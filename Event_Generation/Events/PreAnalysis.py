@@ -79,7 +79,7 @@ with open(ProcessesFile,'r') as f:
             else:
                 BRall = BRall*BRZll
             CS=process['CS']*BRall
-        if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != mode_str
+        if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != mode_str:
             continue
         for rootfile in rootfiles:
             filename=rootfile.split('/')[-1]
