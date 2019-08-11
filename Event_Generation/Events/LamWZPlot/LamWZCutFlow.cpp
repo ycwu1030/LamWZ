@@ -40,21 +40,21 @@ int main(int argc, char const *argv[])
     LamWZPreAna *LamWZch = new LamWZPreAna(ch);
 //Setup the cuts to be scanned:
     CutList *CutsFlow = new CutList();
-    CutsFlow->addCut(&LamWZch->NBJet,2,2,0,2,2,0);
-    CutsFlow->addCut(&LamWZch->NLep_Af,2,2,0,2,2,0);
-    CutsFlow->addCut(&LamWZch->HT,400,600,4,650,1500,4);
-    CutsFlow->addCut(&LamWZch->Mbb,90,110,4,130,150,2);
-    CutsFlow->addCut(&LamWZch->Mll,100,110,2,-1,-1,-1);
-    CutsFlow->addCut(&LamWZch->AnglebV,0.8,1.5,4,2.6,2.9,4);
+    CutsFlow->addCut(&LamWZch->NBJet,"NB",2,2,0,2,2,0);
+    CutsFlow->addCut(&LamWZch->NLep_Af,"NL",2,2,0,2,2,0);
+    CutsFlow->addCut(&LamWZch->HT,"HT",400,600,4,650,1500,4);
+    CutsFlow->addCut(&LamWZch->Mbb,"Mbb",90,110,4,130,150,2);
+    CutsFlow->addCut(&LamWZch->Mll,"Mll",100,110,2,-1,-1,-1);
+    CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.8,1.5,4,2.6,2.9,4);
 //Event Loop
     Int_t nentries = Int_t(ch->GetEntries());
     double valueX,valueY;
     int SorB, id;
     int bid,cat;
-    double *Sig_CS = new double(CutsFlow->NCuts);
-    double *Bkg_CS = new double(CutsFlow->NCuts);
-    int *Sig_MC_N = new int(CutsFlow->NCuts);
-    int *Bkg_MC_N = new int(CutsFlow->NCuts);
+    double *Sig_CS = new double[CutsFlow->NCuts];
+    double *Bkg_CS = new double[CutsFlow->NCuts];
+    int *Sig_MC_N = new int[CutsFlow->NCuts];
+    int *Bkg_MC_N = new int[CutsFlow->NCuts];
     printf("%d entries to be processed!\n",nentries);
     bool good;
     double CS;
@@ -69,7 +69,15 @@ int main(int argc, char const *argv[])
         GetHistID(cat,SorB,id);
         for (int icut = 0; icut < CutsFlow->NCuts; ++icut)
         {
+            if (entry == 0)
+            {
+                Sig_CS[icut] = 0.0;
+                Bkg_CS[icut] = 0.0;
+                Sig_MC_N[icut] = 0;
+                Bkg_MC_N[icut] = 0;
+            }
             good = CutsFlow->Apply(icut);
+            if (!good) continue;
             if (SorB == 1)
             {
                 Sig_CS[icut] += CS/((double)Sig_NTOTAL[id]);
@@ -105,25 +113,27 @@ int main(int argc, char const *argv[])
     ofstream cutlog(temp);
     double sigma=0.0;
     double sigmatemp=0.0;
+    int bestid=-1;
     for (int i = 0; i < CutsFlow->NCuts; ++i)
     {
         sigmatemp = Sig_CS[i]*sqrt(LUMINOSITY)/sqrt(Sig_CS[i]+Bkg_CS[i]+pow(10,-10));
-        cutlog<<i<<"  "<<Sig_CS[i]<<"/"<<Sig_MC_N[i]<<"  "<<Bkg_CS[i]<<"/"<<Bkg_MC_N[i]<<"  "<<sigmatemp<<endl;
+        cutlog<<i<<"  "<<CutsFlow->CutInfo(i)<<"  "<<Sig_CS[i]<<"/"<<Sig_MC_N[i]<<"  "<<Bkg_CS[i]<<"/"<<Bkg_MC_N[i]<<"  "<<sigmatemp<<endl;
         if (Bkg_MC_N[i]>100&&Sig_MC_N[i]>100)
         {
             if (sigmatemp>sigma)
             {
                 sigma = sigmatemp;
+                bestid = i;
             }
         }
     }
-    cout<<"Best Level: "<<sigma<<endl;
+    cout<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
 
     delete CutsFlow;
-    delete Sig_CS;
-    delete Sig_MC_N;
-    delete Bkg_CS;
-    delete Bkg_MC_N;
+    delete[] Sig_CS;
+    delete[] Sig_MC_N;
+    delete[] Bkg_CS;
+    delete[] Bkg_MC_N;
     cout<<"Program Exit!"<<endl;
     cout<<"========================>>"<<endl;
     return 0;

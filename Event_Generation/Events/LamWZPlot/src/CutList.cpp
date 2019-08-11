@@ -7,17 +7,18 @@ CutList::CutList()
     NVARS_I = 0;
     NCuts = 0;
 }
-void CutList::addCut(double *variable, double start_low, double end_low, int steps_low, double start_up, double end_up, int steps_up)
+void CutList::addCut(double *variable, std::string name, double start_low, double end_low, int steps_low, double start_up, double end_up, int steps_up)
 {
     VARS_D[NVARS_D] = variable;
-    if (start_low<0)
+    VARSNAME_D[NVARS_D] = name;
+    if (steps_low<0)
     {
-        LowerSteps_D[NVARS_D] = 0;
+        LowerPoints_D[NVARS_D] = -1;
     }
     else
     {
-        if (steps_low + 1 > STEPS) {steps_low = STEPS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
-        LowerSteps_D[NVARS_D] = steps_low + 1;
+        if (steps_low + 1 > MAXPOINTS) {steps_low = MAXPOINTS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
+        LowerPoints_D[NVARS_D] = steps_low + 1;
         for (int j = 0; j < steps_low+1; ++j)
         {
             if (steps_low == 0)
@@ -37,17 +38,17 @@ void CutList::addCut(double *variable, double start_low, double end_low, int ste
         {
             NCuts *= steps_low+1;
         }
-        LowerCurrent_D[NVARS_D] = 0;
+        LowerCurrentPoint_D[NVARS_D] = 0;
     }
 
     if (start_up<0)
     {
-        UpperSteps_D[NVARS_D] = 0;
+        UpperPoints_D[NVARS_D] = -1;
     }
     else
     {
-        if (steps_up + 1 > STEPS) {steps_up = STEPS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
-        UpperSteps_D[NVARS_D] = steps_up + 1;
+        if (steps_up + 1 > MAXPOINTS) {steps_up = MAXPOINTS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
+        UpperPoints_D[NVARS_D] = steps_up + 1;
         for (int j = 0; j < steps_up+1; ++j)
         {
             if (steps_up == 0)
@@ -67,22 +68,23 @@ void CutList::addCut(double *variable, double start_low, double end_low, int ste
         {
             NCuts *= steps_up+1;
         }
-        UpperCurrent_D[NVARS_D] = 0;
+        UpperCurrentPoint_D[NVARS_D] = 0;
     }
     NVARS_D += 1;
     NVARS += 1;
 }
-void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, int start_up, int end_up, int steps_up)
+void CutList::addCut(int *variable, std::string name, int start_low, int end_low, int steps_low, int start_up, int end_up, int steps_up)
 {
     VARS_I[NVARS_I] = variable;
+    VARSNAME_I[NVARS_I] = name;
     if (start_low<0)
     {
-        LowerSteps_I[NVARS_I] = 0;
+        LowerPoints_I[NVARS_I] = 0;
     }
     else
     {
-        if (steps_low + 1 > STEPS) {steps_low = STEPS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
-        LowerSteps_I[NVARS_I] = steps_low + 1;
+        if (steps_low + 1 > MAXPOINTS) {steps_low = MAXPOINTS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
+        LowerPoints_I[NVARS_I] = steps_low + 1;
         for (int j = 0; j < steps_low+1; ++j)
         {
             if (steps_low == 0)
@@ -102,17 +104,17 @@ void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, i
         {
             NCuts *= steps_low+1;
         }
-        LowerCurrent_I[NVARS_I] = 0;
+        LowerCurrentPoint_I[NVARS_I] = 0;
     }
 
     if (start_up<0)
     {
-        UpperSteps_I[NVARS_I] = 0;
+        UpperPoints_I[NVARS_I] = 0;
     }
     else
     {
-        if (steps_up + 1 > STEPS) {steps_up = STEPS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
-        UpperSteps_I[NVARS_I] = steps_up + 1;
+        if (steps_up + 1 > MAXPOINTS) {steps_up = MAXPOINTS-1; std::cout<<"Exceed the UP limit of cut steps, change to default MAX value."<<std::endl;}
+        UpperPoints_I[NVARS_I] = steps_up + 1;
         for (int j = 0; j < steps_up+1; ++j)
         {
             if (steps_up == 0)
@@ -132,7 +134,7 @@ void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, i
         {
             NCuts *= steps_up+1;
         }
-        UpperCurrent_I[NVARS_I] = 0;
+        UpperCurrentPoint_I[NVARS_I] = 0;
     }
     NVARS_I += 1;
     NVARS += 1;
@@ -140,36 +142,109 @@ void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, i
 
 bool CutList::Apply(int i)
 {
+    // bool good = true;
+    // for (int ivarI = 0; ivarI < NVARS_I; ++ivarI)
+    // {
+    //     if (LowerPoints_I[ivarI] > 0)
+    //     {
+    //         good *= ((*VARS_I[ivarI])>=LowerBounds_I[ivarI][LowerCurrentPoint_I[ivarI]]);
+    //         LowerCurrentPoint_I[ivarI] += 1;
+    //         if (LowerCurrentPoint_I[ivarI] >= LowerPoints_I[ivarI]) LowerCurrentPoint_I[ivarI] = 0;
+    //     }
+    //     if (UpperPoints_I[ivarI] > 0)
+    //     {
+    //         good *= ((*VARS_I[ivarI])<=UpperBounds_I[ivarI][UpperCurrentPoint_I[ivarI]]);
+    //         UpperCurrentPoint_I[ivarI] += 1;
+    //         if (UpperCurrentPoint_I[ivarI] >= UpperPoints_I[ivarI]) UpperCurrentPoint_I[ivarI] = 0;
+    //     }
+    // }
+    // for (int ivarD = 0; ivarD < NVARS_D; ++ivarD)
+    // {
+    //     if (LowerPoints_D[ivarD] > 0)
+    //     {
+    //         good *= ((*VARS_D[ivarD])>=LowerBounds_D[ivarD][LowerCurrentPoint_D[ivarD]]);
+    //         LowerCurrentPoint_D[ivarD] += 1;
+    //         if (LowerCurrent_D[ivarD] >= LowerSteps_D[ivarD]) LowerCurrent_D[ivarD] = 0;
+    //     }
+    //     if (UpperSteps_D[ivarD] > 0)
+    //     {
+    //         good *= ((*VARS_D[ivarD])<=UpperBounds_D[ivarD][UpperCurrent_D[ivarD]]);
+    //         UpperCurrent_D[ivarD] += 1;
+    //         if (UpperCurrent_D[ivarD] >= UpperSteps_D[ivarD]) UpperCurrent_D[ivarD] = 0;
+    //     }
+    // }
+    int NCOUNTS = 1;
+    int cp=1;
     bool good = true;
     for (int ivarI = 0; ivarI < NVARS_I; ++ivarI)
     {
-        if (LowerSteps_I[ivarI] > 0)
+        if (LowerPoints_I[ivarI] > 0)
         {
-            good *= ((*VARS_I[ivarI])>=LowerBounds_I[ivarI][LowerCurrent_I[ivarI]]);
-            LowerCurrent_I[ivarI] += 1;
-            if (LowerCurrent_I[ivarI] >= LowerSteps_I[ivarI]) LowerCurrent_I[ivarI] = 0;
+            cp = int(i/NCOUNTS)%LowerPoints_I[ivarI];
+            good *= ((*VARS_I[ivarI])>=LowerBounds_I[ivarI][cp]);
+            NCOUNTS*=LowerPoints_I[ivarI];
         }
-        if (UpperSteps_I[ivarI] > 0)
+        if (UpperPoints_I[ivarI] > 0)
         {
-            good *= ((*VARS_I[ivarI])<=UpperBounds_I[ivarI][UpperCurrent_I[ivarI]]);
-            UpperCurrent_I[ivarI] += 1;
-            if (UpperCurrent_I[ivarI] >= UpperSteps_I[ivarI]) UpperCurrent_I[ivarI] = 0;
+            cp = int(i/NCOUNTS)%UpperPoints_I[ivarI];
+            good *= ((*VARS_I[ivarI])<=UpperBounds_I[ivarI][cp]);
+            NCOUNTS*=UpperPoints_I[ivarI];
         }
     }
     for (int ivarD = 0; ivarD < NVARS_D; ++ivarD)
     {
-        if (LowerSteps_D[ivarD] > 0)
+        if (LowerPoints_D[ivarD] > 0)
         {
-            good *= ((*VARS_D[ivarD])>=LowerBounds_D[ivarD][LowerCurrent_D[ivarD]]);
-            LowerCurrent_D[ivarD] += 1;
-            if (LowerCurrent_D[ivarD] >= LowerSteps_D[ivarD]) LowerCurrent_D[ivarD] = 0;
+            cp = int(i/NCOUNTS)%LowerPoints_D[ivarD];
+            good *= ((*VARS_D[ivarD])>=LowerBounds_D[ivarD][cp]);
+            NCOUNTS *= LowerPoints_D[ivarD];
         }
-        if (UpperSteps_D[ivarD] > 0)
+        if (UpperPoints_D[ivarD] > 0)
         {
-            good *= ((*VARS_D[ivarD])<=UpperBounds_D[ivarD][UpperCurrent_D[ivarD]]);
-            UpperCurrent_D[ivarD] += 1;
-            if (UpperCurrent_D[ivarD] >= UpperSteps_D[ivarD]) UpperCurrent_D[ivarD] = 0;
+            cp = int(i/NCOUNTS)%UpperPoints_D[ivarD];
+            good *= ((*VARS_D[ivarD])<=UpperBounds_D[ivarD][cp]);
+            NCOUNTS *= UpperPoints_D[ivarD];
         }
     }
     return good;
+}
+
+std::string CutList::CutInfo(int i)
+{
+    std::string info;
+    std::stringstream sst;
+    int NCOUNTS = 1;
+    int cp=1;
+    for (int ivarI = 0; ivarI < NVARS_I; ++ivarI)
+    {
+        if (LowerPoints_I[ivarI] > 0)
+        {
+            cp = int(i/NCOUNTS)%LowerPoints_I[ivarI];
+            sst << "(" << LowerBounds_I[ivarI][cp] << "<=" << VARSNAME_I[ivarI] << ")";
+            NCOUNTS*=LowerPoints_I[ivarI];
+        }
+        if (UpperPoints_I[ivarI] > 0)
+        {
+            cp = int(i/NCOUNTS)%UpperPoints_I[ivarI];
+            sst << "(" << VARSNAME_I[ivarI] << "<=" << UpperBounds_I[ivarI][cp] << ")";
+            NCOUNTS*=UpperPoints_I[ivarI];
+        }
+    }
+    for (int ivarD = 0; ivarD < NVARS_D; ++ivarD)
+    {
+        if (LowerPoints_D[ivarD] > 0)
+        {
+            cp = int(i/NCOUNTS)%LowerPoints_D[ivarD];
+            sst << "(" << LowerBounds_D[ivarD][cp] << "<=" << VARSNAME_D[ivarD] << ")";
+            NCOUNTS *= LowerPoints_D[ivarD];
+        }
+        if (UpperPoints_D[ivarD] > 0)
+        {
+            cp = int(i/NCOUNTS)%UpperPoints_D[ivarD];
+            sst << "(" << VARSNAME_D[ivarD] << "<=" << UpperBounds_D[ivarD][cp] << ")";
+            NCOUNTS *= UpperPoints_D[ivarD];
+        }
+    }
+    sst >> info;
+    return info;
 }
