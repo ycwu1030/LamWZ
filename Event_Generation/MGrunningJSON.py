@@ -69,6 +69,7 @@ if flag_r:
         tag=time.strftime("%m%d_%H")
         Process=ProcessesList[i]
         SECS=selection.keys()
+        MATCH=True
         if len(SECS) == 0:
             MATCH=True
         else:
