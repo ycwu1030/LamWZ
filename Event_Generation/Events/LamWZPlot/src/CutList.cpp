@@ -20,7 +20,14 @@ void CutList::addCut(double *variable, double start_low, double end_low, int ste
         LowerSteps_D[NVARS_D] = steps_low + 1;
         for (int j = 0; j < steps_low+1; ++j)
         {
-            LowerBounds_D[NVARS_D][j] = start_low + j*(end_low-start_low)/(1.0*steps_low);
+            if (steps_low == 0)
+            {
+                LowerBounds_D[NVARS_D][j] = start_low;
+            }
+            else
+            {
+                LowerBounds_D[NVARS_D][j] = start_low + j*(end_low-start_low)/(1.0*steps_low);
+            }
         }
         if (NCuts==0)
         {
@@ -43,7 +50,14 @@ void CutList::addCut(double *variable, double start_low, double end_low, int ste
         UpperSteps_D[NVARS_D] = steps_up + 1;
         for (int j = 0; j < steps_up+1; ++j)
         {
-            UpperBounds_D[NVARS_D][j] = start_up + j*(end_up-start_up)/(1.0*steps_up);
+            if (steps_up == 0)
+            {
+                UpperBounds_D[NVARS_D][j] = start_up;
+            }
+            else
+            {
+                UpperBounds_D[NVARS_D][j] = start_up + j*(end_up-start_up)/(1.0*steps_up);
+            }
         }
         if (NCuts==0)
         {
@@ -71,7 +85,14 @@ void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, i
         LowerSteps_I[NVARS_I] = steps_low + 1;
         for (int j = 0; j < steps_low+1; ++j)
         {
-            LowerBounds_I[NVARS_I][j] = start_low + j*(end_low-start_low)/(1.0*steps_low);
+            if (steps_low == 0)
+            {
+                LowerBounds_I[NVARS_I][j] = start_low;
+            }
+            else
+            {
+                LowerBounds_I[NVARS_I][j] = start_low + j*(end_low-start_low)/(1.0*steps_low);
+            }
         }
         if (NCuts==0)
         {
@@ -94,7 +115,14 @@ void CutList::addCut(int *variable, int start_low, int end_low, int steps_low, i
         UpperSteps_I[NVARS_I] = steps_up + 1;
         for (int j = 0; j < steps_up+1; ++j)
         {
-            UpperBounds_I[NVARS_I][j] = start_up + j*(end_up-start_up)/(1.0*steps_up);
+            if (steps_up == 0)
+            {
+                UpperBounds_I[NVARS_I][j] = start_up;
+            }
+            else
+            {
+                UpperBounds_I[NVARS_I][j] = start_up + j*(end_up-start_up)/(1.0*steps_up);
+            }
         }
         if (NCuts==0)
         {
