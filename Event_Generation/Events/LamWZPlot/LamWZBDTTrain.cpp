@@ -55,10 +55,10 @@ int main(int argc, char const *argv[])
     sprintf(temp,"%s/TMVA_results.root",dir.c_str());
     TString outfileName( temp );
     TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
-    (TMVA::gConfig().GetIONames()).fWeightFileDir = "";
+    (TMVA::gConfig().GetIONames()).fWeightFileDir = "../../../../../../.." + dir;
     TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
                                                "!V:Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
-    TMVA::DataLoader *dataloader=new TMVA::DataLoader(dir.c_str());
+    TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
 
     dataloader->AddVariable( "HT", 'F' );
     dataloader->AddVariable( "Mbb", 'F' );
