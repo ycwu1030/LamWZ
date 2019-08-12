@@ -96,7 +96,7 @@ if flag_r:
                 MECOM.write('generate_events run_' + sqrts + "_" + tag + ' -f \n')
         if sqrts == 3000:
             shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
-        else if sqrts == 1500:
+        elif sqrts == 1500:
             shutil.copyfile(work_dir + '/Cards_tmp/run_card_1500.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
         else:
             shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
