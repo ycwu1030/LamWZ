@@ -36,6 +36,7 @@ parser.add_argument('-delphes',dest='flag_delphes',action='store_true')
 parser.add_argument('-channel',dest='decays',default='bbll')
 parser.add_argument('-i',dest='processfile',default='processes_list.json')
 parser.add_argument('-s',dest='selection',type=simplejson.loads,default='{}')
+parser.add_argument('-e',dest='sqrts',default=3000,type=int) # in GeV
 args = parser.parse_args()
 #print(args)
 
@@ -45,6 +46,7 @@ flag_delphes = args.flag_delphes
 decays = args.decays
 processfile = args.processfile
 selection = args.selection
+sqrts = args.sqrts
 MATCH=True
 
 with open(processfile,'r') as f:
@@ -85,38 +87,43 @@ if flag_r:
             Process['Decay'] = decays
         with open('tmp_madevent.dat','w') as MECOM:
             if Process['Abbr'] == 'zh':
-                MECOM.write('generate_events run_' + tag + '\n')
+                MECOM.write('generate_events run_' + sqrts + "_" + tag + '\n')
                 MECOM.write('done\n')
                 MECOM.write('set mmll 80.0\n')
                 MECOM.write('set mmllmax 100.0\n')
                 MECOM.write('done\n')
             else:
-                MECOM.write('generate_events run_' + tag + ' -f \n')
-        shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
+                MECOM.write('generate_events run_' + sqrts + "_" + tag + ' -f \n')
+        if sqrts == 3000:
+            shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
+        else if sqrts == 1500:
+            shutil.copyfile(work_dir + '/Cards_tmp/run_card_1500.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
+        else:
+            shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
         shutil.copyfile(work_dir + '/Cards_tmp/param_card.dat', work_dir + '/' + Process['Name'] + '/Cards/param_card.dat')
         shutil.copyfile(work_dir + '/Cards_tmp/me5_configuration.txt', work_dir + '/' + Process['Name'] + '/Cards/me5_configuration.txt')
 	#print Process['Name'],Process['BkgSigTag']
         if Process['BkgSigTag'] != 'bkg':
             #print 'Signal'
-            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + tag + "_decayed_1"
+            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + sqrts + "_" + tag + "_decayed_1"
             shutil.copyfile(work_dir + '/Cards_tmp/madspin_card_' + decays + '.dat', work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
         else:
             #print 'Bkg'
-            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + tag
+            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + sqrts + "_" + tag
             try:
                 os.remove(work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
             except OSError:
                 pass
         if flag_delphes: 
-            store_dir = Event_dir + '/' + Process['Name'] + '/Delphes'
+            store_dir = Event_dir + '/' + Process['Name'] + '/Delphes/' + sqrts
             filein = 'tag_1_delphes_events.root'
-            fileout = 'delphes_events_' + Process['Decay'] + '_' + tag + '.root'
+            fileout = 'delphes_events_' + Process['Decay'] + '_' + sqrts + '_' + tag + '.root'
             shutil.copyfile(work_dir + '/Cards_tmp/delphes_card_CEPC.dat', work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
             shutil.copyfile(work_dir + '/Cards_tmp/pythia8_card.dat', work_dir + '/' + Process['Name'] + '/Cards/pythia8_card.dat')
         else:
-            store_dir = Event_dir + '/' + Process['Name'] + '/Parton'
+            store_dir = Event_dir + '/' + Process['Name'] + '/Parton/' + sqrts
             filein = 'unweighted_events_lhe.root'
-            fileout = 'parton_events_' + Process['Decay'] + '_' + tag + '.root'
+            fileout = 'parton_events_' + Process['Decay'] + '_' + sqrts + '_' + tag + '.root'
             try:
                 os.remove(work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
             except OSError:

@@ -28,6 +28,7 @@ BRhtata=0.06256
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
 parser.add_argument('-o',dest='outdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna')
 parser.add_argument('-m',dest='mode',default='wh')
+parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 args = parser.parse_args()
 
 ProcessesFile="../processes_list.json"
@@ -39,6 +40,7 @@ if mode_str == 'wh':
     mode_int = 1
 else:
     mode_int = 2
+sqrts = args.sqrts
 
 if not os.path.exists(Outdir):
     os.makedirs(Outdir)
@@ -65,7 +67,7 @@ with open(ProcessesFile,'r') as f:
     for process in ProcessesList:
         print "Processing process: ",process['Name']
         process['NEvents']=0
-        rootfiles = ListRootFiles(process['Name']+'/Delphes',decay)
+        rootfiles = ListRootFiles(process['Name']+'/Delphes/' + sqrts, decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         if process['BkgSigTag'] == 'bkg':
             CS=process['CS']
