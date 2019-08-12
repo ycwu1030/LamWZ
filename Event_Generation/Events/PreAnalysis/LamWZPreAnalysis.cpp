@@ -20,6 +20,10 @@ bool TLVCompare(TLorentzVector a, TLorentzVector b)
 {
        return a.Pt()>b.Pt();
 }
+bool TLVCompareEta(TLorentzVector a, TLorentzVector b)
+{
+       return a.Eta()>b.Eta();
+}
 int main(int argc, char const *argv[])
 {
     const double PTLepTrigger = 20;
@@ -76,6 +80,11 @@ int main(int argc, char const *argv[])
     double ResonancePhi;
     double ResonanceMass;
 
+    double FLepPT;
+    double FLepEta;
+    double FLepPhi;
+    double FLepMass;
+
     double VPT;
     double VEta;
     double VPhi;
@@ -95,6 +104,7 @@ int main(int argc, char const *argv[])
     double Mll;
     double AnglebV;
     double dRbV;
+    double shat;
 
 
     t2->Branch("Cate",&mode_,"Cate/I");
@@ -130,6 +140,11 @@ int main(int argc, char const *argv[])
     t2->Branch("VPhi",&VPhi,"VPhi/D");
     t2->Branch("VMass",&VMass,"VMass/D");
 
+    t2->Branch("FLepPT",&FLepPT,"FLepPT/D");
+    t2->Branch("FLepEta",&FLepEta,"FLepEta/D");
+    t2->Branch("FLepPhi",&FLepPhi,"FLepPhi/D");
+    t2->Branch("FLepMass",&FLepMass,"FLepMass/D");
+
     t2->Branch("MET",&MET,"MET/D");
     t2->Branch("MET_Phi",&MET_Phi,"MET_Phi/D");
     t2->Branch("MET_Eta",&MET_Eta,"MET_Eta/D");
@@ -143,6 +158,7 @@ int main(int argc, char const *argv[])
     t2->Branch("Mll",&Mll,"Mll/D");
     t2->Branch("AnglebV",&AnglebV,"AnglebV/D");
     t2->Branch("dRbV",&dRbV,"dRbV/D");
+    t2->Branch("shat",&shat,"shat/D");
     ntot = t1->GetEntries();
     outlog<<ntot<<endl;
     outlog.close();

@@ -113,6 +113,10 @@
         ResonancePhi=LVResonance.Phi();
         ResonanceMass=LVResonance.M();
 
+        FLepPT = 0.0;
+        FLepEta = 0.0;
+        FLepPhi = 0.0;
+        FLepMass = 0.0;
 
         HT = del->ScalarHT_HT[0];
         MET = del->MissingET_MET[0];
@@ -129,5 +133,6 @@
         Mll = (Zpeak).M();
         AnglebV = LVResonance.Angle(Zpeak.Vect());
         dRbV = LVResonance.DeltaR(Zpeak);
+        shat = (LVResonance+Zpeak).M();
         t2->Fill();
     }

@@ -67,7 +67,7 @@ with open(ProcessesFile,'r') as f:
     for process in ProcessesList:
         print "Processing process: ",process['Name']
         process['NEvents']=0
-        rootfiles = ListRootFiles(process['Name']+'/Delphes/' + sqrts, decay)
+        rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         if process['BkgSigTag'] == 'bkg':
             CS=process['CS']

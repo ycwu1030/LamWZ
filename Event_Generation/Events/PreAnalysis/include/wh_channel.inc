@@ -26,8 +26,9 @@
         }
         if (LVEle.size()<1) continue;
         NEle_Af = LVEle.size();
-        std::sort(LVEle.begin(),LVEle.end(),TLVCompare);
+        std::sort(LVEle.begin(),LVEle.end(),TLVCompareEta);
         LVForwardEle=LVEle[0];
+        std::sort(++(LVEle.begin()),LVEle.end(),TLVCompare);
 
         NMuon = del->Muon_size;
         for (int i = 0; i < NMuon; ++i)
@@ -96,6 +97,11 @@
         ResonancePhi=LVResonance.Phi();
         ResonanceMass=LVResonance.M();
 
+        FLepPT = LVForwardEle.Pt();
+        FLepEta = LVForwardEle.Eta();
+        FLepPhi = LVForwardEle.Phi();
+        FLepMass = LVForwardEle.M();
+
         VPT = LVCentralLep.Pt();
         VEta = LVCentralLep.Eta();
         VPhi = LVCentralLep.Phi();
@@ -111,5 +117,6 @@
         Mll = (LVForwardEle + LVCentralLep).M();
         AnglebV = LVResonance.Angle(LVCentralLep.Vect());
         dRbV = LVResonance.DeltaR(LVCentralLep);
+        shat = (LVResonance+LVCentralLep).M();
         t2->Fill();
     }
