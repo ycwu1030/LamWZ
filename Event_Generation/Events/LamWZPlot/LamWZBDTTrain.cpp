@@ -55,10 +55,10 @@ int main(int argc, char const *argv[])
     sprintf(temp,"%s/TMVA_results.root",dir.c_str());
     TString outfileName( temp );
     TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
-    (TMVA::gConfig().GetIONames()).fWeightFileDir = dir;
+    (TMVA::gConfig().GetIONames()).fWeightFileDir = "";
     TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
                                                "!V:Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
-    TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
+    TMVA::DataLoader *dataloader=new TMVA::DataLoader(dir.c_str());
 
     dataloader->AddVariable( "HT", 'F' );
     dataloader->AddVariable( "Mbb", 'F' );
@@ -77,7 +77,7 @@ int main(int argc, char const *argv[])
         LamWZPreAna *ch = new LamWZPreAna(ChainSIG[i]);
         ch->GetEntry(0);
         WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[i]);
-        delete ch;
+        // delete ch;
         dataloader->AddSignalTree(ChainSIG[i],WeightSIG[i]);
     }
     for (int i = 0; i < N_BKGCAT; ++i)
@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
         LamWZPreAna *ch = new LamWZPreAna(ChainBKG[i]);
         ch->GetEntry(0);
         WeightBKG[i] = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[i]);
-        delete ch;
+        // delete ch;
         dataloader->AddBackgroundTree(ChainBKG[i],WeightBKG[i]);
     }
     TCut precuts = "NBJet==2&&NLep_Af==2";
