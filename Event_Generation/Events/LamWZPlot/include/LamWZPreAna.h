@@ -53,6 +53,10 @@ public :
    Double_t        VEta;
    Double_t        VPhi;
    Double_t        VMass;
+   Double_t        FLepPT;
+   Double_t        FLepEta;
+   Double_t        FLepPhi;
+   Double_t        FLepMass;
    Double_t        MET;
    Double_t        MET_Phi;
    Double_t        MET_Eta;
@@ -65,6 +69,7 @@ public :
    Double_t        Mll;
    Double_t        AnglebV;
    Double_t        dRbV;
+   Double_t        shat;
 
    // List of branches
    TBranch        *b_Cate;   //!
@@ -94,6 +99,10 @@ public :
    TBranch        *b_VEta;   //!
    TBranch        *b_VPhi;   //!
    TBranch        *b_VMass;   //!
+   TBranch        *b_FLepPT;   //!
+   TBranch        *b_FLepEta;   //!
+   TBranch        *b_FLepPhi;   //!
+   TBranch        *b_FLepMass;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_Phi;   //!
    TBranch        *b_MET_Eta;   //!
@@ -106,6 +115,7 @@ public :
    TBranch        *b_Mll;   //!
    TBranch        *b_AnglebV;   //!
    TBranch        *b_dRbV;   //!
+   TBranch        *b_shat;   //!
 
    LamWZPreAna(TTree *tree=0);
    virtual ~LamWZPreAna();
@@ -166,12 +176,14 @@ void LamWZPreAna::initialize(binning *bn)
    bn->add(10,0,10,"NBJet","N_{B-jet}",&NBJet);
    bn->add(10,0,10,"NLep","N_{l}",&NLep_Af);
    bn->add(10,0,10,"NEle","N_{e}",&NEle_Af);
+   bn->add(20,-5,5,"EtaLep","#eta_{l}",&FLepEta);
    bn->add(50,0,1000,"HT","H_{T} [GeV]",&HT);
    bn->add(50,0,1000,"MET","MET [GeV]",&MET);
    bn->add(50,0,400,"Mbb","M_{bb} [GeV]",&Mbb);
    bn->add(50,0,400,"Mll","M_{ll} [GeV]",&Mll);
    bn->add(50,0,3.1415926,"Anglebl","#theta_{bl}",&AnglebV);
    bn->add(50,0,10,"dRbl","#Delta R_{bl}",&dRbV);
+   bn->add(50,0,3000,"shat","#sqrt{#hat{s}} [GeV]",&shat);
 
 }
 
@@ -240,6 +252,10 @@ void LamWZPreAna::Init(TTree *tree)
    fChain->SetBranchAddress("VEta", &VEta, &b_VEta);
    fChain->SetBranchAddress("VPhi", &VPhi, &b_VPhi);
    fChain->SetBranchAddress("VMass", &VMass, &b_VMass);
+   fChain->SetBranchAddress("FLepPT", &FLepPT, &b_FLepPT);
+   fChain->SetBranchAddress("FLepEta", &FLepEta, &b_FLepEta);
+   fChain->SetBranchAddress("FLepPhi", &FLepPhi, &b_FLepPhi);
+   fChain->SetBranchAddress("FLepMass", &FLepMass, &b_FLepMass);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_Phi", &MET_Phi, &b_MET_Phi);
    fChain->SetBranchAddress("MET_Eta", &MET_Eta, &b_MET_Eta);
@@ -252,6 +268,7 @@ void LamWZPreAna::Init(TTree *tree)
    fChain->SetBranchAddress("Mll", &Mll, &b_Mll);
    fChain->SetBranchAddress("AnglebV", &AnglebV, &b_AnglebV);
    fChain->SetBranchAddress("dRbV", &dRbV, &b_dRbV);
+   fChain->SetBranchAddress("shat", &shat, &b_shat);
    Notify();
 }
 
