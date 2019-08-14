@@ -52,7 +52,7 @@
         double mzpeak = -1;
         double mztemp;
         TLorentzVector Zpeak;
-        if (NEle_Af > 2)
+        if (NEle_Af >= 2)
         {
             for (int i = 0; i < NEle_Af; ++i)
             {
@@ -67,7 +67,7 @@
                 }
             }
         }
-        if (NMuon_Af > 2)
+        if (NMuon_Af >= 2)
         {
             for (int i = 0; i < NMuon_Af; ++i)
             {
