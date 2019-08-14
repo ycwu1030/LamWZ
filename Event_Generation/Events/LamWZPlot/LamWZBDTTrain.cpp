@@ -24,21 +24,22 @@ const int N_SIGCAT = 3;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[N_SIGCAT] = {"wh_hWW","wh_hZZ","wh_Inter"};
+string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter"},{"zh_hWW","zh_hZZ","zh_Inter"}};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[N_SIGCAT] = {"Wh hWW","Wh hZZ","Wh Interference"};
+string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference"},{"Zh hWW","Zh hZZ","Zh Interference"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[N_SIGCAT] = {247244,247138,247328};
+int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328},{249239,245187,245138}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
 {
     SetPlotStyle();
 
-    if (argc != 4) return -1;
+    if (argc != 5) return -1;
     string InputDir(argv[1]);
     int decayID=atoi(argv[2]);
     string tag(argv[3]);
+    int channelID=atoi(argv[4]);
 
     //Create the Folder Saving the results
     string dir,dirtop;
@@ -60,10 +61,23 @@ int main(int argc, char const *argv[])
                                                "!V:Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
     TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
 
-    dataloader->AddVariable( "HT", 'F' );
-    dataloader->AddVariable( "Mbb", 'F' );
-    dataloader->AddVariable( "Mll", 'F' );
-    dataloader->AddVariable( "AnglebV", 'F' );
+    if (channelID == 1)
+    {
+        dataloader->AddVariable( "FLepEta", 'F' );
+        dataloader->AddVariable( "HT", 'F' );
+        dataloader->AddVariable( "Mbb", 'F' );
+        dataloader->AddVariable( "Mll", 'F' );
+        dataloader->AddVariable( "AnglebV", 'F' );
+        dataloader->AddVariable( "shat", 'F' );
+    }
+    else if (channelID == 2)
+    {
+        dataloader->AddVariable( "HT", 'F' );
+        dataloader->AddVariable( "Mbb", 'F' );
+        dataloader->AddVariable( "Mll", 'F' );
+        dataloader->AddVariable( "AnglebV", 'F' );
+        dataloader->AddVariable( "shat", 'F' );
+    }
 
     TChain *ChainSIG[N_SIGCAT];
     TChain *ChainBKG[N_BKGCAT];
@@ -72,11 +86,11 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         ChainSIG[i] = new TChain("LamWZPreAna");
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID][i].c_str());
         ChainSIG[i] -> Add(temp);
         LamWZPreAna *ch = new LamWZPreAna(ChainSIG[i]);
         ch->GetEntry(0);
-        WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[i]);
+        WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[channelID][i]);
         // delete ch;
         dataloader->AddSignalTree(ChainSIG[i],WeightSIG[i]);
     }

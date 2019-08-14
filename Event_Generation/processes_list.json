@@ -69,7 +69,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHZZ==0"],
-        "CS": -27.554
+        "CS": 27.554
     },
     {
         "Name": "ee_VBF_zh_ZOnly",
