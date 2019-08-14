@@ -65,7 +65,7 @@ int main(int argc, char const *argv[])
     }
     for (int i = 0; i < N_BKGCAT; ++i)
     {
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[channelID-1][i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[i].c_str());
         Chaintotal -> Add(temp);
         // LamWZPreAna *ch = new LamWZPreAna(ChainBKG[i]);
         // ch->GetEntry(0);
@@ -135,7 +135,7 @@ int main(int argc, char const *argv[])
         }
         else
         {
-            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[channelID-1][id]);
+            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[id]);
         }
         if (channelID == 1)
         {
