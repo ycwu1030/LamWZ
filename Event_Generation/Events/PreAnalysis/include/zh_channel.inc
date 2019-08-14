@@ -47,7 +47,7 @@
         NMuon_Af = LVMuon.size();
         std::sort(LVMuon.begin(),LVMuon.end(),TLVCompare);
         NLep_Af = LVLep.size();
-        if ( NLep_Af < 2 ) continue; // In total we have two lepton in the final state
+        if (NEle_Af < 2 || NMuon_Af < 2) continue; // In total we have at least two same flavor lepton in the final state
         // Get the lepton pair which comes from Z-decay
         double mzpeak = -1;
         double mztemp;
@@ -59,7 +59,7 @@
                 for (int j = i+1; j < NEle_Af; ++j)
                 {
                     mztemp = (LVEle[i]+LVEle[j]).M();
-                    if (abs(mztemp-91.1776)<abs(mzpeak-91.1776)||mzpeak < 0)
+                    if ((abs(mztemp-91.1776)<abs(mzpeak-91.1776))||mzpeak < 0)
                     {
                         mzpeak = mztemp;
                         Zpeak = LVEle[i]+LVEle[j];
