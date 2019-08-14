@@ -177,10 +177,12 @@ int main(int argc, char const *argv[])
     double dR;
     if (channelID == 1)
     {
+    cout<<"Analysis WH case"<<endl;
     #include "wh_channel.inc"
     }
     else if (channelID == 2)
     {
+    cout<<"Analysis ZH case"<<endl;
     #include "zh_channel.inc"
     }
     cout<<endl;

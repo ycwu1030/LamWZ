@@ -49,7 +49,7 @@
         NLep_Af = LVLep.size();
         if ( NLep_Af < 2 ) continue; // In total we have two lepton in the final state
         // Get the lepton pair which comes from Z-decay
-        double mzpeak = 9999999;
+        double mzpeak = -1;
         double mztemp;
         TLorentzVector Zpeak;
         if (NEle_Af > 2)
@@ -59,7 +59,7 @@
                 for (int j = i+1; j < NEle_Af; ++j)
                 {
                     mztemp = (LVEle[i]+LVEle[j]).M();
-                    if (abs(mztemp-91.1776)<abs(mzpeak-91.1776))
+                    if (abs(mztemp-91.1776)<abs(mzpeak-91.1776)||mzpeak < 0)
                     {
                         mzpeak = mztemp;
                         Zpeak = LVEle[i]+LVEle[j];
@@ -74,7 +74,7 @@
                 for (int j = i+1; j < NMuon_Af; ++j)
                 {
                     mztemp = (LVMuon[i]+LVMuon[j]).M();
-                    if (abs(mztemp-91.1776)<abs(mzpeak-91.1776))
+                    if (abs(mztemp-91.1776)<abs(mzpeak-91.1776)||mzpeak < 0)
                     {
                         mzpeak = mztemp;
                         Zpeak = LVMuon[i]+LVMuon[j];
