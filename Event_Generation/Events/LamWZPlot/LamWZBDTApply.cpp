@@ -146,7 +146,7 @@ int main(int argc, char const *argv[])
             F_AnglebV = ch->AnglebV;
             F_shat = ch->shat;
         }
-        else if (channel ID == 2)
+        else if (channelID == 2)
         {
             F_HT = ch->HT;
             F_MET = ch->MET;
