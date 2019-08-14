@@ -86,11 +86,11 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         ChainSIG[i] = new TChain("LamWZPreAna");
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID][i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
         ChainSIG[i] -> Add(temp);
         LamWZPreAna *ch = new LamWZPreAna(ChainSIG[i]);
         ch->GetEntry(0);
-        WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[channelID][i]);
+        WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[channelID-1][i]);
         // delete ch;
         dataloader->AddSignalTree(ChainSIG[i],WeightSIG[i]);
     }
