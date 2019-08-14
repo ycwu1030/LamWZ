@@ -25,11 +25,11 @@ const int N_SIGCAT = 3;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[N_SIGCAT] = {"wh_hWW","wh_hZZ","wh_Inter"};
+string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter"},{"zh_hWW","zh_hZZ","zh_Inter"}};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[N_SIGCAT] = {"Wh hWW","Wh hZZ","Wh Interference"};
+string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference"},{"Zh hWW","Zh hZZ","Zh Interference"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[N_SIGCAT] = {247244,247138,247328};
+int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328},{249239,245187,245138}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
     string InputDir(argv[1]);
     int decayID=atoi(argv[2]);
     string tag(argv[3]);
+    int channelID = atoi(argv[4]);
 
     //Create the Folder Saving the results
     string dir,dirtop;
@@ -56,7 +57,7 @@ int main(int argc, char const *argv[])
     TChain *Chaintotal = new TChain("LamWZPreAna");
     for (int i = 0; i < N_SIGCAT; ++i)
     {
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
         Chaintotal -> Add(temp);
         // LamWZPreAna *ch = new LamWZPreAna(ChainSIG[i]);
         // ch->GetEntry(0);
@@ -64,7 +65,7 @@ int main(int argc, char const *argv[])
     }
     for (int i = 0; i < N_BKGCAT; ++i)
     {
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[channelID-1][i].c_str());
         Chaintotal -> Add(temp);
         // LamWZPreAna *ch = new LamWZPreAna(ChainBKG[i]);
         // ch->GetEntry(0);
@@ -88,12 +89,26 @@ int main(int argc, char const *argv[])
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
-    Float_t F_HT, F_Mbb, F_Mll, F_AnglebV;
-    reader->AddVariable( "HT", &F_HT );
-    reader->AddVariable( "Mbb", &F_Mbb );
-    reader->AddVariable( "Mll", &F_Mll );
-    reader->AddVariable( "AnglebV", &F_AnglebV );
+    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
 
+    if (channelID == 1)
+    {
+        reader->AddVariable( "FLepEta", &F_FLepEta );
+        reader->AddVariable( "HT", &F_HT );
+        reader->AddVariable( "Mbb", &F_Mbb );
+        reader->AddVariable( "Mll", &F_Mll );
+        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "shat", &F_shat );
+    }
+    else if (channelID == 2)
+    {
+        reader->AddVariable( "HT", &F_HT );
+        reader->AddVariable( "MET", &F_MET );
+        reader->AddVariable( "Mbb", &F_Mbb );
+        reader->AddVariable( "Mll", &F_Mll );
+        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "shat", &F_shat );
+    }
     
     TCut precuts = "NBJet==2&&NLep_Af==2";
     string methodName = "BDT method";
@@ -116,16 +131,30 @@ int main(int argc, char const *argv[])
         GetHistID(cat,SorB,id);
         if (SorB == 1)
         {
-            Weight = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[id]);
+            Weight = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[channelID-1][id]);
         }
         else
         {
-            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[id]);
+            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[channelID-1][id]);
         }
-        F_HT = ch->HT;
-        F_Mll = ch->Mll;
-        F_Mbb = ch->Mbb;
-        F_AnglebV = ch->AnglebV;
+        if (channelID == 1)
+        {
+            F_FLepEta = ch->FLepEta;
+            F_HT = ch->HT;
+            F_Mll = ch->Mll;
+            F_Mbb = ch->Mbb;
+            F_AnglebV = ch->AnglebV;
+            F_shat = ch->shat;
+        }
+        else if (channel ID == 2)
+        {
+            F_HT = ch->HT;
+            F_MET = ch->MET;
+            F_Mll = ch->Mll;
+            F_Mbb = ch->Mbb;
+            F_AnglebV = ch->AnglebV;
+            F_shat = ch->shat;
+        }
         BDTScore = reader->EvaluateMVA("BDT method");
         t2->Fill();
     }

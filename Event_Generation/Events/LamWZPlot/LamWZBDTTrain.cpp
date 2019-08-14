@@ -73,6 +73,7 @@ int main(int argc, char const *argv[])
     else if (channelID == 2)
     {
         dataloader->AddVariable( "HT", 'F' );
+        dataloader->AddVariable( "MET", 'F' );
         dataloader->AddVariable( "Mbb", 'F' );
         dataloader->AddVariable( "Mll", 'F' );
         dataloader->AddVariable( "AnglebV", 'F' );
