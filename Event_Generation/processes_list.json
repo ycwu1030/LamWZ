@@ -32,6 +32,14 @@
         "CS": 0.4610
     },
     {
+        "Name": "ee_VBF_wh_Full",
+        "BkgSigTag": "Full",
+        "Abbr": "wh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "CS": 29.540
+    },
+    {
         "Name": "ee_VBF_wh_InterOnly",
         "BkgSigTag": "Inter",
         "Abbr": "wh",
@@ -54,6 +62,14 @@
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHWW==0","e- e+ > w- > ve e+ l- vl~ h CHWW==0"],
         "CS": 54.9895
+    },
+    {
+        "Name": "ee_VBF_zh_Full",
+        "BkgSigTag": "Full",
+        "Abbr": "zh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "CS": 15.930
     },
     {
         "Name": "ee_VBF_zh_InterOnly",

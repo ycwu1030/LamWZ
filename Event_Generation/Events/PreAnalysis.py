@@ -28,6 +28,7 @@ BRhtata=0.06256
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
 parser.add_argument('-o',dest='outdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna')
 parser.add_argument('-m',dest='mode',default='wh')
+parser.add_argument('-c',dest='case',default='Full')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 args = parser.parse_args()
 
@@ -41,6 +42,11 @@ if mode_str == 'wh':
 else:
     mode_int = 2
 sqrts = args.sqrts
+case_str=args.case
+if case_str == 'Full':
+    case_int = 1
+else:
+    case_int = 0
 
 if not os.path.exists(Outdir):
     os.makedirs(Outdir)
@@ -83,6 +89,9 @@ with open(ProcessesFile,'r') as f:
             CS=process['CS']*BRall
         if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
             continue
+        if case_str == 'Full':
+            if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != 'Full':
+                continue
         for rootfile in rootfiles:
             filename=rootfile.split('/')[-1]
             RandomID=(filename.split('.')[0]).split('_')[-2:]
