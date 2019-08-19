@@ -15,7 +15,7 @@ import argparse
 import simplejson
 
 Decays={'bbll':1,'tatall':2}
-BkgSigTag={'bkg':0,'hWW':1,'hZZ':2,'Inter':3}
+BkgSigTag={'bkg':0,'hWW':1,'hZZ':2,'Inter':3,'Full':4}
 Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
 #ProsList=['bkg_tt_bbll','bkg_VBF_wz_bbll','bkg_VBF_zz_bbll','bkg_VBF_zz_tatall','ee_VBF_wh_InterOnly','ee_VBF_wh_WOnly','ee_VBF_wh_ZOnly','ee_VBF_zh_InterOnly','ee_VBF_zh_WOnly','ee_VBF_zh_ZOnly']
 #ChannelInfo=[]
@@ -29,6 +29,7 @@ parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of 
 parser.add_argument('-o',dest='outdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna')
 parser.add_argument('-m',dest='mode',default='wh')
 parser.add_argument('-c',dest='case',default='Full')
+parser.add_argument('-s',dest='selection',type=simplejson.loads,default='{}')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 args = parser.parse_args()
 
@@ -47,6 +48,7 @@ if case_str == 'Full':
     case_int = 1
 else:
     case_int = 0
+selection = args.selection
 
 if not os.path.exists(Outdir):
     os.makedirs(Outdir)
@@ -73,6 +75,19 @@ with open(ProcessesFile,'r') as f:
     for process in ProcessesList:
         print "Processing process: ",process['Name']
         process['NEvents']=0
+        SECS=selection.keys()
+        MATCH=True
+        if len(SECS) == 0:
+            MATCH=True
+        else:
+            for key in SECS:
+                if Process[key] in selection[key]:
+                    MATCH*=True
+                else:
+                    MATCH*=False
+        if not MATCH:
+            print 'Skip: ',Process['Name'],MATCH
+            continue
         rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         if process['BkgSigTag'] == 'bkg':
