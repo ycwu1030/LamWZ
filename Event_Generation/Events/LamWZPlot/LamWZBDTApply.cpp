@@ -21,13 +21,13 @@
 using namespace std;
 string DIR = "/data/data068/ycwu/LamWZ/Event_Generation/Events/Plots";
 const int LUMINOSITY = 4000; //fb^-1
-const int N_SIGCAT = 3;
+const int N_SIGCAT = 4;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter"},{"zh_hWW","zh_hZZ","zh_Inter"}};
+string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter","wh_Full"},{"zh_hWW","zh_hZZ","zh_Inter","zh_Full"}};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference"},{"Zh hWW","Zh hZZ","Zh Interference"}};
+string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh Full"},{"Zh hWW","Zh hZZ","Zh Interference","Zh Full"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
 int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328},{249239,245187,245138}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};

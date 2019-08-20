@@ -23,7 +23,7 @@
             // For signal
             for (int j = 0; j < N_SIGCAT; ++j)
             {
-                sprintf(temp,"Hsig_%s_var%d_%s",SIG_NAME[j].c_str(),i+1,(bn->VarNameX[i]).c_str());
+                sprintf(temp,"Hsig_%s_var%d_%s",SIG_NAME[channelID-1][j].c_str(),i+1,(bn->VarNameX[i]).c_str());
                 Hsig[j][i] = new TH1F(temp,"",bn->nbinx[i],bn->xlo[i],bn->xhi[i]);
                 Hsig[j][i]->Sumw2();
             }
@@ -39,7 +39,7 @@
         {
             for (int j = 0; j < N_SIGCAT; ++j)
             {
-                sprintf(temp,"Hsig_%s_var%d_%svs%s",SIG_NAME[j].c_str(),i+1,(bn->VarNameX[i]).c_str(),(bn->VarNameY[i]).c_str());
+                sprintf(temp,"Hsig_%s_var%d_%svs%s",SIG_NAME[channelID-1][j].c_str(),i+1,(bn->VarNameX[i]).c_str(),(bn->VarNameY[i]).c_str());
                 Hsig2[j][i] = new TH2F(temp,"",bn->nbinx[i],bn->xlo[i],bn->xhi[i],bn->nbiny[i],bn->ylo[i],bn->yhi[i]);
                 Hsig2[j][i]->Sumw2();
             }

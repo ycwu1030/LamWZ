@@ -101,7 +101,7 @@
             }
             for (int ii = 0; ii < N_SIGCAT; ++ii)
             {
-                sprintf(temp,"Signal(%s)",SIG_LABEL[ii].c_str());
+                sprintf(temp,"Signal(%s)",SIG_LABEL[channelID-1][ii].c_str());
                 lg->AddEntry(Hsig[ii][i],temp,"F");
             }
             // cout<<"Legend Done!"<<endl;
