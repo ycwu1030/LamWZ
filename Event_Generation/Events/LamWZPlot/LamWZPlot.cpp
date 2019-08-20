@@ -29,7 +29,7 @@ int main(int argc, char const *argv[])
     SetPlotStyle();
     TChain *ch = new TChain("LamWZPreAna");
 
-    if (argc != 4) return -1;
+    if (argc != 5) return -1;
     string InputDir(argv[1]);
     int decayID=atoi(argv[2]);
     string tag(argv[3]);
