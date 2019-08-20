@@ -91,7 +91,7 @@ with open(ProcessesFile,'r') as f:
         rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         if process['BkgSigTag'] == 'bkg':
-            CS=process['CS']
+            CS=process['CS']['%d'%(sqrts)]
         else:
             if decay == 'bbll':
                 BRall = BRhbb
@@ -101,7 +101,7 @@ with open(ProcessesFile,'r') as f:
                 BRall = BRall*BRWlv
             else:
                 BRall = BRall*BRZll
-            CS=process['CS']*BRall
+            CS=process['CS']['%d'%(sqrts)]*BRall
         if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
             continue
         if case_str == 'Full':

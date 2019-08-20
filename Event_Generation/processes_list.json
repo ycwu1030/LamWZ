@@ -5,7 +5,7 @@
         "Abbr": "tt",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > t t~, ( t > b w+, w+ > l+ vl ), ( t~ > b~ w-, w- > l- vl~ )"],
-        "CS": 1.1709
+        "CS": {"3000":1.1709,"1500":4.6421}
     },
     {
         "Name": "bkg_VBF_wz_bbll",
@@ -13,7 +13,7 @@
         "Abbr": "wz",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve e+ w- z, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z, w+ > l+ vl, z > b b~"],
-        "CS": 2.713
+        "CS": {"3000":2.713,"1500":1.871}
     },
     {
         "Name": "bkg_VBF_zz_bbll",
@@ -21,7 +21,7 @@
         "Abbr": "zz",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > b b~"],
-        "CS": 2.0686
+        "CS": {"3000":2.0686,"1500":0.6479}
     },
     {
         "Name": "bkg_VBF_zz_tatall",
@@ -29,7 +29,7 @@
         "Abbr": "zz",
         "Decay" : "tatall",
         "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > ta- ta+"],
-        "CS": 0.4610
+        "CS": {"3000":0.4610,"1500":0.1444}
     },
     {
         "Name": "ee_VBF_wh_Full",
@@ -37,7 +37,7 @@
         "Abbr": "wh",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
-        "CS": 29.540
+        "CS": {"3000":29.540,"1500":12.206}
     },
     {
         "Name": "ee_VBF_wh_InterOnly",
@@ -45,7 +45,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHWW^2==1 CHZZ^2==1","e- e+ > w- > ve e+ l- vl~ h  CHWW^2==1 CHZZ^2==1"],
-        "CS": -97.3915
+        "CS": {"3000":-97.3915,"1500":-15.4085}
     },
     {
         "Name": "ee_VBF_wh_WOnly",
@@ -53,7 +53,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHZZ==0", "e- e+ > w- > ve e+ l- vl~ h CHZZ==0"],
-        "CS": 71.924
+        "CS": {"3000":71.924,"1500":17.727}
     },
     {
         "Name": "ee_VBF_wh_ZOnly",
@@ -61,7 +61,7 @@
         "Abbr": "wh",
         "Decay" : "None",
         "Processes" : ["e- e+ > w+ > e- ve~ l+ vl h CHWW==0","e- e+ > w- > ve e+ l- vl~ h CHWW==0"],
-        "CS": 54.9895
+        "CS": {"3000":54.9895,"1500":9.8875}
     },
     {
         "Name": "ee_VBF_zh_Full",
@@ -69,7 +69,7 @@
         "Abbr": "zh",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
-        "CS": 15.930
+        "CS": {"3000":15.930,"1500":5.198}
     },
     {
         "Name": "ee_VBF_zh_InterOnly",
@@ -77,7 +77,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHWW^2==1 CHZZ^2==1"],
-        "CS": -31.631
+        "CS": {"3000":-31.631,"1500":-5.2475}
     },
     {
         "Name": "ee_VBF_zh_WOnly",
@@ -85,7 +85,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHZZ==0"],
-        "CS": 27.554
+        "CS": {"3000":27.554,"1500":6.585}
     },
     {
         "Name": "ee_VBF_zh_ZOnly",
@@ -93,7 +93,7 @@
         "Abbr": "zh",
         "Decay" : "None",
         "Processes" : ["e- e+ > z > ve ve~ l+ l- h CHWW==0"],
-        "CS": 20.007
+        "CS": {"3000":20.007,"1500":3.8605}
     }
   ],
 "Description": "sqrts=3TeV, P(e-)=-0.8, P(e+)=0.0"
