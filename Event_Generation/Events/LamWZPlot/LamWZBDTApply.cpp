@@ -29,7 +29,7 @@ string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter","wh_Full"},{"zh_hW
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
 string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh Full"},{"Zh hWW","Zh hZZ","Zh Interference","Zh Full"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328},{249239,245187,245138}};
+int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,525505}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
