@@ -101,6 +101,7 @@
             }
             for (int ii = 0; ii < N_SIGCAT; ++ii)
             {
+                if (Hsig[ii][i]->GetEntries()<=0) continue;
                 sprintf(temp,"Signal(%s)",SIG_LABEL[channelID-1][ii].c_str());
                 lg->AddEntry(Hsig[ii][i],temp,"F");
             }
