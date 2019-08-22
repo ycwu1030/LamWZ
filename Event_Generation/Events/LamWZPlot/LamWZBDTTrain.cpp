@@ -19,7 +19,8 @@
 
 using namespace std;
 string DIR = "/data/data068/ycwu/LamWZ/Event_Generation/Events/Plots";
-const int LUMINOSITY = 4000; //fb^-1
+const int LUMINOSITY3000 = 4000; //fb^-1
+const int LUMINOSITY1500 = 2000; //fb^-1
 const int N_SIGCAT = 4;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
@@ -28,18 +29,20 @@ string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter","wh_Full"},{"zh_hW
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
 string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh Full"},{"Zh hWW","Zh hZZ","Zh Interference","Zh Full"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,525505}};
+int Sig_NTOTAL3000[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,525505}};
+int Sig_NTOTAL1500[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,750000}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
 {
     SetPlotStyle();
 
-    if (argc != 5) return -1;
+    if (argc != 6) return -1;
     string InputDir(argv[1]);
     int decayID=atoi(argv[2]);
     string tag(argv[3]);
     int channelID=atoi(argv[4]);
+    int sqrts=atoi(argv[5]);
 
     //Create the Folder Saving the results
     string dir,dirtop;
@@ -95,7 +98,14 @@ int main(int argc, char const *argv[])
         {
             LamWZPreAna *ch = new LamWZPreAna(ChainSIG[i]);
             ch->GetEntry(0);
-            WeightSIG[i] = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[channelID-1][i]);
+            if (sqrts == 3000)
+            {
+                WeightSIG[i] = ch->CS*LUMINOSITY3000/((double)Sig_NTOTAL3000[channelID-1][i]);
+            }
+            else if (sqrts == 1500)
+            {
+                WeightSIG[i] = ch->CS*LUMINOSITY1500/((double)Sig_NTOTAL1500[channelID-1][i]);
+            }
             // delete ch;
             dataloader->AddSignalTree(ChainSIG[i],WeightSIG[i]);
         }
@@ -107,7 +117,15 @@ int main(int argc, char const *argv[])
         ChainBKG[i] -> Add(temp);
         LamWZPreAna *ch = new LamWZPreAna(ChainBKG[i]);
         ch->GetEntry(0);
-        WeightBKG[i] = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[i]);
+        if (sqrts == 3000)
+        {
+            WeightBKG[i] = ch->CS*LUMINOSITY3000/((double)Bkg_NTOTAL[i]);
+        }
+        else if (sqrts == 1500)
+        {
+            WeightBKG[i] = ch->CS*LUMINOSITY1500/((double)Bkg_NTOTAL[i]);
+        }
+
         // delete ch;
         dataloader->AddBackgroundTree(ChainBKG[i],WeightBKG[i]);
     }
