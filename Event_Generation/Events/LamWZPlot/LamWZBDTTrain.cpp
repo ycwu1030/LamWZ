@@ -71,7 +71,7 @@ int main(int argc, char const *argv[])
         dataloader->AddVariable( "MET", 'F' );
         dataloader->AddVariable( "Mbb", 'F' );
         dataloader->AddVariable( "Mll", 'F' );
-        dataloader->AddVariable( "AnglebV", 'F' );
+        dataloader->AddVariable( "dRbV", 'F' );
         dataloader->AddVariable( "shat", 'F' );
     }
     else if (channelID == 2)
@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
         dataloader->AddVariable( "MET", 'F' );
         dataloader->AddVariable( "Mbb", 'F' );
         dataloader->AddVariable( "Mll", 'F' );
-        dataloader->AddVariable( "AnglebV", 'F' );
+        dataloader->AddVariable( "dRbV", 'F' );
         dataloader->AddVariable( "shat", 'F' );
     }
 

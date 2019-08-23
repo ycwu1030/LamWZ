@@ -92,7 +92,7 @@ int main(int argc, char const *argv[])
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
-    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_dRbV, F_shat;
 
     if (channelID == 1)
     {
@@ -101,7 +101,7 @@ int main(int argc, char const *argv[])
         reader->AddVariable( "MET", &F_MET );
         reader->AddVariable( "Mbb", &F_Mbb );
         reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "dRbV", &F_dRbV );
         reader->AddVariable( "shat", &F_shat );
     }
     else if (channelID == 2)
@@ -110,7 +110,7 @@ int main(int argc, char const *argv[])
         reader->AddVariable( "MET", &F_MET );
         reader->AddVariable( "Mbb", &F_Mbb );
         reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "dRbV", &F_dRbV );
         reader->AddVariable( "shat", &F_shat );
     }
     
@@ -164,7 +164,8 @@ int main(int argc, char const *argv[])
             F_MET = ch->MET;
             F_Mll = ch->Mll;
             F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
+            // F_AnglebV = ch->AnglebV;
+            F_dRbV = ch->dRbV;
             F_shat = ch->shat;
         }
         else if (channelID == 2)
@@ -173,7 +174,8 @@ int main(int argc, char const *argv[])
             F_MET = ch->MET;
             F_Mll = ch->Mll;
             F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
+            // F_AnglebV = ch->AnglebV;
+            F_dRbV = ch->dRbV;
             F_shat = ch->shat;
         }
         BDTScore = reader->EvaluateMVA("BDT method");
