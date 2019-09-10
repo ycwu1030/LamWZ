@@ -15,7 +15,7 @@ import argparse
 import simplejson
 
 Decays={'bbll':1,'tatall':2}
-BkgSigTag={'bkg':0,'hWW':1,'hZZ':2,'Inter':3,'Full':4}
+BkgSigTag={'bkg':0,'hWW':1,'hZZ':2,'Inter':3,'Full':4,'Full_lwz0x6':5,'Full_lwz0x8':6,'Full_lwz1x0':7,'Full_lwz1x2':8,'Full_lwz1x4':9}
 Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
 #ProsList=['bkg_tt_bbll','bkg_VBF_wz_bbll','bkg_VBF_zz_bbll','bkg_VBF_zz_tatall','ee_VBF_wh_InterOnly','ee_VBF_wh_WOnly','ee_VBF_wh_ZOnly','ee_VBF_zh_InterOnly','ee_VBF_zh_WOnly','ee_VBF_zh_ZOnly']
 #ChannelInfo=[]
@@ -29,11 +29,12 @@ parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of 
 parser.add_argument('-o',dest='outdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna')
 parser.add_argument('-m',dest='mode',default='wh')
 parser.add_argument('-c',dest='case',default='Full')
+parser.add_argument('-i',dest='processfile',default='processes_list.json')
 parser.add_argument('-s',dest='selection',type=simplejson.loads,default='{}')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 args = parser.parse_args()
 
-ProcessesFile="../processes_list.json"
+ProcessesFile=args.processfile
 decay="bbll"
 Analysis='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAnalysis/LamWZPreAnalysis.x'
 Outdir=args.outdir
