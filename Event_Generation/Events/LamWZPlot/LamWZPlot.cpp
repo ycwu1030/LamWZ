@@ -13,13 +13,13 @@
 using namespace std;
 string DIR = "/data/data068/ycwu/LamWZ/Event_Generation/Events/Plots";
 const int LUMINOSITY = 300; //fb^-1
-const int N_SIGCAT = 4;
+const int N_SIGCAT = 9;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[2][N_SIGCAT] = {{"wh_hww","wh_hzz","wh_Inter","wh_Full"},{"zh_hww","zh_hzz","zh_Inter","zh_Full"}};
+string SIG_NAME[2][N_SIGCAT] = {{"wh_hww","wh_hzz","wh_Inter","wh_Full","wh_Full_lwz0x6","wh_Full_lwz0x8","wh_Full_lwz1x0","wh_Full_lwz1x2","wh_Full_lwz1x4"},{"zh_hww","zh_hzz","zh_Inter","zh_Full","zh_Full_lwz0x6","zh_Full_lwz0x8","zh_Full_lwz1x0","zh_Full_lwz1x2","zh_Full_lwz1x4"}};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh All"},{"Zh hWW","Zh hZZ","Zh Interference","Zh All"}};
+string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh All","Wh(#lambda_{WZ}=0.6)","Wh(#lambda_{WZ}=0.8)","Wh(#lambda_{WZ}=1.0)","Wh(#lambda_{WZ}=1.2)","Wh(#lambda_{WZ}=1.4)"},{"Zh hWW","Zh hZZ","Zh Interference","Zh All","Zh(#lambda_{WZ}=0.6)","Zh(#lambda_{WZ}=0.8)","Zh(#lambda_{WZ}=1.0)","Zh(#lambda_{WZ}=1.2)","Zh(#lambda_{WZ}=1.4)"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
 
 
@@ -68,7 +68,7 @@ int main(int argc, char const *argv[])
     //Plotting the Histogram;
     cout<<"Collect Histograms..."<<endl;
     int bkgcolor[N_BKGCAT]={kOrange+8,kSpring-3,kCyan-4};//,kAzure-3,kMagenta-4,kMagenta+3};
-    int sigcolor[N_SIGCAT]={kBlack,kGray+2,kGray,kBlack};
+    int sigcolor[N_SIGCAT]={kBlack,kGray+2,kGray,kBlack,kRed+4,kRed-1,kRed-5,kRed-8,kRed-10};
 
     string dir,dirtop;
     stringstream sst,ssttop;
