@@ -40,6 +40,30 @@
         "CS": {"3000":62.3534,"1500":19.5114}
     },
     {
+        "Name": "ee_VBF_wh_Full_lwz0x65",
+        "BkgSigTag": "Full_lwz0x65",
+        "Abbr": "wh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "CS": {"3000":52.2436,"1500":17.424}
+    },
+    {
+        "Name": "ee_VBF_wh_Full_lwz0x7",
+        "BkgSigTag": "Full_lwz0x7",
+        "Abbr": "wh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "CS": {"3000":45.0168,"1500":15.8934}
+    },
+    {
+        "Name": "ee_VBF_wh_Full_lwz0x75",
+        "BkgSigTag": "Full_lwz0x75",
+        "Abbr": "wh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "CS": {"3000":39.8278,"1500":14.7601}
+    },
+    {
         "Name": "ee_VBF_wh_Full_lwz0x8",
         "BkgSigTag": "Full_lwz0x8",
         "Abbr": "wh",
@@ -72,12 +96,44 @@
         "CS": {"3000":30.4145,"1500":11.7656}
     },
     {
+        "Name": "ee_VBF_wh_Full_lwz1x6",
+        "BkgSigTag": "Full_lwz1x6",
+        "Abbr": "wh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "CS": {"3000":32.5346,"1500":11.959}
+    },
+    {
         "Name": "ee_VBF_zh_Full_lwz0x6",
         "BkgSigTag": "Full_lwz0x6",
         "Abbr": "zh",
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
         "CS": {"3000":30.4107,"1500":8.56278}
+    },
+    {
+        "Name": "ee_VBF_zh_Full_lwz0x65",
+        "BkgSigTag": "Full_lwz0x65",
+        "Abbr": "zh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "CS": {"3000":26.2448,"1500":7.6492}
+    },
+    {
+        "Name": "ee_VBF_zh_Full_lwz0x7",
+        "BkgSigTag": "Full_lwz0x7",
+        "Abbr": "zh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "CS": {"3000":23.1975,"1500":6.96714}
+    },
+    {
+        "Name": "ee_VBF_zh_Full_lwz0x75",
+        "BkgSigTag": "Full_lwz0x75",
+        "Abbr": "zh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "CS": {"3000":20.9473,"1500":6.45144}
     },
     {
         "Name": "ee_VBF_zh_Full_lwz0x8",
@@ -110,6 +166,14 @@
         "Decay" : "bbll",
         "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
         "CS": {"3000":15.1681,"1500":4.80643}
+    },
+    {
+        "Name": "ee_VBF_zh_Full_lwz1x6",
+        "BkgSigTag": "Full_lwz1x6",
+        "Abbr": "zh",
+        "Decay" : "bbll",
+        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "CS": {"3000":15.5999,"1500":4.81332}
     }
   ],
 "Description": "sqrts=3TeV, P(e-)=-0.8, P(e+)=0.0"
