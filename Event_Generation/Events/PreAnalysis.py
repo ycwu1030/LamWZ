@@ -15,7 +15,7 @@ import argparse
 import simplejson
 
 Decays={'bbll':1,'tatall':2}
-BkgSigTag={'bkg':0,'hWW':1,'hZZ':2,'Inter':3,'Full':4,'Full_lwz0x6':5,'Full_lwz0x8':6,'Full_lwz1x0':7,'Full_lwz1x2':8,'Full_lwz1x4':9}
+BkgSigTag={'bkg':0,'Full_lwz0x6':1,'Full_lwz0x65':2,'Full_lwz0x7':3,'Full_lwz0x75':4,'Full_lwz0x8':5,'Full_lwz1x0':6,'Full_lwz1x2':7,'Full_lwz1x4':8,'Full_lwz1x6':9}
 Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
 #ProsList=['bkg_tt_bbll','bkg_VBF_wz_bbll','bkg_VBF_zz_bbll','bkg_VBF_zz_tatall','ee_VBF_wh_InterOnly','ee_VBF_wh_WOnly','ee_VBF_wh_ZOnly','ee_VBF_zh_InterOnly','ee_VBF_zh_WOnly','ee_VBF_zh_ZOnly']
 #ChannelInfo=[]
