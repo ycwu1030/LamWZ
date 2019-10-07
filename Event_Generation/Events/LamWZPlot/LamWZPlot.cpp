@@ -68,7 +68,8 @@ int main(int argc, char const *argv[])
     //Plotting the Histogram;
     cout<<"Collect Histograms..."<<endl;
     int bkgcolor[N_BKGCAT]={kOrange+8,kSpring-3,kCyan-4};//,kAzure-3,kMagenta-4,kMagenta+3};
-    int sigcolor[N_SIGCAT]={kBlack,kGray+2,kGray,kBlack,kRed+4,kRed-1,kRed-5,kRed-8,kRed-10};
+    // int sigcolor[N_SIGCAT]={kBlack,kGray+2,kGray,kBlack,kRed+4,kRed-1,kRed-5,kRed-8,kRed-10};
+    int sigcolor[N_SIGCAT]={kBlue+4,kBlue+3,kBlue+2,kBlue+1,kBlue,kBlue-4,kBlue-7,kBlue-9,kBlue-10};
 
     string dir,dirtop;
     stringstream sst,ssttop;
