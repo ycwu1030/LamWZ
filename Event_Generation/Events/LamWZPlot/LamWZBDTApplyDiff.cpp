@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         Chaintotal[i] = new TChain("LamWZPreAna");
-        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
+        sprintf(temp,"%s/%s_*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
         Chaintotal[i] -> Add(temp);
         ch[i] = new LamWZPreAna(Chaintotal[i]);
         sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
