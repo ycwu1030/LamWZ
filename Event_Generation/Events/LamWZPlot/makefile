@@ -23,7 +23,7 @@ ARCH          = linux
 #CubaPATH := $(maindir)/../Cuba-4.2
 
 ROOTCFLAGS   := $(shell root-config --cflags)
-ROOTLIBS     := $(shell root-config --libs) -lMLP -lMinuit -lTreePlayer -lTMVA -lXMLIO  -lMLP -lm
+ROOTLIBS     := $(shell root-config --libs) -lMLP -lMinuit -lTreePlayer -lTMVA -lXMLIO  -lMLP -lm -lRooFit -lRooFitCore -lRooStats
 ROOTGLIBS    := $(shell root-config --glibs)
 
 
