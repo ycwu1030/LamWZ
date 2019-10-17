@@ -73,6 +73,7 @@ int main(int argc, char const *argv[])
     double NEVENTS[N_SIGCAT];
     TChain *Chaintotal[N_SIGCAT];
     TChain *ChainBKG = new TChain("LamWZPreAna");
+    TH1F *HistSHAT[N_SIGCAT];
     LamWZPreAna *ch[N_SIGCAT];
     LamWZPreAna *chbkg;
     TTree *tshat[N_SIGCAT];
@@ -96,6 +97,8 @@ int main(int argc, char const *argv[])
         tshat[i]->Branch("shat",&shat,"shat/D");
         tshat[i]->Branch("Weight",&Weight,"Weight/D");
         NEVENTS[i] = 0;
+        sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
+        HistSHAT[i] = new TH1F(temp,"",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     }
 
     TMVA::Tools::Instance();
@@ -217,6 +220,7 @@ int main(int argc, char const *argv[])
         {
             NEVENTS[isig] += Weight;
             tshat[isig]->Fill();
+            HistSHAT[isig]->Fill(shat,Weight);
         }      
         // t2->Fill();
     }
@@ -293,13 +297,18 @@ int main(int argc, char const *argv[])
                 }
             }
             NEVENTS[isig] += Weight;
-            tshat[isig]->Fill();      
+            tshat[isig]->Fill(); 
+            HistSHAT[isig]->Fill(shat,Weight);     
             // t2->Fill();
         }
         f2->cd();
         tshat[isig]->Write();
+        HistSHAT[isig]->Write();
     }
+    f2->Close();
 
+    // sprintf(temp,"%s/BDTResult_Diff.root",dir.c_str());
+    // f2 = new TFile(temp);
     // int NBINS = 20;
     // RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     // roo_shat.setBins(NBINS);
@@ -339,9 +348,8 @@ int main(int argc, char const *argv[])
     // f2->cd();
     // g1->Write();
 
-    // // delete tshat;
     // delete g1;
-    f2->Close();
+    // f2->Close();
     cout<<"Program Exit!"<<endl;
     cout<<"=================================>"<<endl;
     return 0;
