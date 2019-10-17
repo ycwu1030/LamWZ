@@ -71,21 +71,24 @@ int main(int argc, char const *argv[])
 
     char temp[500];
     TChain *Chaintotal[N_SIGCAT];
+    TChain *ChainBKG = new TChain("LamWZPreAna");
     LamWZPreAna *ch[N_SIGCAT];
+    LamWZPreAna *chbkg;
     TTree *tshat[N_SIGCAT];
     double shat;
     double Weight;
     // TChain *Chaintotal = new TChain("LamWZPreAna");
+    for (int i = 0; i < N_BKGCAT; ++i)
+    {
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[i].c_str());
+        ChainBKG -> Add(temp);
+    }
+    chbkg = new LamWZPreAna(ChainBKG);
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         Chaintotal[i] = new TChain("LamWZPreAna");
         sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
         Chaintotal[i] -> Add(temp);
-        for (int i = 0; i < N_BKGCAT; ++i)
-        {
-            sprintf(temp,"%s/%s*.root",InputDir.c_str(),BKG_NAME[i].c_str());
-            Chaintotal[i] -> Add(temp);
-        }
         ch[i] = new LamWZPreAna(Chaintotal[i]);
         sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
         tshat[i] = new TTree(temp,"shat storage for different lamWZ");
@@ -109,7 +112,7 @@ int main(int argc, char const *argv[])
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
-    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_dRbV, F_shat;
 
     if (channelID == 1)
     {
@@ -118,7 +121,7 @@ int main(int argc, char const *argv[])
         reader->AddVariable( "MET", &F_MET );
         reader->AddVariable( "Mbb", &F_Mbb );
         reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "dRbV", &F_dRbV );
         reader->AddVariable( "shat", &F_shat );
     }
     else if (channelID == 2)
@@ -127,7 +130,7 @@ int main(int argc, char const *argv[])
         reader->AddVariable( "MET", &F_MET );
         reader->AddVariable( "Mbb", &F_Mbb );
         reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
+        reader->AddVariable( "dRbV", &F_dRbV );
         reader->AddVariable( "shat", &F_shat );
     }
     
@@ -145,7 +148,7 @@ int main(int argc, char const *argv[])
         // int SorB; // 1 for Sig, 0 for Bkg;
         int id; // Histogram ID;
         NEVENTS[isig] = 0.0;
-        printf("%d entries to be processed!\n",nentries);
+        printf("%d signal entries to be processed!\n",nentries);
         for (int entry = 0; entry < nentries; ++entry)
         {
             if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
@@ -185,7 +188,7 @@ int main(int argc, char const *argv[])
                 F_MET = ch[isig]->MET;
                 F_Mll = ch[isig]->Mll;
                 F_Mbb = ch[isig]->Mbb;
-                F_AnglebV = ch[isig]->AnglebV;
+                F_dRbV = ch[isig]->dRbV;
                 F_shat = ch[isig]->shat;
                 shat = F_shat;
             }
@@ -195,8 +198,82 @@ int main(int argc, char const *argv[])
                 F_MET = ch[isig]->MET;
                 F_Mll = ch[isig]->Mll;
                 F_Mbb = ch[isig]->Mbb;
-                F_AnglebV = ch[isig]->AnglebV;
+                F_dRbV = ch[isig]->dRbV;
                 F_shat = ch[isig]->shat;
+                shat = F_shat;
+            }
+            BDTScore = reader->EvaluateMVA("BDT method");
+            if (sqrts == 3000)
+            {
+                if (BDTScore<BDTScoreCuts3000[channelID-1])
+                {
+                    continue;
+                }
+            }
+            else if (sqrts == 1500)
+            {
+                if (BDTScore < BDTScoreCuts1500[channelID-1])
+                {
+                    continue;
+                }
+            }
+            NEVENTS[isig] += Weight;
+            tshat[isig]->Fill();      
+            // t2->Fill();
+        }
+        nentries = Int_t(ChainBKG->GetEntries());
+        printf("%d bkg entries to be processed!\n",nentries);
+        for (int entry = 0; entry < nentries; ++entry)
+        {
+            if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
+            chbkg->GetEntry(entry);
+            cat = chbkg->Cate;
+            Good = (chbkg->NBJet == 2 && chbkg->NLep_Af==2);
+            if(!Good) continue;
+            GetHistID(cat,SorB,id);
+            if (SorB == 1)
+            {
+                if (sqrts == 3000)
+                {
+                    Weight = chbkg->CS*LUMINOSITY3000/((double)Sig_NTOTAL3000[channelID-1][id]);
+                }
+                else if (sqrts == 1500)
+                {
+                    Weight = chbkg->CS*LUMINOSITY1500/((double)Sig_NTOTAL1500[channelID-1][id]);
+                }
+                
+            }
+            else
+            {
+                if (sqrts == 3000)
+                {
+                    Weight = chbkg->CS*LUMINOSITY3000/((double)Bkg_NTOTAL[id]);
+                }
+                else if (sqrts == 1500)
+                {
+                    Weight = chbkg->CS*LUMINOSITY1500/((double)Bkg_NTOTAL[id]);
+                }
+                
+            }
+            if (channelID == 1)
+            {
+                F_FLepEta = chbkg->FLepEta;
+                F_HT = chbkg->HT;
+                F_MET = chbkg->MET;
+                F_Mll = chbkg->Mll;
+                F_Mbb = chbkg->Mbb;
+                F_dRbV = chbkg->dRbV;
+                F_shat = chbkg->shat;
+                shat = F_shat;
+            }
+            else if (channelID == 2)
+            {
+                F_HT = chbkg->HT;
+                F_MET = chbkg->MET;
+                F_Mll = chbkg->Mll;
+                F_Mbb = chbkg->Mbb;
+                F_dRbV = chbkg->dRbV;
+                F_shat = chbkg->shat;
                 shat = F_shat;
             }
             BDTScore = reader->EvaluateMVA("BDT method");
