@@ -70,6 +70,7 @@ int main(int argc, char const *argv[])
 
 
     char temp[500];
+    double NEVENTS[N_SIGCAT];
     TChain *Chaintotal[N_SIGCAT];
     TChain *ChainBKG = new TChain("LamWZPreAna");
     LamWZPreAna *ch[N_SIGCAT];
@@ -94,6 +95,7 @@ int main(int argc, char const *argv[])
         tshat[i] = new TTree(temp,"shat storage for different lamWZ");
         tshat[i]->Branch("shat",&shat,"shat/D");
         tshat[i]->Branch("Weight",&Weight,"Weight/D");
+        NEVENTS[i] = 0;
     }
 
     TMVA::Tools::Instance();
@@ -138,16 +140,89 @@ int main(int argc, char const *argv[])
     string methodName = "BDT method";
     string weightfile = dir + "/TMVAClassification_BDT.weights.xml";
     reader->BookMVA(methodName,weightfile);
-
-    double NEVENTS[N_SIGCAT];
     // --------------------------------------------------------------
+    Int_t Good=true;
+    int id; // Histogram ID;
+    Int_t nentries = Int_t(ChainBKG->GetEntries());
+    printf("%d bkg entries to be processed!\n",nentries);
+    for (int entry = 0; entry < nentries; ++entry)
+    {
+        if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
+        chbkg->GetEntry(entry);
+        cat = chbkg->Cate;
+        Good = (chbkg->NBJet == 2 && chbkg->NLep_Af==2);
+        if(!Good) continue;
+        GetHistID(cat,SorB,id);
+        if (SorB == 1)
+        {
+            if (sqrts == 3000)
+            {
+                Weight = chbkg->CS*LUMINOSITY3000/((double)Sig_NTOTAL3000[channelID-1][id]);
+            }
+            else if (sqrts == 1500)
+            {
+                Weight = chbkg->CS*LUMINOSITY1500/((double)Sig_NTOTAL1500[channelID-1][id]);
+            }
+            
+        }
+        else
+        {
+            if (sqrts == 3000)
+            {
+                Weight = chbkg->CS*LUMINOSITY3000/((double)Bkg_NTOTAL[id]);
+            }
+            else if (sqrts == 1500)
+            {
+                Weight = chbkg->CS*LUMINOSITY1500/((double)Bkg_NTOTAL[id]);
+            }
+            
+        }
+        if (channelID == 1)
+        {
+            F_FLepEta = chbkg->FLepEta;
+            F_HT = chbkg->HT;
+            F_MET = chbkg->MET;
+            F_Mll = chbkg->Mll;
+            F_Mbb = chbkg->Mbb;
+            F_dRbV = chbkg->dRbV;
+            F_shat = chbkg->shat;
+            shat = F_shat;
+        }
+        else if (channelID == 2)
+        {
+            F_HT = chbkg->HT;
+            F_MET = chbkg->MET;
+            F_Mll = chbkg->Mll;
+            F_Mbb = chbkg->Mbb;
+            F_dRbV = chbkg->dRbV;
+            F_shat = chbkg->shat;
+            shat = F_shat;
+        }
+        BDTScore = reader->EvaluateMVA("BDT method");
+        if (sqrts == 3000)
+        {
+            if (BDTScore<BDTScoreCuts3000[channelID-1])
+            {
+                continue;
+            }
+        }
+        else if (sqrts == 1500)
+        {
+            if (BDTScore < BDTScoreCuts1500[channelID-1])
+            {
+                continue;
+            }
+        }
+        for (int isig = 0; isig < N_SIGCAT; isig++)
+        {
+            NEVENTS[isig] += Weight;
+            tshat[isig]->Fill();
+        }      
+        // t2->Fill();
+    }
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        Int_t nentries = Int_t(Chaintotal[isig]->GetEntries());
-        Int_t Good=true;
-        // int SorB; // 1 for Sig, 0 for Bkg;
-        int id; // Histogram ID;
-        NEVENTS[isig] = 0.0;
+        nentries = Int_t(Chaintotal[isig]->GetEntries());
         printf("%d signal entries to be processed!\n",nentries);
         for (int entry = 0; entry < nentries; ++entry)
         {
@@ -221,125 +296,51 @@ int main(int argc, char const *argv[])
             tshat[isig]->Fill();      
             // t2->Fill();
         }
-        nentries = Int_t(ChainBKG->GetEntries());
-        printf("%d bkg entries to be processed!\n",nentries);
-        for (int entry = 0; entry < nentries; ++entry)
-        {
-            if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
-            chbkg->GetEntry(entry);
-            cat = chbkg->Cate;
-            Good = (chbkg->NBJet == 2 && chbkg->NLep_Af==2);
-            if(!Good) continue;
-            GetHistID(cat,SorB,id);
-            if (SorB == 1)
-            {
-                if (sqrts == 3000)
-                {
-                    Weight = chbkg->CS*LUMINOSITY3000/((double)Sig_NTOTAL3000[channelID-1][id]);
-                }
-                else if (sqrts == 1500)
-                {
-                    Weight = chbkg->CS*LUMINOSITY1500/((double)Sig_NTOTAL1500[channelID-1][id]);
-                }
-                
-            }
-            else
-            {
-                if (sqrts == 3000)
-                {
-                    Weight = chbkg->CS*LUMINOSITY3000/((double)Bkg_NTOTAL[id]);
-                }
-                else if (sqrts == 1500)
-                {
-                    Weight = chbkg->CS*LUMINOSITY1500/((double)Bkg_NTOTAL[id]);
-                }
-                
-            }
-            if (channelID == 1)
-            {
-                F_FLepEta = chbkg->FLepEta;
-                F_HT = chbkg->HT;
-                F_MET = chbkg->MET;
-                F_Mll = chbkg->Mll;
-                F_Mbb = chbkg->Mbb;
-                F_dRbV = chbkg->dRbV;
-                F_shat = chbkg->shat;
-                shat = F_shat;
-            }
-            else if (channelID == 2)
-            {
-                F_HT = chbkg->HT;
-                F_MET = chbkg->MET;
-                F_Mll = chbkg->Mll;
-                F_Mbb = chbkg->Mbb;
-                F_dRbV = chbkg->dRbV;
-                F_shat = chbkg->shat;
-                shat = F_shat;
-            }
-            BDTScore = reader->EvaluateMVA("BDT method");
-            if (sqrts == 3000)
-            {
-                if (BDTScore<BDTScoreCuts3000[channelID-1])
-                {
-                    continue;
-                }
-            }
-            else if (sqrts == 1500)
-            {
-                if (BDTScore < BDTScoreCuts1500[channelID-1])
-                {
-                    continue;
-                }
-            }
-            NEVENTS[isig] += Weight;
-            tshat[isig]->Fill();      
-            // t2->Fill();
-        }
         f2->cd();
         tshat[isig]->Write();
     }
 
-    int NBINS = 20;
-    RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
-    roo_shat.setBins(NBINS);
-    RooRealVar roo_weight("Weight","Weight",0,20);
-    RooArgSet testset = RooArgSet(roo_shat,roo_weight);
+    // int NBINS = 20;
+    // RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
+    // roo_shat.setBins(NBINS);
+    // RooRealVar roo_weight("Weight","Weight",0,20);
+    // RooArgSet testset = RooArgSet(roo_shat,roo_weight);
 
-    RooDataSet *roo_data[N_SIGCAT];
-    RooDataHist *roo_datahist[N_SIGCAT];
-    RooHistPdf *roo_pdfhist[N_SIGCAT]; 
-    for (int i = 0; i < N_SIGCAT; i++)
-    {
-        sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
-        roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
-        roo_datahist[i] = roo_data[i]->binnedClone();
-        sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
-        roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
-    }
-    int NTRIALS = 5000;
+    // RooDataSet *roo_data[N_SIGCAT];
+    // RooDataHist *roo_datahist[N_SIGCAT];
+    // RooHistPdf *roo_pdfhist[N_SIGCAT]; 
+    // for (int i = 0; i < N_SIGCAT; i++)
+    // {
+    //     sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
+    //     roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
+    //     roo_datahist[i] = roo_data[i]->binnedClone();
+    //     sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
+    //     roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
+    // }
+    // int NTRIALS = 5000;
 
-    double NLL[N_SIGCAT];
-    double Delta_NLL[N_SIGCAT];
-    for (int isig = 0; isig < N_SIGCAT; isig++)
-    {
-        NLL[isig] = 0;
-        for (int i = 0; i < NTRIALS; i++)
-        {
-            RooDataSet* roo_testdata = roo_pdfhist[CENTERID]->generate(roo_shat,NEVENTS[CENTERID]);
-            NLL[isig] += (roo_pdfhist[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
-        }
-        NLL[isig]/=NTRIALS;
-    }
-    for (int isig = 0; isig < N_SIGCAT; isig++)
-    {
-        Delta_NLL[isig] = NLL[isig] - NLL[CENTERID];
-    }
-    TGraph *g1 = new TGraph(N_SIGCAT,lwzValue,Delta_NLL);
-    f2->cd();
-    g1->Write();
+    // double NLL[N_SIGCAT];
+    // double Delta_NLL[N_SIGCAT];
+    // for (int isig = 0; isig < N_SIGCAT; isig++)
+    // {
+    //     NLL[isig] = 0;
+    //     for (int i = 0; i < NTRIALS; i++)
+    //     {
+    //         RooDataSet* roo_testdata = roo_pdfhist[CENTERID]->generate(roo_shat,NEVENTS[CENTERID]);
+    //         NLL[isig] += (roo_pdfhist[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
+    //     }
+    //     NLL[isig]/=NTRIALS;
+    // }
+    // for (int isig = 0; isig < N_SIGCAT; isig++)
+    // {
+    //     Delta_NLL[isig] = NLL[isig] - NLL[CENTERID];
+    // }
+    // TGraph *g1 = new TGraph(N_SIGCAT,lwzValue,Delta_NLL);
+    // f2->cd();
+    // g1->Write();
 
-    // delete tshat;
-    delete g1;
+    // // delete tshat;
+    // delete g1;
     f2->Close();
     cout<<"Program Exit!"<<endl;
     cout<<"=================================>"<<endl;
