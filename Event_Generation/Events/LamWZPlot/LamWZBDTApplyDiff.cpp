@@ -23,6 +23,7 @@
 #include "RooDataSet.h"
 #include "RooDataHist.h"
 #include "RooHistPdf.h"
+#include "RooPlot.h"
 
 using namespace RooFit;
 using namespace std;
@@ -307,25 +308,38 @@ int main(int argc, char const *argv[])
     }
     f2->Close();
 
-    // sprintf(temp,"%s/BDTResult_Diff.root",dir.c_str());
-    // f2 = new TFile(temp);
-    // int NBINS = 20;
-    // RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
-    // roo_shat.setBins(NBINS);
+    sprintf(temp,"%s/BDTResult_Diff.root",dir.c_str());
+    f2 = new TFile(temp);
+    sprintf(temp,"%s/BDTResult_Diff_PDF.root",dir.c_str());
+    TFile *f3 = new TFile(temp,"RECREATE");
+    int NBINS = 20;
+    RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
+    roo_shat.setBins(NBINS);
     // RooRealVar roo_weight("Weight","Weight",0,20);
     // RooArgSet testset = RooArgSet(roo_shat,roo_weight);
 
     // RooDataSet *roo_data[N_SIGCAT];
-    // RooDataHist *roo_datahist[N_SIGCAT];
-    // RooHistPdf *roo_pdfhist[N_SIGCAT]; 
-    // for (int i = 0; i < N_SIGCAT; i++)
-    // {
-    //     sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
-    //     roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
-    //     roo_datahist[i] = roo_data[i]->binnedClone();
-    //     sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
-    //     roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
-    // }
+    RooDataHist *roo_datahist[N_SIGCAT];
+    RooHistPdf *roo_pdfhist[N_SIGCAT]; 
+    RooPlot *roo_pdfframe = roo_shat.frame();
+    TH1F *roo_Hist[N_SIGCAT];
+    for (int i = 0; i < N_SIGCAT; i++)
+    {
+        sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
+        roo_Hist[i] = (TH1F*) f2->Get(temp);
+        sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
+        // roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
+        // roo_datahist[i] = roo_data[i]->binnedClone();
+        roo_datahist[i] = new RooDataHist(temp,"",roo_shat,roo_Hist[i]);
+        sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
+        roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
+        roo_pdfhist[i]->plotOn(roo_pdfframe);
+    }
+    TCanvas *c1 = new TCanvas("c1","",1000,800);
+    roo_pdfframe->Draw();
+    f3->cd();
+    c1->Write();
+    f3->Close();
     // int NTRIALS = 5000;
 
     // double NLL[N_SIGCAT];
