@@ -87,12 +87,12 @@ int main(int argc, char const *argv[])
     // RooArgSet testset = RooArgSet(roo_shat,roo_weight);
 
     // RooDataSet *roo_data[N_SIGCAT];
-    RooDataHist roo_datahist_SIG[N_SIGCAT];
-    RooHistPdf roo_pdfhist_SIG[N_SIGCAT]; 
-    RooDataHist roo_datahist_BKG[N_SIGCAT];
-    RooHistPdf roo_pdfhist_BKG[N_SIGCAT]; 
-    RooDataHist roo_datahist_TOT[N_SIGCAT];
-    RooHistPdf roo_pdfhist_TOT[N_SIGCAT]; 
+    RooDataHist *roo_datahist_SIG[N_SIGCAT];
+    RooHistPdf *roo_pdfhist_SIG[N_SIGCAT]; 
+    RooDataHist *roo_datahist_BKG[N_SIGCAT];
+    RooHistPdf *roo_pdfhist_BKG[N_SIGCAT]; 
+    RooDataHist *roo_datahist_TOT[N_SIGCAT];
+    RooHistPdf *roo_pdfhist_TOT[N_SIGCAT]; 
     // RooPlot *roo_pdfframe = roo_shat.frame();
     TH1F *roo_Hist_SIG[N_SIGCAT];
     TH1F *roo_Hist_BKG[N_SIGCAT];
@@ -107,25 +107,25 @@ int main(int argc, char const *argv[])
         sprintf(temp,"%s_SIG",SIG_NAME[channelID-1][i].c_str());
         // roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
         // roo_datahist[i] = roo_data[i]->binnedClone();
-        roo_datahist_SIG[i] = RooDataHist(temp,"",roo_shat,roo_Hist_SIG[i]);
+        roo_datahist_SIG[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_SIG[i]);
         sprintf(temp,"%s_SIG_pdf",SIG_NAME[channelID-1][i].c_str());
-        roo_pdfhist_SIG[i] = RooHistPdf(temp,temp,roo_shat,roo_datahist_SIG[i]);
+        roo_pdfhist_SIG[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_SIG[i]);
         // roo_pdfhist_SIG[i].plotOn(roo_pdfframe);
 
         sprintf(temp,"Hist_BKG_%s",SIG_NAME[channelID-1][i].c_str());
         roo_Hist_BKG[i] = (TH1F*) f2->Get(temp);
         NEVENTS_BKG[i] = roo_Hist_BKG[i]->Integral();
         sprintf(temp,"%s_BKG",SIG_NAME[channelID-1][i].c_str());
-        roo_datahist_BKG[i] = RooDataHist(temp,"",roo_shat,roo_Hist_BKG[i]);
+        roo_datahist_BKG[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_BKG[i]);
         sprintf(temp,"%s_BKG_pdf",SIG_NAME[channelID-1][i].c_str());
-        roo_pdfhist_BKG[i] = RooHistPdf(temp,temp,roo_shat,roo_datahist_BKG[i]);
+        roo_pdfhist_BKG[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_BKG[i]);
 
         sprintf(temp,"Hist_TOT_%s",SIG_NAME[channelID-1][i].c_str());
         roo_Hist_TOT[i] = (TH1F*) f2->Get(temp);
         sprintf(temp,"%s_TOT",SIG_NAME[channelID-1][i].c_str());
-        roo_datahist_TOT[i] = RooDataHist(temp,"",roo_shat,roo_Hist_TOT[i]);
+        roo_datahist_TOT[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_TOT[i]);
         sprintf(temp,"%s_TOT_pdf",SIG_NAME[channelID-1][i].c_str());
-        roo_pdfhist_TOT[i] = RooHistPdf(temp,temp,roo_shat,roo_datahist_TOT[i]);
+        roo_pdfhist_TOT[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_TOT[i]);
     }
     // TCanvas *c1 = new TCanvas("c1","",1000,800);
     // roo_pdfframe->Draw();
@@ -135,15 +135,15 @@ int main(int argc, char const *argv[])
 
     RooArgList shapes[N_SIGCAT];
     RooArgList yields[N_SIGCAT];
-    RooAddPdf totalPdf[N_SIGCAT];
+    RooAddPdf *totalPdf[N_SIGCAT];
     RooRealVar sig_yeild[N_SIGCAT];
     RooRealVar bkg_yeild[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
         // sprintf(temp,"Shape_%s",SIG_NAME[channelID-1][isig].c_str());
         // shapes[isig] = RooArgList(temp);
-        shapes[isig].add(roo_pdfhist_SIG[isig]);
-        shapes[isig].add(roo_pdfhist_BKG[isig]);
+        shapes[isig].addClone(*roo_pdfhist_SIG[isig]);
+        shapes[isig].addClone(*roo_pdfhist_BKG[isig]);
         sprintf(temp,"Yeild_SIG_%s",SIG_NAME[channelID-1][isig].c_str());
         sig_yeild[isig] = RooRealVar(temp,"",NEVENTS_SIG[isig]);
         sprintf(temp,"Yeild_BKG_%s",SIG_NAME[channelID-1][isig].c_str());
@@ -151,10 +151,10 @@ int main(int argc, char const *argv[])
         cout<<"Sig-"<<isig<<": "<<NEVENTS_SIG[isig]<<", "<<NEVENTS_BKG[isig]<<endl;
         // sprintf(temp,"Yeild_%s",SIG_NAME[channelID-1][isig].c_str());
         // yields[isig] = RooArgList(temp);
-        yields[isig].add(sig_yeild[isig]);
-        yields[isig].add(bkg_yeild[isig]);
+        yields[isig].addClone(sig_yeild[isig]);
+        yields[isig].addClone(bkg_yeild[isig]);
         sprintf(temp,"Total_PDF_%s",SIG_NAME[channelID-1][isig].c_str());
-        totalPdf[isig] = RooAddPdf(temp,"",shapes[isig],yields[isig]); 
+        totalPdf[isig] = new RooAddPdf(temp,"",shapes[isig],yields[isig]); 
     }
 
     int NTRIALS = 5000;
@@ -167,8 +167,8 @@ int main(int argc, char const *argv[])
         for (int i = 0; i < NTRIALS; i++)
         {
             if((i+1)%100==0) cout << "\tTRIALS: "<<(i+1)<<"\r";
-            RooDataSet* roo_testdata = roo_pdfhist_TOT[CENTERID].generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]);
-            NLL[isig] += (totalPdf[isig].createNLL(*roo_testdata,Extended(true)))->getVal();
+            RooDataSet* roo_testdata = roo_pdfhist_TOT[CENTERID]->generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]);
+            NLL[isig] += (totalPdf[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
         }
         cout<<endl;
         NLL[isig]/=NTRIALS;
