@@ -19,10 +19,12 @@
 #include "TMVA/Reader.h"
 
 #include "RooArgSet.h"
+#include "RooArgList.h"
 #include "RooRealVar.h"
 #include "RooDataSet.h"
 #include "RooDataHist.h"
 #include "RooHistPdf.h"
+#include "RooAddPdf.h"
 #include "RooPlot.h"
 
 using namespace RooFit;
@@ -71,13 +73,16 @@ int main(int argc, char const *argv[])
 
 
     char temp[500];
-    double NEVENTS[N_SIGCAT];
+    double NEVENTS_SIG[N_SIGCAT];
+    double NEVENTS_BKG;
     TChain *Chaintotal[N_SIGCAT];
     TChain *ChainBKG = new TChain("LamWZPreAna");
-    TH1F *HistSHAT[N_SIGCAT];
+    TH1F *HistSHAT_SIG[N_SIGCAT];
+    TH1F *HistSHAT_BKG;
     LamWZPreAna *ch[N_SIGCAT];
     LamWZPreAna *chbkg;
-    TTree *tshat[N_SIGCAT];
+    TTree *tshat_SIG[N_SIGCAT];
+    TTree *tshat_BKG;
     double shat;
     double Weight;
     // TChain *Chaintotal = new TChain("LamWZPreAna");
@@ -87,19 +92,25 @@ int main(int argc, char const *argv[])
         ChainBKG -> Add(temp);
     }
     chbkg = new LamWZPreAna(ChainBKG);
+    // sprintf(temp,"BDTResult_BKG_Diff_%s",SIG_NAME[channelID-1][i].c_str());
+    tshat_BKG = new TTree("BDTResult_BKG_Diff","shat storage for different lamWZ");
+    tshat_BKG->Branch("shat",&shat,"shat/D");
+    tshat_BKG->Branch("Weight",&Weight,"Weight/D");
+    NEVENTS_BKG = 0;
+    HistSHAT_BKG = new TH1F("Hist_BKG","",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         Chaintotal[i] = new TChain("LamWZPreAna");
         sprintf(temp,"%s/%s_*.root",InputDir.c_str(),SIG_NAME[channelID-1][i].c_str());
         Chaintotal[i] -> Add(temp);
         ch[i] = new LamWZPreAna(Chaintotal[i]);
-        sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
-        tshat[i] = new TTree(temp,"shat storage for different lamWZ");
-        tshat[i]->Branch("shat",&shat,"shat/D");
-        tshat[i]->Branch("Weight",&Weight,"Weight/D");
-        NEVENTS[i] = 0;
-        sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
-        HistSHAT[i] = new TH1F(temp,"",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
+        sprintf(temp,"BDTResult_SIG_Diff_%s",SIG_NAME[channelID-1][i].c_str());
+        tshat_SIG[i] = new TTree(temp,"shat storage for different lamWZ");
+        tshat_SIG[i]->Branch("shat",&shat,"shat/D");
+        tshat_SIG[i]->Branch("Weight",&Weight,"Weight/D");
+        NEVENTS_SIG[i] = 0;
+        sprintf(temp,"Hist_SIG_%s",SIG_NAME[channelID-1][i].c_str());
+        HistSHAT_SIG[i] = new TH1F(temp,"",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     }
 
     TMVA::Tools::Instance();
@@ -217,14 +228,15 @@ int main(int argc, char const *argv[])
                 continue;
             }
         }
-        for (int isig = 0; isig < N_SIGCAT; isig++)
-        {
-            NEVENTS[isig] += Weight;
-            tshat[isig]->Fill();
-            HistSHAT[isig]->Fill(shat,Weight);
-        }      
+        NEVENTS_BKG += Weight;
+        tshat_BKG->Fill();
+        HistSHAT_BKG->Fill(shat,Weight);
         // t2->Fill();
     }
+    f2->cd();
+    tshat_BKG->Write();
+    HistSHAT_BKG->Write();
+
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
         nentries = Int_t(Chaintotal[isig]->GetEntries());
@@ -297,14 +309,14 @@ int main(int argc, char const *argv[])
                     continue;
                 }
             }
-            NEVENTS[isig] += Weight;
-            tshat[isig]->Fill(); 
-            HistSHAT[isig]->Fill(shat,Weight);     
+            NEVENTS_SIG[isig] += Weight;
+            tshat_SIG[isig]->Fill(); 
+            HistSHAT_SIG[isig]->Fill(shat,Weight);     
             // t2->Fill();
         }
         f2->cd();
-        tshat[isig]->Write();
-        HistSHAT[isig]->Write();
+        tshat_SIG[isig]->Write();
+        HistSHAT_SIG[isig]->Write();
     }
     f2->Close();
 
@@ -315,35 +327,60 @@ int main(int argc, char const *argv[])
     int NBINS = 20;
     RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     roo_shat.setBins(NBINS);
-    RooRealVar roo_weight("Weight","Weight",0,1);
-    RooArgSet testset = RooArgSet(roo_shat,roo_weight);
+    // RooRealVar roo_weight("Weight","Weight",0,1);
+    // RooArgSet testset = RooArgSet(roo_shat,roo_weight);
 
-    RooDataSet *roo_data[N_SIGCAT];
-    RooDataHist *roo_datahist[N_SIGCAT];
-    RooHistPdf *roo_pdfhist[N_SIGCAT]; 
+    // RooDataSet *roo_data[N_SIGCAT];
+    RooDataHist *roo_datahist_SIG[N_SIGCAT];
+    RooHistPdf *roo_pdfhist_SIG[N_SIGCAT]; 
+    RooDataHist *roo_datahist_BKG;
+    RooHistPdf *roo_pdfhist_BKG; 
     RooPlot *roo_pdfframe = roo_shat.frame();
-    TH1F *roo_Hist[N_SIGCAT];
+    TH1F *roo_Hist_SIG[N_SIGCAT];
+    TH1F *roo_Hist_BKG;
     for (int i = 0; i < N_SIGCAT; i++)
     {
-        // sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
-        // roo_Hist[i] = (TH1F*) f2->Get(temp);
-        sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
-        tshat[i] = (TTree*) f2->Get(temp);
+        sprintf(temp,"Hist_SIG_%s",SIG_NAME[channelID-1][i].c_str());
+        roo_Hist_SIG[i] = (TH1F*) f2->Get(temp);
+        // sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
+        // tshat[i] = (TTree*) f2->Get(temp);
         sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
-        roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
-        roo_datahist[i] = roo_data[i]->binnedClone();
-        // roo_datahist[i] = new RooDataHist(temp,"",roo_shat,roo_Hist[i]);
-        sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
-        roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
-        roo_pdfhist[i]->plotOn(roo_pdfframe);
+        // roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
+        // roo_datahist[i] = roo_data[i]->binnedClone();
+        roo_datahist_SIG[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_SIG[i]);
+        sprintf(temp,"%s_SIG_pdf",SIG_NAME[channelID-1][i].c_str());
+        roo_pdfhist_SIG[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_SIG[i]);
+        roo_pdfhist_SIG[i]->plotOn(roo_pdfframe);
     }
+    roo_Hist_BKG = (TH1F*) f2->Get("Hist_BKG");
+    roo_datahist_BKG = new RooDataHist("BKG","",roo_shat,roo_Hist_BKG);
+    roo_pdfhist_BKG = new RooHistPdf("BKG_pdf","BKG_pdf",roo_shat,*roo_datahist_BKG);
     TCanvas *c1 = new TCanvas("c1","",1000,800);
     roo_pdfframe->Draw();
     f3->cd();
     c1->Write();
     // f3->Close();
-    int NTRIALS = 5000;
 
+    RooArgList shapes[N_SIGCAT];
+    RooArgList yields[N_SIGCAT];
+    RooAddPdf totalPdf[N_SIGCAT];
+    RooRealVar sig_yeild[N_SIGCAT];
+    RooRealVar bkg_yeild[N_SIGCAT];
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        shapes[isig].add(*roo_pdfhist_SIG[isig]);
+        shapes[isig].add(*roo_pdfhist_BKG);
+        sprintf(temp,"Yeild_SIG_%s",SIG_NAME[channelID-1][isig].c_str());
+        sig_yeild[isig] = RooRealVar(temp,"",NEVENTS_SIG[isig]);
+        sprintf(temp,"Yeild_BKG_%s",SIG_NAME[channelID-1][isig].c_str());
+        bkg_yeild[isig] = RooRealVar(temp,"",NEVENTS_BKG);
+        yields[isig].add(sig_yeild[isig]);
+        yields[isig].add(bkg_yeild[isig]);
+        sprintf(temp,"Total_PDF_%s",SIG_NAME[channelID-1][isig].c_str());
+        totalPdf[isig] = RooAddPdf(temp,"",shapes[isig],yields[isig]); 
+    }
+
+    int NTRIALS = 5000;
     double NLL[N_SIGCAT];
     double Delta_NLL[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
@@ -353,8 +390,8 @@ int main(int argc, char const *argv[])
         for (int i = 0; i < NTRIALS; i++)
         {
             if((i+1)%100==0) cout << "\tTRIALS: "<<(i+1)<<"\r";
-            RooDataSet* roo_testdata = roo_pdfhist[CENTERID]->generate(roo_shat,NEVENTS[CENTERID]);
-            NLL[isig] += (roo_pdfhist[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
+            RooDataSet* roo_testdata = totalPdf[CENTERID].generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG);
+            NLL[isig] += (totalPdf[isig].createNLL(*roo_testdata,Extended(true)))->getVal();
         }
         cout<<endl;
         NLL[isig]/=NTRIALS;
