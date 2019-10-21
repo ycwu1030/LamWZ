@@ -374,7 +374,7 @@ int main(int argc, char const *argv[])
         sig_yeild[isig] = RooRealVar(temp,"",NEVENTS_SIG[isig]);
         sprintf(temp,"Yeild_BKG_%s",SIG_NAME[channelID-1][isig].c_str());
         bkg_yeild[isig] = RooRealVar(temp,"",NEVENTS_BKG);
-        cout<<"Sig-"<<isig<<": "<<NEVENTS_SIG[isiga]<<", "<<NEVENTS_BKG<<endl;
+        cout<<"Sig-"<<isig<<": "<<NEVENTS_SIG[isig]<<", "<<NEVENTS_BKG<<endl;
         yields[isig].add(sig_yeild[isig]);
         yields[isig].add(bkg_yeild[isig]);
         sprintf(temp,"Total_PDF_%s",SIG_NAME[channelID-1][isig].c_str());
