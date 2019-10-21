@@ -79,6 +79,7 @@ int main(int argc, char const *argv[])
     TChain *ChainBKG = new TChain("LamWZPreAna");
     TH1F *HistSHAT_SIG[N_SIGCAT];
     TH1F *HistSHAT_BKG[N_SIGCAT];
+    TH1F *HistSHAT_TOT[N_SIGCAT];
     LamWZPreAna *ch[N_SIGCAT];
     LamWZPreAna *chbkg;
     TTree *tshat_SIG[N_SIGCAT];
@@ -101,6 +102,8 @@ int main(int argc, char const *argv[])
         NEVENTS_BKG[i] = 0;
         sprintf(temp,"Hist_BKG_%s",SIG_NAME[channelID-1][i].c_str());
         HistSHAT_BKG[i] = new TH1F(temp,"",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
+        sprintf(temp,"Hist_TOT_%s",SIG_NAME[channelID-1][i].c_str());
+        HistSHAT_TOT[i] = new TH1F(temp,"",20,SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     }
     for (int i = 0; i < N_SIGCAT; ++i)
     {
@@ -237,6 +240,7 @@ int main(int argc, char const *argv[])
         {
             NEVENTS_BKG[isig] += Weight;
             HistSHAT_BKG[isig]->Fill(shat,Weight);   
+            HistSHAT_TOT[isig]->Fill(shat,Weight);
         }
         // t2->Fill();
     }
@@ -321,12 +325,14 @@ int main(int argc, char const *argv[])
             }
             NEVENTS_SIG[isig] += Weight;
             tshat_SIG[isig]->Fill(); 
-            HistSHAT_SIG[isig]->Fill(shat,Weight);     
+            HistSHAT_SIG[isig]->Fill(shat,Weight);  
+            HistSHAT_TOT[isig]->Fill(shat,Weight);   
             // t2->Fill();
         }
         f2->cd();
         tshat_SIG[isig]->Write();
         HistSHAT_SIG[isig]->Write();
+        HistSHAT_TOT[isig]->Write();
     }
     f2->Close();
 
@@ -345,9 +351,12 @@ int main(int argc, char const *argv[])
     RooHistPdf *roo_pdfhist_SIG[N_SIGCAT]; 
     RooDataHist *roo_datahist_BKG[N_SIGCAT];
     RooHistPdf *roo_pdfhist_BKG[N_SIGCAT]; 
+    RooDataHist *roo_datahist_TOT[N_SIGCAT];
+    RooHistPdf *roo_pdfhist_TOT[N_SIGCAT]; 
     RooPlot *roo_pdfframe = roo_shat.frame();
     TH1F *roo_Hist_SIG[N_SIGCAT];
     TH1F *roo_Hist_BKG[N_SIGCAT];
+    TH1F *roo_Hist_TOT[N_SIGCAT];
     for (int i = 0; i < N_SIGCAT; i++)
     {
         sprintf(temp,"Hist_SIG_%s",SIG_NAME[channelID-1][i].c_str());
@@ -368,6 +377,13 @@ int main(int argc, char const *argv[])
         roo_datahist_BKG[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_BKG[i]);
         sprintf(temp,"%s_BKG_pdf",SIG_NAME[channelID-1][i].c_str());
         roo_pdfhist_BKG[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_BKG[i]);
+
+        sprintf(temp,"Hist_TOT_%s",SIG_NAME[channelID-1][i].c_str());
+        roo_Hist_TOT[i] = (TH1F*) f2->Get(temp);
+        sprintf(temp,"%s_TOT",SIG_NAME[channelID-1][i].c_str());
+        roo_datahist_TOT[i] = new RooDataHist(temp,"",roo_shat,roo_Hist_TOT[i]);
+        sprintf(temp,"%s_TOT_pdf",SIG_NAME[channelID-1][i].c_str());
+        roo_pdfhist_TOT[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist_TOT[i]);
     }
     TCanvas *c1 = new TCanvas("c1","",1000,800);
     roo_pdfframe->Draw();
@@ -405,7 +421,7 @@ int main(int argc, char const *argv[])
         for (int i = 0; i < NTRIALS; i++)
         {
             if((i+1)%100==0) cout << "\tTRIALS: "<<(i+1)<<"\r";
-            RooDataSet* roo_testdata = totalPdf[CENTERID]->generate(roo_shat,int(NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]));
+            RooDataSet* roo_testdata = roo_pdfhist_TOT[CENTERID]->generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]);
             NLL[isig] += (totalPdf[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
         }
         cout<<endl;
