@@ -315,22 +315,24 @@ int main(int argc, char const *argv[])
     int NBINS = 20;
     RooRealVar roo_shat("shat","shat",SHATMIN3000[channelID-1],SHATMAX3000[channelID-1]);
     roo_shat.setBins(NBINS);
-    // RooRealVar roo_weight("Weight","Weight",0,20);
-    // RooArgSet testset = RooArgSet(roo_shat,roo_weight);
+    RooRealVar roo_weight("Weight","Weight",0,1);
+    RooArgSet testset = RooArgSet(roo_shat,roo_weight);
 
-    // RooDataSet *roo_data[N_SIGCAT];
+    RooDataSet *roo_data[N_SIGCAT];
     RooDataHist *roo_datahist[N_SIGCAT];
     RooHistPdf *roo_pdfhist[N_SIGCAT]; 
     RooPlot *roo_pdfframe = roo_shat.frame();
     TH1F *roo_Hist[N_SIGCAT];
     for (int i = 0; i < N_SIGCAT; i++)
     {
-        sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
-        roo_Hist[i] = (TH1F*) f2->Get(temp);
+        // sprintf(temp,"Hist_%s",SIG_NAME[channelID-1][i].c_str());
+        // roo_Hist[i] = (TH1F*) f2->Get(temp);
+        sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
+        tshat[i] = (TTree*) f2->Get(temp);
         sprintf(temp,"%s",SIG_NAME[channelID-1][i].c_str());
-        // roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
-        // roo_datahist[i] = roo_data[i]->binnedClone();
-        roo_datahist[i] = new RooDataHist(temp,"",roo_shat,roo_Hist[i]);
+        roo_data[i] = new RooDataSet(temp,"",testset,Import(*tshat[i]),WeightVar(roo_weight));
+        roo_datahist[i] = roo_data[i]->binnedClone();
+        // roo_datahist[i] = new RooDataHist(temp,"",roo_shat,roo_Hist[i]);
         sprintf(temp,"%s_pdf",SIG_NAME[channelID-1][i].c_str());
         roo_pdfhist[i] = new RooHistPdf(temp,temp,roo_shat,*roo_datahist[i]);
         roo_pdfhist[i]->plotOn(roo_pdfframe);
@@ -339,7 +341,7 @@ int main(int argc, char const *argv[])
     roo_pdfframe->Draw();
     f3->cd();
     c1->Write();
-    f3->Close();
+    // f3->Close();
     int NTRIALS = 5000;
 
     double NLL[N_SIGCAT];
@@ -362,11 +364,12 @@ int main(int argc, char const *argv[])
         Delta_NLL[isig] = NLL[isig] - NLL[CENTERID];
     }
     TGraph *g1 = new TGraph(N_SIGCAT,lwzValue,Delta_NLL);
-    f2->cd();
+    f3->cd();
     g1->Write();
 
     delete g1;
     f2->Close();
+    f3->Close();
     cout<<"Program Exit!"<<endl;
     cout<<"=================================>"<<endl;
     return 0;
