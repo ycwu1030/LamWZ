@@ -340,30 +340,33 @@ int main(int argc, char const *argv[])
     f3->cd();
     c1->Write();
     f3->Close();
-    // int NTRIALS = 5000;
+    int NTRIALS = 5000;
 
-    // double NLL[N_SIGCAT];
-    // double Delta_NLL[N_SIGCAT];
-    // for (int isig = 0; isig < N_SIGCAT; isig++)
-    // {
-    //     NLL[isig] = 0;
-    //     for (int i = 0; i < NTRIALS; i++)
-    //     {
-    //         RooDataSet* roo_testdata = roo_pdfhist[CENTERID]->generate(roo_shat,NEVENTS[CENTERID]);
-    //         NLL[isig] += (roo_pdfhist[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
-    //     }
-    //     NLL[isig]/=NTRIALS;
-    // }
-    // for (int isig = 0; isig < N_SIGCAT; isig++)
-    // {
-    //     Delta_NLL[isig] = NLL[isig] - NLL[CENTERID];
-    // }
-    // TGraph *g1 = new TGraph(N_SIGCAT,lwzValue,Delta_NLL);
-    // f2->cd();
-    // g1->Write();
+    double NLL[N_SIGCAT];
+    double Delta_NLL[N_SIGCAT];
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        NLL[isig] = 0;
+        cout << "For Signal-"<<isig<<": "<<endl;
+        for (int i = 0; i < NTRIALS; i++)
+        {
+            if((i+1)%100==0) cout << "\tTRIALS: "<<(i+1)<<"\r";
+            RooDataSet* roo_testdata = roo_pdfhist[CENTERID]->generate(roo_shat,NEVENTS[CENTERID]);
+            NLL[isig] += (roo_pdfhist[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
+        }
+        cout<<endl;
+        NLL[isig]/=NTRIALS;
+    }
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        Delta_NLL[isig] = NLL[isig] - NLL[CENTERID];
+    }
+    TGraph *g1 = new TGraph(N_SIGCAT,lwzValue,Delta_NLL);
+    f2->cd();
+    g1->Write();
 
-    // delete g1;
-    // f2->Close();
+    delete g1;
+    f2->Close();
     cout<<"Program Exit!"<<endl;
     cout<<"=================================>"<<endl;
     return 0;
