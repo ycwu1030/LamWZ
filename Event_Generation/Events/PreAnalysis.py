@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import os
 import glob
 import stat
@@ -74,7 +75,7 @@ ProcessesInfo={}
 with open(ProcessesFile,'r') as f:
     ProcessesList = (simplejson.load(f))['Processes']
     for process in ProcessesList:
-        print "Processing process: ",process['Name']
+        print("Processing process: ",process['Name'])
         process['NEvents']=0
         SECS=selection.keys()
         MATCH=True
@@ -87,7 +88,7 @@ with open(ProcessesFile,'r') as f:
                 else:
                     MATCH*=False
         if not MATCH:
-            print 'Skip: ',Process['Name'],MATCH
+            print('Skip: ',Process['Name'],MATCH)
             continue
         rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]

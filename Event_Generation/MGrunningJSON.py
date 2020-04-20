@@ -2,6 +2,7 @@
 
 # All Parton level process should be decayed 
 #(Higgs can be decayed by madspin, and others should be decayed directly at ME level to preserve the spin correlation)
+from __future__ import print_function
 import os
 import stat
 import sys
@@ -81,7 +82,7 @@ if flag_r:
                 else:
                     MATCH*=False
         if not MATCH:
-            print 'Skip: ',Process['Name'],MATCH
+            print('Skip: ',Process['Name'],MATCH)
             continue
         if Process['Decay'] == 'None':
             Process['Decay'] = decays
