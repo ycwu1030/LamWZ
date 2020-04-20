@@ -157,7 +157,7 @@ int main(int argc, char const *argv[])
         totalPdf[isig] = new RooAddPdf(temp,"",*shapes[isig],*yields[isig]); 
     }
 
-    int NTRIALS = 5000;
+    int NTRIALS = 500;
     double NLL[N_SIGCAT];
     double Delta_NLL[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
@@ -166,9 +166,10 @@ int main(int argc, char const *argv[])
         cout << "For Signal-"<<isig<<": "<<endl;
         for (int i = 0; i < NTRIALS; i++)
         {
-            if((i+1)%100==0) cout << "\tTRIALS: "<<(i+1)<<"\r";
+            if((i+1)%100==0) { cout << "\tTRIALS: "<<(i+1)<<"\r"; cout.flush(); }
             RooDataSet* roo_testdata = roo_pdfhist_TOT[CENTERID]->generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]);
             NLL[isig] += (totalPdf[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
+            delete roo_testdata;
         }
         cout<<endl;
         NLL[isig]/=NTRIALS;
@@ -181,9 +182,26 @@ int main(int argc, char const *argv[])
     f3->cd();
     g1->Write();
 
-    delete g1;
-    f2->Close();
-    f3->Close();
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        delete totalPdf[isig];
+        shapes[isig]->removeAll();
+        yields[isig]->removeAll();
+        delete sig_yeild[isig];
+        delete bkg_yeild[isig];
+        delete shapes[isig];
+        delete yields[isig];
+        delete roo_pdfhist_TOT[isig];
+        delete roo_datahist_TOT[isig];
+        delete roo_Hist_TOT[isig];
+        delete roo_pdfhist_BKG[isig];
+        delete roo_datahist_BKG[isig];
+        delete roo_Hist_BKG[isig];
+        delete roo_pdfhist_SIG[isig];
+        delete roo_datahist_SIG[isig];
+    }
+//    f2->Close();
+//    f3->Close();
     cout<<"Program Exit!"<<endl;
     cout<<"=================================>"<<endl;
     return 0;

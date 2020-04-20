@@ -27,4 +27,6 @@ void GetBDTSignificance(string filename)
     fsigma->Draw();
     c1->SaveAs("BDTResult.png");
     cout<<"The maximum significance is: "<<fsigma->GetMaximum()<<endl;
+    cout<<"The bin for maximum significance is: "<<fsigma->GetMaximumBin()<<endl;
+    cout<<"The bin-center is: "<<fsigma->GetBinCenter(fsigma->GetMaximumBin())<<endl;
 }

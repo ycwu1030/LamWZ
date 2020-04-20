@@ -2,6 +2,7 @@
 *.o
 *.x
 *.log
+*.png
 .DS_Store
 *.x.dSYM
 *~
@@ -12,5 +13,6 @@ Event_Generation/tmp_madevent.dat
 Event_Generation/Events/bkg*/
 Event_Generation/Events/ee_VBF*/
 Event_Generation/Events/PreAna/
+Event_Generation/Events/PreAna_*/
 Event_Generation/Events/Plots/
 .vscode/
