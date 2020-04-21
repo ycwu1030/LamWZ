@@ -13,19 +13,18 @@
 
 using namespace std;
 string DIR = "/data/data068/ycwu/LamWZ/Event_Generation/Events/Plots";
-const int LUMINOSITY = 4000; //fb^-1
+const int LUMINOSITY3000 = 4000; //fb^-1
+const int LUMINOSITY1500 = 2000; //fb^-1
 const int N_SIGCAT = 4;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[N_SIGCAT] = {"wh_hww","wh_hzz","wh_Inter","wh_Full"};
-// string SIG_NAME[N_SIGCAT] = {"wh_Full"};
+string SIG_NAME[2][N_SIGCAT] = {{"wh_hWW","wh_hZZ","wh_Inter","wh_Full"},{"zh_hWW","zh_hZZ","zh_Inter","zh_Full"}};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[N_SIGCAT] = {"Wh hWW","Wh hZZ","Wh Interference","Wh Full"};
-// string SIG_LABEL[N_SIGCAT] = {"Wh Full"};
+string SIG_LABEL[2][N_SIGCAT] = {{"Wh hWW","Wh hZZ","Wh Interference","Wh Full"},{"Zh hWW","Zh hZZ","Zh Interference","Zh Full"}};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[N_SIGCAT] = {247244,247138,247328,750000};
-// int Sig_NTOTAL[N_SIGCAT] = {7500000};
+int Sig_NTOTAL3000[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,525505}};
+int Sig_NTOTAL1500[2][N_SIGCAT] = {{247244,247138,247328,750000},{249239,245187,245138,750000}};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
@@ -34,21 +33,39 @@ int main(int argc, char const *argv[])
     SetPlotStyle();
     TChain *ch = new TChain("LamWZPreAna");
 
-    if (argc != 4) return -1;
+    if (argc != 6) return -1;
     string InputDir(argv[1]);
     int decayID=atoi(argv[2]);
     string tag(argv[3]);
+    int channelID=atoi(argv[4]);
+    int sqrts=atoi(argv[5]);
+    double LUMINOSITY = sqrts==3000?LUMINOSITY3000:LUMINOSITY1500;
 
     LoadingRootFile(ch,InputDir);
     LamWZPreAna *LamWZch = new LamWZPreAna(ch);
 //Setup the cuts to be scanned:
     CutList *CutsFlow = new CutList();
-    CutsFlow->addCut(&LamWZch->NBJet,"NB",2,2,0,2,2,0);
-    CutsFlow->addCut(&LamWZch->NLep_Af,"NL",2,2,0,2,2,0);
-    CutsFlow->addCut(&LamWZch->HT,"HT",400,600,4,650,1500,4);
-    CutsFlow->addCut(&LamWZch->Mbb,"Mbb",90,110,4,130,150,2);
-    CutsFlow->addCut(&LamWZch->Mll,"Mll",100,110,2,-1,-1,-1);
-    CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.8,1.5,4,2.6,2.9,4);
+    if (channelID == 1)//wh
+    {
+        CutsFlow->addCut(&LamWZch->NBJet,"NB",2,2,0,2,2,0);
+        CutsFlow->addCut(&LamWZch->NLep_Af,"NL",2,2,0,2,2,0);
+        CutsFlow->addCut(&LamWZch->HT,"HT",340,440,4,,,4);
+        CutsFlow->addCut(&LamWZch->MET,"MET",-1,-1,-1,120,180,4);
+        CutsFlow->addCut(&LamWZch->Mbb,"Mbb",90,110,4,130,150,2);
+        CutsFlow->addCut(&LamWZch->Mll,"Mll",100,110,2,-1,-1,-1);
+        CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.8,1.5,4,2.6,2.9,4);   
+    }
+    else if (channelID == 2)
+    {
+        CutsFlow->addCut(&LamWZch->NBJet,"NB",2,2,0,2,2,0);
+        CutsFlow->addCut(&LamWZch->NLep_Af,"NL",2,2,0,2,2,0);
+        CutsFlow->addCut(&LamWZch->HT,"HT",-1,-1,-1,320,380,4);
+        CutsFlow->addCut(&LamWZch->MET,"MET",-1,-1,-1,140,200,4);
+        CutsFlow->addCut(&LamWZch->Mbb,"Mbb",90,110,4,130,150,2);
+        CutsFlow->addCut(&LamWZch->Mll,"Mll",70,85,4,100,110,3);
+        CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.8,1.5,4,2.7,3.0,4); 
+    }
+    
 //Event Loop
     Int_t nentries = Int_t(ch->GetEntries());
     double valueX,valueY;
