@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
     int channelID=atoi(argv[4]);
     int sqrts=atoi(argv[5]);
     double LUMINOSITY = sqrts==3000?LUMINOSITY3000:LUMINOSITY1500;
+    int *Sig_NTOTAL = sqrts==3000?Sig_NTOTAL3000[channelID-1]:Sig_NTOTAL1500[channelID-1];
 
     LoadingRootFile(ch,InputDir);
     LamWZPreAna *LamWZch = new LamWZPreAna(ch);
