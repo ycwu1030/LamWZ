@@ -85,7 +85,7 @@ int main(int argc, char const *argv[])
         LamWZch->GetEntry(entry);
         cat = LamWZch->Cate;
         CS = LamWZch->CS;
-        if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
+        if((entry+1)%10000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
         // cout<<entry<<endl;
         GetHistID(cat,SorB,id);
         for (int icut = 0; icut < CutsFlow->NCuts; ++icut)
