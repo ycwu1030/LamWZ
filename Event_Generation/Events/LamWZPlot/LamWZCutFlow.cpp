@@ -131,7 +131,7 @@ int main(int argc, char const *argv[])
         }
     }
     cout<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
-    cutlong<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
+    cutlog<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
     delete CutsFlow;
     delete[] Sig_CS;
     delete[] Sig_MC_N;
