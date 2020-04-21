@@ -49,11 +49,11 @@ int main(int argc, char const *argv[])
     {
         CutsFlow->addCut(&LamWZch->NBJet,"NB",2,2,0,2,2,0);
         CutsFlow->addCut(&LamWZch->NLep_Af,"NL",2,2,0,2,2,0);
-        CutsFlow->addCut(&LamWZch->HT,"HT",340,440,4,,,4);
+        CutsFlow->addCut(&LamWZch->HT,"HT",340,440,4,560,680,4);
         CutsFlow->addCut(&LamWZch->MET,"MET",-1,-1,-1,120,180,4);
         CutsFlow->addCut(&LamWZch->Mbb,"Mbb",90,110,4,130,150,2);
-        CutsFlow->addCut(&LamWZch->Mll,"Mll",100,110,2,-1,-1,-1);
-        CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.8,1.5,4,2.6,2.9,4);   
+        CutsFlow->addCut(&LamWZch->Mll,"Mll",95,105,3,-1,-1,-1);
+        CutsFlow->addCut(&LamWZch->AnglebV,"AnglebV",0.6,0.9,4,2.7,3.0,4);   
     }
     else if (channelID == 2)
     {
