@@ -14,15 +14,18 @@
 using namespace std;
 string DIR = "/data/data068/ycwu/LamWZ/Event_Generation/Events/Plots";
 const int LUMINOSITY = 4000; //fb^-1
-const int N_SIGCAT = 3;
+const int N_SIGCAT = 4;
 const int N_BKGCAT = 3;
 const int N_VARIABLE = 30;
 string DecayChannel[2] = {"bbll","tatall"};
-string SIG_NAME[N_SIGCAT] = {"wh_hww","wh_hzz","wh_Inter"};
+string SIG_NAME[N_SIGCAT] = {"wh_hww","wh_hzz","wh_Inter","wh_Full"};
+// string SIG_NAME[N_SIGCAT] = {"wh_Full"};
 string BKG_NAME[N_BKGCAT] = {"tt","wz","zz"};
-string SIG_LABEL[N_SIGCAT] = {"Wh hWW","Wh hZZ","Wh Interference"};
+string SIG_LABEL[N_SIGCAT] = {"Wh hWW","Wh hZZ","Wh Interference","Wh Full"};
+// string SIG_LABEL[N_SIGCAT] = {"Wh Full"};
 string BKG_LABEL[N_BKGCAT] = {"t#bar{t}","WZ","ZZ"};
-int Sig_NTOTAL[N_SIGCAT] = {247244,247138,247328};
+int Sig_NTOTAL[N_SIGCAT] = {247244,247138,247328,750000};
+// int Sig_NTOTAL[N_SIGCAT] = {7500000};
 int Bkg_NTOTAL[N_BKGCAT] = {2500000,2500000,2500000};
 
 int main(int argc, char const *argv[])
@@ -128,7 +131,7 @@ int main(int argc, char const *argv[])
         }
     }
     cout<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
-
+    cutlong<<"Best Level: "<<sigma<<", achieved by cut-"<<bestid<<endl;
     delete CutsFlow;
     delete[] Sig_CS;
     delete[] Sig_MC_N;
