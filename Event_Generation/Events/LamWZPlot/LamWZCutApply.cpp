@@ -231,6 +231,25 @@ int main(int argc, char const *argv[])
     }
     cout<<"Maximum Significance is: "<<sigmax<<endl;
     cout<<"Achieved at EffS = "<<EffSmax<<endl;
+    TMVA::MethodCuts* mcuts = reader->FindCutsMVA("CutsGA method");
+    if (mcuts)
+    {
+        std::vector<Double_t> cutsMin;
+        std::vector<Double_t> cutsMax;
+        mcuts->GetCuts( EffSmax, cutsMin, cutsMax );
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
+        std::cout << "... Cut: "
+                    << cutsMin[ivar]
+                    << " < \""
+                    << mcuts->GetInputVar(ivar)
+                    << "\" <= "
+                    << cutsMax[ivar] << std::endl;
+        }
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+    }
+    
     TGraph *gsig = new TGraph(N_EffS_samples,EffSignals,Significance);
     gsig->SetName("g_significance");
 
