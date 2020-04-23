@@ -224,7 +224,7 @@ int main(int argc, char const *argv[])
     double EffSmax;
     for (int i = 0; i < N_EffS_samples; i++)
     {
-        Significance[i] = EventsSig[i]/sqrt(EventsSig[i]+EventsBkg[i]);
+        Significance[i] = EventsSig[i]/sqrt(EventsSig[i]+EventsBkg[i] + 0.01*EventsBkg[i]*EventsBkg[i]);//10% systematic
         if (Significance[i] > sigmax) { 
             sigmax = Significance[i]; 
             EffSmax = EffSignals[i];
