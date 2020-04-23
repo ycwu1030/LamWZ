@@ -66,7 +66,7 @@ int main(int argc, char const *argv[])
 
     if (channelID == 1)
     {
-        dataloader->AddVariable( "FLepEta", 'F' );
+        dataloader->AddVariable( "MovedEta := FLepEta<0?FLepEta+6:FLepEta", 'F' );
         dataloader->AddVariable( "HT", 'F' );
         dataloader->AddVariable( "MET", 'F' );
         dataloader->AddVariable( "Mbb", 'F' );
@@ -132,8 +132,8 @@ int main(int argc, char const *argv[])
     TCut precuts = "NBJet==2&&NLep_Af==2";
     dataloader->PrepareTrainingAndTestTree( precuts, precuts,
                                         "SplitMode=Random:NormMode=None:!V" );
-    factory->BookMethod( dataloader, TMVA::Types::kCuts, "Cuts",
-                           "!H:!V:FitMethod=MC:EffSel:SampleSize=200000:VarProp=FSmart" );
+    factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsGA",
+                           "!H:!V:FitMethod=GA:EffSel:VarProp=FSmart:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95" );
     // Train MVAs using the set of training events
     factory->TrainAllMethods();
 
