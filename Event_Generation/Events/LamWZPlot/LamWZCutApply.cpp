@@ -2,6 +2,7 @@
 #include "LamWZPreAna.h"
 #include "TStyle.h"
 #include "TH2F.h"
+#include "TGraph.h"
 #include "Utilities.h"
 #include "CutList.h"
 #include <fstream>
@@ -81,6 +82,7 @@ int main(int argc, char const *argv[])
     TFile *f2 = new TFile(temp,"RECREATE");
     TTree *t2 = new TTree("CUTResult","The results from CUT");
     const int N_EffS_samples = 21;
+    int N_EffS = N_EffS_samples;
     double EffSignals[N_EffS_samples];
     int CUTcate[N_EffS_samples];
     double EventsSig[N_EffS_samples];
@@ -102,9 +104,9 @@ int main(int argc, char const *argv[])
     t2->Branch("Cate",&cat,"Cate/I");
     t2->Branch("SorB",&SorB,"SorB/I");
     t2->Branch("Weight",&Weight,"Weight/D");
-    t2->Branch("N_EffS",&N_EffS_samples,"N_EffS/I");
+    t2->Branch("N_EffS",&N_EffS,"N_EffS/I");
     t2->Branch("EffSignals",EffSignals,"EffSignals[N_EffS]/D");
-    t2->Branch("CUTcate",CUTcate,"CUTcate[N_EffS]/D");
+    t2->Branch("CUTcate",CUTcate,"CUTcate[N_EffS]/I");
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
@@ -176,7 +178,7 @@ int main(int argc, char const *argv[])
         if (channelID == 1)
         {
             F_FLepEta = ch->FLepEta;
-            F_MovedEta = F_FLepEta<0?F_FLepEta+6:F_LepEta;
+            F_MovedEta = F_FLepEta<0?F_FLepEta+6:F_FLepEta;
             F_HT = ch->HT;
             F_MET = ch->MET;
             F_Mll = ch->Mll;
