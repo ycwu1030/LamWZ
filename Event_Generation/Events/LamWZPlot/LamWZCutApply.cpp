@@ -16,6 +16,7 @@
 #include "TMVA/DataLoader.h"
 #include "TMVA/Tools.h"
 #include "TMVA/TMVAGui.h"
+#include "TMVA/MethodCuts.h"
 #include "TMVA/Config.h"
 #include "TMVA/Reader.h"
 
