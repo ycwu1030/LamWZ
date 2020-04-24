@@ -82,6 +82,10 @@ int main(int argc, char const *argv[])
     sprintf(temp,"%s/CUTResult.root",dir.c_str());
     TFile *f2 = new TFile(temp,"RECREATE");
     TTree *t2 = new TTree("CUTResult","The results from CUT");
+    int CUTHardcate;
+    double EventsSigHard=0;
+    double EventsBkgHard=0;
+    double SignificanceHard;
     const int N_EffS_samples = 21;
     int N_EffS = N_EffS_samples;
     double EffSignals[N_EffS_samples];
@@ -135,6 +139,10 @@ int main(int argc, char const *argv[])
     t2->Branch("CUTGAcate",CUTGAcate,"CUTGAcate[N_EffS]/I");
     t2->Branch("CUTMCDcate",CUTMCDcate,"CUTMCDcate[N_EffS]/I");
     t2->Branch("CUTMCPCAcate",CUTMCPCAcate,"CUTMCPCAcate[N_EffS]/I");
+
+    auto hardcut = [&](){
+        return (F_Mll > 98.0)&&(F_Mbb < 140)&&(F_MET > 50 && F_MET < 300);
+    }
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
@@ -228,6 +236,25 @@ int main(int argc, char const *argv[])
             F_AnglebV = ch->AnglebV;
             F_shat = ch->shat;
         }
+        TMVARes = hardcut();
+        if (TMVARes)
+        {
+            CUTHardcate = 1;
+            if (SorB == 1)
+            {
+                EventsSigHard += Weight;
+            }
+            else
+            {
+                EventsBkgHard += Weight;
+            }
+        }
+        else
+        {
+            CUTHardcate = 0;
+        }
+        
+        
         for (int ieffs = 0; ieffs < N_EffS_samples; ieffs++)
         {
             TMVARes = reader->EvaluateMVA("CutsGA method", EffSignals[ieffs]);
@@ -310,12 +337,14 @@ int main(int argc, char const *argv[])
             EffSmaxMCD = EffSignals[i];
         }
 
-        SignificanceMCPCA[i] = EventsSigMCPCA[i]/sqrt(EventsSigMCPCA[i]+EventsBkgMCPCA[i] + 0.0025*EventsBkgMCPCA[i]*EventsBkgMCPCA[i]);//5% systematic
+        SignificanceMCPCA[i] = EventsSigMCPCA[i]/sqrt(EventsSigMCPCA[i]+EventsBkgMCPCA[i] + 0*EventsBkgMCPCA[i]*EventsBkgMCPCA[i]);//5% systematic
         if (SignificanceMCPCA[i] > sigmaxMCPCA) { 
             sigmaxMCPCA = SignificanceMCPCA[i]; 
             EffSmaxMCPCA = EffSignals[i];
         }
     }
+    SignificanceHard = EventsSigHard/sqrt(EventsSigHard+EventsBkgHard + 0*EventsBkgHard*EventsBkgHard);//5% systematic
+    cout<<"Hard Maximum Significance is: "<<SignificanceHard<<endl;
     cout<<"GA Maximum Significance is: "<<sigmaxGA<<endl;
     cout<<"Achieved at EffS = "<<EffSmaxGA<<endl;
     TMVA::MethodCuts* mcutsGA = reader->FindCutsMVA("CutsGA method");
