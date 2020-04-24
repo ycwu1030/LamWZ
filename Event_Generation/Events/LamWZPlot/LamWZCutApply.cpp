@@ -238,7 +238,7 @@ int main(int argc, char const *argv[])
             }
             else
             {
-                CUTcateGA[ieffs] = 0;
+                CUTGAcate[ieffs] = 0;
             } 
             TMVARes = reader->EvaluateMVA("CutsMCD method", EffSignals[ieffs]);
             if (TMVARes)
