@@ -142,7 +142,7 @@ int main(int argc, char const *argv[])
 
     auto hardcut = [&](){
         return (F_Mll > 98.0)&&(F_Mbb < 140)&&(F_MET > 50 && F_MET < 300);
-    }
+    };
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
