@@ -85,17 +85,33 @@ int main(int argc, char const *argv[])
     const int N_EffS_samples = 21;
     int N_EffS = N_EffS_samples;
     double EffSignals[N_EffS_samples];
-    int CUTcate[N_EffS_samples];
-    double EventsSig[N_EffS_samples];
-    double EventsBkg[N_EffS_samples];
-    double Significance[N_EffS_samples];
+    int CUTGAcate[N_EffS_samples];
+    double EventsSigGA[N_EffS_samples];
+    double EventsBkgGA[N_EffS_samples];
+    double SignificanceGA[N_EffS_samples];
+
+    int CUTMCDcate[N_EffS_samples];
+    double EventsSigMCD[N_EffS_samples];
+    double EventsBkgMCD[N_EffS_samples];
+    double SignificanceMCD[N_EffS_samples];
+
+    int CUTMCPCAcate[N_EffS_samples];
+    double EventsSigMCPCA[N_EffS_samples];
+    double EventsBkgMCPCA[N_EffS_samples];
+    double SignificanceMCPCA[N_EffS_samples];
     bool TMVARes;
     double EffSigStart = 0.1, EffSigEnd = 0.9;
     for (int i = 0; i < N_EffS_samples; i++)
     {
         EffSignals[i] = EffSigStart + i*(EffSigEnd-EffSigStart)/(double(N_EffS_samples-1));
-        EventsSig[i] = 0;
-        EventsBkg[i] = 0;
+        EventsSigGA[i] = 0;
+        EventsBkgGA[i] = 0;
+
+        EventsSigMCD[i] = 0;
+        EventsBkgMCD[i] = 0;
+
+        EventsSigMCPCA[i] = 0;
+        EventsBkgMCPCA[i] = 0;
     }
 
     int cat;
@@ -107,7 +123,9 @@ int main(int argc, char const *argv[])
     t2->Branch("Weight",&Weight,"Weight/D");
     t2->Branch("N_EffS",&N_EffS,"N_EffS/I");
     t2->Branch("EffSignals",EffSignals,"EffSignals[N_EffS]/D");
-    t2->Branch("CUTcate",CUTcate,"CUTcate[N_EffS]/I");
+    t2->Branch("CUTGAcate",CUTGAcate,"CUTGAcate[N_EffS]/I");
+    t2->Branch("CUTMCDcate",CUTMCDcate,"CUTMCDcate[N_EffS]/I");
+    t2->Branch("CUTMCPCAcate",CUTMCPCAcate,"CUTMCPCAcate[N_EffS]/I");
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
@@ -136,6 +154,12 @@ int main(int argc, char const *argv[])
     TCut precuts = "NBJet==2&&NLep_Af==2";
     string methodName = "CutsGA method";
     string weightfile = dir + "/TMVAClassification_CutsGA.weights.xml";
+    reader->BookMVA(methodName,weightfile);
+    methodName = "CutsMCD method";
+    weightfile = dir + "/TMVAClassification_CutsMCD.weights.xml";
+    reader->BookMVA(methodName,weightfile);
+    methodName = "CutsMCPCA method";
+    weightfile = dir + "/TMVAClassification_CutsMCPCA.weights.xml";
     reader->BookMVA(methodName,weightfile);
 
     // --------------------------------------------------------------
@@ -215,48 +239,152 @@ int main(int argc, char const *argv[])
             else
             {
                 CUTcate[ieffs] = 0;
+            } 
+            TMVARes = reader->EvaluateMVA("CutsMCD method", EffSignals[ieffs]);
+            if (TMVARes)
+            {
+                CUTMCDcate[ieffs] = 1;
+                if (SorB == 1)
+                {
+                    EventsSigMCD[ieffs] += Weight;
+                }
+                else
+                {
+                    EventsBkgMCD[ieffs] += Weight;
+                }
+                
+            }
+            else
+            {
+                CUTMCDcate[ieffs] = 0;
+            } 
+            TMVARes = reader->EvaluateMVA("CutsMCPCA method", EffSignals[ieffs]);
+            if (TMVARes)
+            {
+                CUTMCPCAcate[ieffs] = 1;
+                if (SorB == 1)
+                {
+                    EventsSigMCPCA[ieffs] += Weight;
+                }
+                else
+                {
+                    EventsBkgMCPCA[ieffs] += Weight;
+                }
+                
+            }
+            else
+            {
+                CUTMCPCAcate[ieffs] = 0;
             }   
         }
         // BDTScore = reader->EvaluateMVA("CutsGA method",);
         t2->Fill();
     }
-    double sigmax = -1;
-    double EffSmax;
+    double sigmaxGA = -1;
+    double EffSmaxGA;
+
+    double sigmaxMCD = -1;
+    double EffSmaxMCD;
+
+    double sigmaxMCPCA = -1;
+    double EffSmaxMCPCA;
     for (int i = 0; i < N_EffS_samples; i++)
     {
-        Significance[i] = EventsSig[i]/sqrt(EventsSig[i]+EventsBkg[i] + 0.0025*EventsBkg[i]*EventsBkg[i]);//5% systematic
-        if (Significance[i] > sigmax) { 
-            sigmax = Significance[i]; 
-            EffSmax = EffSignals[i];
+        SignificanceGA[i] = EventsSigGA[i]/sqrt(EventsSigGA[i]+EventsBkgGA[i] + 0*EventsBkgGA[i]*EventsBkgGA[i]);//5% systematic
+        if (SignificanceGA[i] > sigmaxGA) { 
+            sigmaxGA = SignificanceGA[i]; 
+            EffSmaxGA = EffSignals[i];
+        }
+
+        SignificanceMCD[i] = EventsSigMCD[i]/sqrt(EventsSigMCD[i]+EventsBkgMCD[i] + 0*EventsBkgMCD[i]*EventsBkgMCD[i]);//5% systematic
+        if (SignificanceMCD[i] > sigmaxMCD) { 
+            sigmaxMCD = SignificanceMCD[i]; 
+            EffSmaxMCD = EffSignals[i];
+        }
+
+        SignificanceMCPCA[i] = EventsSigMCPCA[i]/sqrt(EventsSigMCPCA[i]+EventsBkgMCPCA[i] + 0.0025*EventsBkgMCPCA[i]*EventsBkgMCPCA[i]);//5% systematic
+        if (SignificanceMCPCA[i] > sigmaxMCPCA) { 
+            sigmaxMCPCA = SignificanceMCPCA[i]; 
+            EffSmaxMCPCA = EffSignals[i];
         }
     }
-    cout<<"Maximum Significance is: "<<sigmax<<endl;
-    cout<<"Achieved at EffS = "<<EffSmax<<endl;
-    TMVA::MethodCuts* mcuts = reader->FindCutsMVA("CutsGA method");
-    if (mcuts)
+    cout<<"GA Maximum Significance is: "<<sigmaxGA<<endl;
+    cout<<"Achieved at EffS = "<<EffSmaxGA<<endl;
+    TMVA::MethodCuts* mcutsGA = reader->FindCutsMVA("CutsGA method");
+    if (mcutsGA)
     {
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
-        mcuts->GetCuts( EffSmax, cutsMin, cutsMax );
+        mcutsGA->GetCuts( EffSmaxGA, cutsMin, cutsMax );
         std::cout << "--- -------------------------------------------------------------" << std::endl;
         std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
         std::cout << "... Cut: "
                     << cutsMin[ivar]
                     << " < \""
-                    << mcuts->GetInputVar(ivar)
+                    << mcutsGA->GetInputVar(ivar)
+                    << "\" <= "
+                    << cutsMax[ivar] << std::endl;
+        }
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+    }
+
+    cout<<"MCD Maximum Significance is: "<<sigmaxMCD<<endl;
+    cout<<"Achieved at EffS = "<<EffSmaxMCD<<endl;
+    TMVA::MethodCuts* mcutsMCD = reader->FindCutsMVA("CutsMCD method");
+    if (mcutsMCD)
+    {
+        std::vector<Double_t> cutsMin;
+        std::vector<Double_t> cutsMax;
+        mcutsMCD->GetCuts( EffSmaxMCD, cutsMin, cutsMax );
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
+        std::cout << "... Cut: "
+                    << cutsMin[ivar]
+                    << " < \""
+                    << mcutsMCD->GetInputVar(ivar)
+                    << "\" <= "
+                    << cutsMax[ivar] << std::endl;
+        }
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+    }
+
+    cout<<"MCDPCA Maximum Significance is: "<<sigmaxMCPCA<<endl;
+    cout<<"Achieved at EffS = "<<EffSmaxMCPCA<<endl;
+    TMVA::MethodCuts* mcutsMCPCA = reader->FindCutsMVA("CutsMCPCA method");
+    if (mcutsMCPCA)
+    {
+        std::vector<Double_t> cutsMin;
+        std::vector<Double_t> cutsMax;
+        mcutsMCPCA->GetCuts( EffSmaxMCPCA, cutsMin, cutsMax );
+        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
+        std::cout << "... Cut: "
+                    << cutsMin[ivar]
+                    << " < \""
+                    << mcutsMCPCA->GetInputVar(ivar)
                     << "\" <= "
                     << cutsMax[ivar] << std::endl;
         }
         std::cout << "--- -------------------------------------------------------------" << std::endl;
     }
     
-    TGraph *gsig = new TGraph(N_EffS_samples,EffSignals,Significance);
-    gsig->SetName("g_significance");
+    TGraph *gsigGA = new TGraph(N_EffS_samples,EffSignals,SignificanceGA);
+    gsigGA->SetName("g_significance_GA");
+
+    TGraph *gsigMCD = new TGraph(N_EffS_samples,EffSignals,SignificanceMCD);
+    gsigMCD->SetName("g_significance_MCD");
+
+    TGraph *gsigMCPCA = new TGraph(N_EffS_samples,EffSignals,SignificanceMCPCA);
+    gsigMCPCA->SetName("g_significance_MCPCA");
 
     f2->cd();
     t2->Write();
-    gsig->Write();
+    gsigGA->Write();
+    gsigMCD->Write();
+    gsigMCPCA->Write();
 
     delete t2;
     f2->Close();
