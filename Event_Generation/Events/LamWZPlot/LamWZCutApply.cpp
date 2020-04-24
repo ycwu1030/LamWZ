@@ -225,20 +225,20 @@ int main(int argc, char const *argv[])
             TMVARes = reader->EvaluateMVA("CutsGA method", EffSignals[ieffs]);
             if (TMVARes)
             {
-                CUTcate[ieffs] = 1;
+                CUTGAcate[ieffs] = 1;
                 if (SorB == 1)
                 {
-                    EventsSig[ieffs] += Weight;
+                    EventsSigGA[ieffs] += Weight;
                 }
                 else
                 {
-                    EventsBkg[ieffs] += Weight;
+                    EventsBkgGA[ieffs] += Weight;
                 }
                 
             }
             else
             {
-                CUTcate[ieffs] = 0;
+                CUTcateGA[ieffs] = 0;
             } 
             TMVARes = reader->EvaluateMVA("CutsMCD method", EffSignals[ieffs]);
             if (TMVARes)
@@ -317,7 +317,7 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMax;
         mcutsGA->GetCuts( EffSmaxGA, cutsMin, cutsMax );
         std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxGA<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
         std::cout << "... Cut: "
                     << cutsMin[ivar]
@@ -338,7 +338,7 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMax;
         mcutsMCD->GetCuts( EffSmaxMCD, cutsMin, cutsMax );
         std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxMCD<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
         std::cout << "... Cut: "
                     << cutsMin[ivar]
@@ -359,7 +359,7 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMax;
         mcutsMCPCA->GetCuts( EffSmaxMCPCA, cutsMin, cutsMax );
         std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmax<<" from Reader" << std::endl;
+        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxMCPCA<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
         std::cout << "... Cut: "
                     << cutsMin[ivar]
