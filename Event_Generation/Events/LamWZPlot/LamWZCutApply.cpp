@@ -117,10 +117,19 @@ int main(int argc, char const *argv[])
     int cat;
     int SorB;
     double Weight;
+    Float_t F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
 
     t2->Branch("Cate",&cat,"Cate/I");
     t2->Branch("SorB",&SorB,"SorB/I");
     t2->Branch("Weight",&Weight,"Weight/D");
+    t2->Branch("FLepEta",&F_FLepEta,"FLepEta/F");
+    t2->Branch("FMovedEta",&F_MovedEta,"FmovedEta/F");
+    t2->Branch("HT",&F_HT,"HT/F");
+    t2->Branch("MET",&F_MET,"MET/F");
+    t2->Branch("Mbb",&F_Mbb,"Mbb/F");
+    t2->Branch("Mll",&F_Mll, "Mll/F");
+    t2->Branch("AnglebV",&F_AnglebV,"AnglebV/F");
+    t2->Branch("shat",&F_shat,"shat/F");
     t2->Branch("N_EffS",&N_EffS,"N_EffS/I");
     t2->Branch("EffSignals",EffSignals,"EffSignals[N_EffS]/D");
     t2->Branch("CUTGAcate",CUTGAcate,"CUTGAcate[N_EffS]/I");
@@ -129,7 +138,6 @@ int main(int argc, char const *argv[])
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
-    Float_t F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
 
     if (channelID == 1)
     {
