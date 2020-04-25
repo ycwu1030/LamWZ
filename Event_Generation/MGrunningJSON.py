@@ -106,7 +106,7 @@ if flag_r:
         if Process['Decay'] == 'None':
             Process['Decay'] = decays
         with open('tmp_madevent.dat','w') as MECOM:
-            if Process['Abbr'] == 'zh':
+            if Process['Abbr'] == 'zh' and Process['BkgSigTag'] != 'bkg':
                 MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + '\n')
                 MECOM.write('done\n')
                 MECOM.write('set mmll 80.0\n')
