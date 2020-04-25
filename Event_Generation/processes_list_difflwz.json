@@ -24,6 +24,30 @@
         "CS": {"3000":2.0686,"1500":0.6479}
     },
     {
+        "Name": "bkg_zh_bbll",
+        "BkgSigTag": "bkg",
+        "Abbr": "zh",
+        "Decay": "bbll",
+        "Processes": ["e- e+ > z h, z > l- l+, h > b b~"],
+        "CS": {"3000":0.08978, "1500":0.3646}
+    },
+    {
+        "Name": "bkg_zww_bbll",
+        "BkgSigTag": "bkg",
+        "Abbr": "zww",
+        "Decay": "bbll",
+        "Processes": ["e- e+ > z w+ w-, z > b b~, w+ > l+ vl, w- > l- vl~"],
+        "CS": {"3000":0.415, "1500": 0.6604}
+    },
+    {
+        "Name": "bkg_zzz_bbll",
+        "BkgSigTag": "bkg",
+        "Abbr": "zzz",
+        "Decay": "bbll",
+        "Processes": ["e- e+ > z z z, z > b b~, z > l+ l-, z > vl vl~"],
+        "CS": {"3000": 0.006139, "1500": 0.0119}
+    },
+    {
         "Name": "bkg_VBF_zz_tatall",
         "BkgSigTag": "bkg",
         "Abbr": "zz",
