@@ -373,7 +373,7 @@ int main(int argc, char const *argv[])
     {
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
-        mcutsMCD->GetCuts( EffSmaxMC, cutsMin, cutsMax );
+        mcutsMC->GetCuts( EffSmaxMC, cutsMin, cutsMax );
         std::cout << "--- -------------------------------------------------------------" << std::endl;
         std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxMC<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
@@ -390,7 +390,7 @@ int main(int argc, char const *argv[])
     cout<<"SA Maximum Significance is: "<<sigmaxSA<<endl;
     cout<<"Achieved at EffS = "<<EffSmaxSA<<endl;
     TMVA::MethodCuts* mcutsSA = reader->FindCutsMVA("CutsSA method");
-    if (mcutsMCPCA)
+    if (mcutsSA)
     {
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
