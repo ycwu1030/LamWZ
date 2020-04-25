@@ -134,10 +134,10 @@ int main(int argc, char const *argv[])
                                         "SplitMode=Random:NormMode=None:!V" );
     factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsGA",
                            "!H:!V:FitMethod=GA:EffSel:VarProp=FSmart:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95" );
-    factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsMCD",
-                           "!H:!V:FitMethod=MC:EffSel:VarProp=FSmart:SampleSize=200000:VarTransform=Decorrelate" );
-    factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsMCPCA",
-                           "!H:!V:FitMethod=MC:EffSel:VarProp=FSmart:SampleSize=200000:VarTransform=PCA" );
+    factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsMC",
+                           "!H:!V:FitMethod=MC:EffSel:VarProp=FSmart:SampleSize=200000" );
+    factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsSA",
+                           "!H:!V:FitMethod=SA:EffSel:VarProp=FSmart:MaxCalls=150000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale");
     // Train MVAs using the set of training events
     factory->TrainAllMethods();
 
