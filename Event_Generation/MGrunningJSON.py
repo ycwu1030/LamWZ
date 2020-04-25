@@ -50,12 +50,28 @@ selection = args.selection
 sqrts = args.sqrts
 MATCH=True
 
+def SELECT_PROCESS(Process,SELECTS):
+    if len(SELECTS) == 0:
+        return True
+    
+    match=True
+    for key in SELECTS.keys():
+        wanted = SELECTS[key]
+        if isinstance(wanted,list):
+            match *= Process[key] in wanted
+        else:
+            match *= Process[key] == wanted
+    return match
+
 with open(processfile,'r') as f:
     ProcessesList=(simplejson.load(f))['Processes']
 
 if flag_g:
     # if -g, then generate the output directory using MG5
     for i in range(len(ProcessesList)):
+        if not SELECT_PROCESS(ProcessesList[i],selection):
+            print('Skip: ',ProcessesList[i]['Name'])
+            continue
         with open('tmp_mg5.dat','w') as OutGen:
             OutGen.write('import model ' + modelName + '\n')
             ChannelProcesses=ProcessesList[i]['Processes']
@@ -71,18 +87,21 @@ if flag_r:
     for i in range(len(ProcessesList)):
         tag=time.strftime("%m%d_%H")
         Process=ProcessesList[i]
-        SECS=selection.keys()
-        MATCH=True
-        if len(SECS) == 0:
-            MATCH=True
-        else:
-            for key in SECS:
-                if Process[key] == selection[key]:
-                    MATCH*=True
-                else:
-                    MATCH*=False
-        if not MATCH:
-            print('Skip: ',Process['Name'],MATCH)
+        # SECS=selection.keys()
+        # MATCH=True
+        # if len(SECS) == 0:
+        #     MATCH=True
+        # else:
+        #     for key in SECS:
+        #         if Process[key] == selection[key]:
+        #             MATCH*=True
+        #         else:
+        #             MATCH*=False
+        # if not MATCH:
+        #     print('Skip: ',Process['Name'],MATCH)
+        #     continue
+        if not SELECT_PROCESS(Process,selection):
+            print('Skip: ',Process['Name'])
             continue
         if Process['Decay'] == 'None':
             Process['Decay'] = decays
