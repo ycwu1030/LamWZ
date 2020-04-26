@@ -24,6 +24,7 @@ Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
 BRZll=0.067316
 BRWlv=0.2172
 BRhbb=0.5809
+BRZbb=0.1512
 BRhtata=0.06256
 
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
