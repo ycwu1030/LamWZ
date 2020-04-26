@@ -22,6 +22,7 @@ Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
 #ChannelInfo=[]
 # Following BR information is used for signal process CS calculation
 BRZll=0.067316
+BRZvv=0.20000
 BRWlv=0.2172
 BRhbb=0.5809
 BRZbb=0.1512

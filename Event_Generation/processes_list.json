@@ -6,7 +6,8 @@
         "Decay" : "bbll",
         "Processes" : [ "e- e+ > t t~, ( t > b w+, w+ > l+ vl ), ( t~ > b~ w-, w- > l- vl~ )"],
         "HardProcesses": [ "e- e+ > t t~" ],
-        "CS": {"3000":1.1709,"1500":4.6421}
+        "CSHard": {"3000":24.8642,"1500":98.463},
+        "CS": {"3000":1.173,"1500":4.645}
     },
     {
         "Name": "bkg_VBF_wz_bbll",
@@ -16,7 +17,8 @@
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > ve e+ w- z $ vb, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z $ vb, w+ > l+ vl, z > b b~"],
         "HardProcesses": ["e- e+ > ve e+ w- z $ vb", "e- e+ > e- ve~ w+ z $ vb"],
-        "CS": {"3000":2.713,"1500":1.871}
+        "CSHard": {"3000":136.127,"1500":56.06123},
+        "CS": {"3000":4.47,"1500":1.841}
     },
     {
         "Name": "bkg_VBF_zz_bbll",
@@ -26,7 +28,8 @@
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > ve ve~ z z $ vb, z > l- l+, z > b b~"],
         "HardProcesses": ["e- e+ > ve ve~ z z $ vb"],
-        "CS": {"3000":2.0686,"1500":0.6479}
+        "CSHard": {"3000":94.1089, "1500": 29.069},
+        "CS": {"3000":1.9157,"1500":0.5917}
     },
     {
         "Name": "bkg_zh_bbll",
@@ -35,7 +38,8 @@
         "Decay": "bbll",
         "Processes": ["e- e+ > z h, z > l- l+, h > b b~"],
         "HardProcesses": ["e- e+ > z h"],
-        "CS": {"3000":0.08978, "1500":0.3646}
+        "CSHard": {"3000": 1.5033, "1500": 6.1011},
+        "CS": {"3000":0.05878, "1500":0.2386}
     },
     {
         "Name": "bkg_zww_bbll",
@@ -44,7 +48,8 @@
         "Decay": "bbll",
         "Processes": ["e- e+ > z w+ w-, z > b b~, w+ > l+ vl, w- > l- vl~"],
         "HardProcesses": ["e- e+ > z w+ w-"],
-        "CS": {"3000":0.415, "1500": 0.6604}
+        "CSHard": {"3000": 56.199472, "1500": 89.16495},
+        "CS": {"3000":0.40087, "1500": 0.636}
     },
     {
         "Name": "bkg_zzz_bbll",
@@ -53,7 +58,8 @@
         "Decay": "bbll",
         "Processes": ["e- e+ > z z z, z > b b~, z > l+ l-, z > vl vl~"],
         "HardProcesses": ["e- e+ > z z z"],
-        "CS": {"3000": 0.006139, "1500": 0.0119}
+        "CSHard": {"3000": 0.414657, "1500": 0.8006},
+        "CS": {"3000": 0.005064, "1500": 0.009778}
     },
     {
         "Name": "ee_VBF_wh_Full",
@@ -63,7 +69,8 @@
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "HardProcesses": ["e- e+ > e- ve~ w+ h $ vb", "e- e+ > ve e+ w- h $ vb"],
-        "CS": {"3000":29.540,"1500":12.206}
+        "CSHard": {"3000": 15.243978, "1500": 7.627546},
+        "CS": {"3000":1.9234,"1500":0.9624}
     },
     {
         "Name": "ee_VBF_zh_Full",
@@ -73,8 +80,10 @@
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "HardProcesses": ["e- e+ > ve ve~ z h $ vb"],
-        "CS": {"3000":15.930,"1500":5.198}
+        "CSHard": {"3000": 16.548485, "1500": 5.1846124},
+        "CS": {"3000":0.6471,"1500":0.20274}
     }
   ],
-"Description": "sqrts=3TeV, P(e-)=-0.8, P(e+)=0.0"
+"Description": "P(e-)=-0.8, P(e+)=0.0",
+"MG5Run": "cut_decays = False, ptb=0, ptl = 10, etab = -1, etal = 3.5, drbb = 0, drll = 0, drbl = 0"
 }

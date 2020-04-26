@@ -199,7 +199,12 @@ if flag_r:
             store_dir = Event_dir + '/' + Process['Name'] + '/Delphes/' + '%d'%(sqrts)
             filein = 'tag_1_delphes_events.root'
             fileout = 'delphes_events_' + Process['Decay'] + '_' + '%d'%(sqrts) + '_' + tag + '.root'
-            shutil.copyfile(work_dir + '/Cards_tmp/delphes_card_CEPC.dat', work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
+            if sqrts == 3000:
+                shutil.copyfile(work_dir + '/Cards_tmp/delphes_card_CLICdet_3000.tcl', work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
+            elif sqrts == 1500:
+                shutil.copyfile(work_dir + '/Cards_tmp/delphes_card_CLICdet_1500.tcl', work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
+            else:
+                shutil.copyfile(work_dir + '/Cards_tmp/delphes_card_CLICdet_3000.tcl', work_dir + '/' + Process['Name'] + '/Cards/delphes_card.dat')
             shutil.copyfile(work_dir + '/Cards_tmp/pythia8_card.dat', work_dir + '/' + Process['Name'] + '/Cards/pythia8_card.dat')
         else:
             store_dir = Event_dir + '/' + Process['Name'] + '/Parton/' + '%d'%(sqrts)

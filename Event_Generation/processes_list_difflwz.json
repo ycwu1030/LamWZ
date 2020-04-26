@@ -4,8 +4,10 @@
         "BkgSigTag":"bkg",
         "Abbr": "tt",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > t t~, ( t > b w+, w+ > l+ vl ), ( t~ > b~ w-, w- > l- vl~ )"],
-        "CS": {"3000":1.1709,"1500":4.6421}
+        "Processes" : [ "e- e+ > t t~, ( t > b w+, w+ > l+ vl ), ( t~ > b~ w-, w- > l- vl~ )"],
+        "HardProcesses": [ "e- e+ > t t~" ],
+        "CSHard": {"3000":24.8642,"1500":98.463},
+        "CS": {"3000":1.173,"1500":4.645}
     },
     {
         "Name": "bkg_VBF_wz_bbll",
@@ -14,7 +16,9 @@
         "Decay" : "bbll",
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > ve e+ w- z $ vb, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z $ vb, w+ > l+ vl, z > b b~"],
-        "CS": {"3000":2.713,"1500":1.871}
+        "HardProcesses": ["e- e+ > ve e+ w- z $ vb", "e- e+ > e- ve~ w+ z $ vb"],
+        "CSHard": {"3000":136.127,"1500":56.06123},
+        "CS": {"3000":4.47,"1500":1.841}
     },
     {
         "Name": "bkg_VBF_zz_bbll",
@@ -23,7 +27,9 @@
         "Decay" : "bbll",
         "PreDefine": ["vb = w+ w- z"],
         "Processes" : ["e- e+ > ve ve~ z z $ vb, z > l- l+, z > b b~"],
-        "CS": {"3000":2.0686,"1500":0.6479}
+        "HardProcesses": ["e- e+ > ve ve~ z z $ vb"],
+        "CSHard": {"3000":94.1089, "1500": 29.069},
+        "CS": {"3000":1.9157,"1500":0.5917}
     },
     {
         "Name": "bkg_zh_bbll",
@@ -31,7 +37,9 @@
         "Abbr": "zh",
         "Decay": "bbll",
         "Processes": ["e- e+ > z h, z > l- l+, h > b b~"],
-        "CS": {"3000":0.08978, "1500":0.3646}
+        "HardProcesses": ["e- e+ > z h"],
+        "CSHard": {"3000": 1.5033, "1500": 6.1011},
+        "CS": {"3000":0.05878, "1500":0.2386}
     },
     {
         "Name": "bkg_zww_bbll",
@@ -39,7 +47,9 @@
         "Abbr": "zww",
         "Decay": "bbll",
         "Processes": ["e- e+ > z w+ w-, z > b b~, w+ > l+ vl, w- > l- vl~"],
-        "CS": {"3000":0.415, "1500": 0.6604}
+        "HardProcesses": ["e- e+ > z w+ w-"],
+        "CSHard": {"3000": 56.199472, "1500": 89.16495},
+        "CS": {"3000":0.40087, "1500": 0.636}
     },
     {
         "Name": "bkg_zzz_bbll",
@@ -47,7 +57,9 @@
         "Abbr": "zzz",
         "Decay": "bbll",
         "Processes": ["e- e+ > z z z, z > b b~, z > l+ l-, z > vl vl~"],
-        "CS": {"3000": 0.006139, "1500": 0.0119}
+        "HardProcesses": ["e- e+ > z z z"],
+        "CSHard": {"3000": 0.414657, "1500": 0.8006},
+        "CS": {"3000": 0.005064, "1500": 0.009778}
     },
     {
         "Name": "ee_VBF_wh_Full_lwz0x6",
