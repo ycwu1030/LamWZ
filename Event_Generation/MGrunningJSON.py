@@ -136,8 +136,8 @@ if flag_cs:
             os.remove(work_dir + '/' + Process['Name'] + '/Cards/pythia8_card.dat')
         except OSError:
             pass
-        subprocess.call(work_dir + '/' + Process['Name'] + '/bin/madevent ' + currentDir + '/tmp_madevent.dat', cwd = work_dir + '/' + Process['Name'], shell=True)
-        gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + '%d'%(sqrts) + "_" + tag
+        subprocess.call(work_dir + '/' + Process['Name'] + '_Hard_CS' + '/bin/madevent ' + currentDir + '/tmp_madevent.dat', cwd = work_dir + '/' + Process['Name'] + '_Hard_CS', shell=True)
+        gene_dir = work_dir + '/' + Process['Name'] + '_Hard_CS' + '/Events/run_' + '%d'%(sqrts) + "_" + tag
         result_file = gene_dir + '/run_' + '%d'%(sqrts) + "_" + tag + '_tag_1_banner.txt'
         cs=subprocess.check_output('awk \'$2=="Integrated"&&$3=="weight" {print $6}\' ' + result_file,shell=True)
         cs_results.append({Process['Name']: float(cs)*1000})
