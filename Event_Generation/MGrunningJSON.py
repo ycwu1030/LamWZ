@@ -78,6 +78,10 @@ if flag_g:
             continue
         with open('tmp_mg5.dat','w') as OutGen:
             OutGen.write('import model ' + modelName + '\n')
+            if 'PreDefine' in ProcessesList[i].keys():
+                Predefined=ProcessesList[i]['PreDefine']
+                for pre in Predefined:
+                    OutGen.write('define ' + pre + '\n')
             ChannelProcesses=ProcessesList[i]['Processes']
             OutGen.write('generate ' + ChannelProcesses[0] + '\n')
             for j in range(1,len(ChannelProcesses)):
@@ -95,6 +99,10 @@ if flag_cs:
             continue
         with open('tmp_mg5.dat','w') as OutGen:
             OutGen.write('import model ' + modelName + '\n')
+            if 'PreDefine' in ProcessesList[i].keys():
+                Predefined=ProcessesList[i]['PreDefine']
+                for pre in Predefined:
+                    OutGen.write('define ' + pre + '\n')
             ChannelProcesses=ProcessesList[i]['HardProcesses']
             OutGen.write('generate ' + ChannelProcesses[0] + '\n')
             for j in range(1,len(ChannelProcesses)):
