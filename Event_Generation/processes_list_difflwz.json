@@ -12,7 +12,8 @@
         "BkgSigTag": "bkg",
         "Abbr": "wz",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve e+ w- z, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z, w+ > l+ vl, z > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve e+ w- z $ vb, w- > l- vl~, z > b b~","e- e+ > e- ve~ w+ z $ vb, w+ > l+ vl, z > b b~"],
         "CS": {"3000":2.713,"1500":1.871}
     },
     {
@@ -20,7 +21,8 @@
         "BkgSigTag": "bkg",
         "Abbr": "zz",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z z $ vb, z > l- l+, z > b b~"],
         "CS": {"3000":2.0686,"1500":0.6479}
     },
     {
@@ -48,19 +50,12 @@
         "CS": {"3000": 0.006139, "1500": 0.0119}
     },
     {
-        "Name": "bkg_VBF_zz_tatall",
-        "BkgSigTag": "bkg",
-        "Abbr": "zz",
-        "Decay" : "tatall",
-        "Processes" : ["e- e+ > ve ve~ z z, z > l- l+, z > ta- ta+"],
-        "CS": {"3000":0.4610,"1500":0.1444}
-    },
-    {
         "Name": "ee_VBF_wh_Full_lwz0x6",
         "BkgSigTag": "Full_lwz0x6",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":62.3534,"1500":19.5114}
     },
     {
@@ -68,7 +63,8 @@
         "BkgSigTag": "Full_lwz0x65",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":52.2436,"1500":17.424}
     },
     {
@@ -76,7 +72,8 @@
         "BkgSigTag": "Full_lwz0x7",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":45.0168,"1500":15.8934}
     },
     {
@@ -84,7 +81,8 @@
         "BkgSigTag": "Full_lwz0x75",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":39.8278,"1500":14.7601}
     },
     {
@@ -92,7 +90,8 @@
         "BkgSigTag": "Full_lwz0x8",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":36.1057,"1500":13.9156}
     },
     {
@@ -100,7 +99,8 @@
         "BkgSigTag": "Full_lwz1x0",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":29.522,"1500":12.206}
     },
     {
@@ -108,7 +108,8 @@
         "BkgSigTag": "Full_lwz1x2",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":28.9516,"1500":11.7529}
     },
     {
@@ -116,7 +117,8 @@
         "BkgSigTag": "Full_lwz1x4",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":30.4145,"1500":11.7656}
     },
     {
@@ -124,7 +126,8 @@
         "BkgSigTag": "Full_lwz1x6",
         "Abbr": "wh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > e- ve~ w+ h, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h, w- > l- vl~, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > e- ve~ w+ h $ vb, w+ > l+ vl, h > b b~","e- e+ > ve e+ w- h $ vb, w- > l- vl~, h > b b~"],
         "CS": {"3000":32.5346,"1500":11.959}
     },
     {
@@ -132,7 +135,8 @@
         "BkgSigTag": "Full_lwz0x6",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":30.4107,"1500":8.56278}
     },
     {
@@ -140,7 +144,8 @@
         "BkgSigTag": "Full_lwz0x65",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":26.2448,"1500":7.6492}
     },
     {
@@ -148,7 +153,8 @@
         "BkgSigTag": "Full_lwz0x7",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":23.1975,"1500":6.96714}
     },
     {
@@ -156,7 +162,8 @@
         "BkgSigTag": "Full_lwz0x75",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":20.9473,"1500":6.45144}
     },
     {
@@ -164,7 +171,8 @@
         "BkgSigTag": "Full_lwz0x8",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":19.2762,"1500":6.05766}
     },
     {
@@ -172,7 +180,8 @@
         "BkgSigTag": "Full_lwz1x0",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":15.930,"1500":5.198}
     },
     {
@@ -180,7 +189,8 @@
         "BkgSigTag": "Full_lwz1x2",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":15.0886,"1500":4.89299}
     },
     {
@@ -188,7 +198,8 @@
         "BkgSigTag": "Full_lwz1x4",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":15.1681,"1500":4.80643}
     },
     {
@@ -196,7 +207,8 @@
         "BkgSigTag": "Full_lwz1x6",
         "Abbr": "zh",
         "Decay" : "bbll",
-        "Processes" : ["e- e+ > ve ve~ z h, z > l- l+, h > b b~"],
+        "PreDefine": ["vb = w+ w- z"],
+        "Processes" : ["e- e+ > ve ve~ z h $ vb, z > l- l+, h > b b~"],
         "CS": {"3000":15.5999,"1500":4.81332}
     }
   ],
