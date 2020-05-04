@@ -28,13 +28,24 @@ int main(int argc, char const *argv[])
 {
     const double PTLepTrigger = 20;
     const double PTJetTrigger = 20;
+
+    // 0: exe name
+    // 1: input file name
+    // 2: output directory
+    // 3: output filename
+    // 4: process full name
+    // 5: process abbr name
+    // 6: process ID
+    // 7: SigBkgTag
+    // 8: SorB
+    // 9: decayName
+    // 10: decayID
+    // 11: analysisName
+    // 12: analysisID
+    // 13: CS
     TFile *f1 = new TFile(argv[1]);
     TTree *t1 = (TTree *)f1->Get("Delphes");
     Delphes *del = new Delphes(t1);
-//    string fileori(argv[1]);
-//    int pos = fileori.find_last_of('/');
-//    string filename(fileori.substr(pos+1));
-//    string filepath(fileori.substr(0,pos));
     string outdir(argv[2]);
     string fileout(argv[3]);
     char temp[200];
@@ -42,17 +53,28 @@ int main(int argc, char const *argv[])
     TFile *f2 = new TFile(temp,"RECREATE");
     TTree *t2 = new TTree("LamWZPreAna","New Variables for Lambda_WZ Ana");
 
-    int mode_ = atoi(argv[4]);// bbll or tautaull, signal or background, 
-    // a + 10*b + 100*c;
-    // a: 0 for background, 1 for from hWW, 2 for from hZZ, 3 for from inter
-    // b: 1 for bbll, 2 for tautaull
-    // c: 1 for Wh, 2 for Zh, 3 for ttbar, 4 for wz, 5 for zz
-    sprintf(temp,"%s/events_proc_%d.dat",outdir.c_str(),mode_);
-    ofstream outlog(temp);
-    double CS = atof(argv[5]);// The cross section for the process, not the weight
-    int channelID = atoi(argv[6]);
-    int ntot;
     
+
+    char process_full_name[200];
+    sprintf(process_full_name,"%s",argv[4]);
+    char process_abbr_name[20];
+    sprintf(process_abbr_name,"%s",argv[5]);
+    int processID = atoi(argv[6]);
+    char SigBkgTag[20];
+    sprintf(SigBkgTag,"%s",argv[7]);
+    int SorB = atoi(argv[8]);
+    char decayName[20];
+    sprintf(decayName,"%s",argv[9]);
+    int decayID = atoi(argv[10]);
+    char analysisName[20];
+    sprintf(analysisName,"%s",argv[11]);
+    int analysisID = atoi(argv[12]);
+
+    sprintf(temp,"%s/events_proc_%s.dat",outdir.c_str(),process_full_name);
+    ofstream outlog(temp);
+    double CS = atof(argv[13]);// The cross section for the process, not the weight
+    int ntot;
+
     const int MAXEle=5;
     int NEle;
     double ElePT[MAXEle];
@@ -106,8 +128,16 @@ int main(int argc, char const *argv[])
     double dRbV;
     double shat;
 
+    t2->Branch("SorB",&SorB,"SorB/I");
+    t2->Branch("SigBkgTag",SigBkgTag,"SigBkgTag/C");
+    t2->Branch("processID",&processID,"processID/I");
+    t2->Branch("processAbbr",process_abbr_name,"processAbbr/C");
+    t2->Branch("decayID",&decayID,"decayID/I");
+    t2->Branch("decayName",decayName,"decayName/C");
+    t2->Branch("analysisID",&analysisID,"analysisID/I");
+    t2->Branch("analysisName",analysisName,"analysisName/C");
+    t2->Branch("processFullName",process_full_name,"processFullName/C");
 
-    t2->Branch("Cate",&mode_,"Cate/I");
     t2->Branch("CS",&CS,"CS/D");
     t2->Branch("NEVENTS",&ntot,"NEVENTS/I");
 
@@ -175,12 +205,12 @@ int main(int argc, char const *argv[])
     TLorentzVector PT;
     double tmpdR;
     double dR;
-    if (channelID == 1)
+    if (analysisID == 1)
     {
     cout<<"Analysis WH case"<<endl;
     #include "wh_channel.inc"
     }
-    else if (channelID == 2)
+    else if (analysisID == 2)
     {
     cout<<"Analysis ZH case"<<endl;
     #include "zh_channel.inc"

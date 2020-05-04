@@ -17,7 +17,7 @@ import simplejson
 
 Decays={'bbll':1,'tatall':2}
 BkgSigTag={'bkg':0,'Full_lwz0x6':1,'Full_lwz0x65':2,'Full_lwz0x7':3,'Full_lwz0x75':4,'Full_lwz0x8':5,'Full_lwz1x0':6,'Full_lwz1x2':7,'Full_lwz1x4':8,'Full_lwz1x6':9}
-Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5}
+Process={'wh':1,'zh':2,'tt':3,'wz':4,'zz':5,'zh':6,'zww':7,'zzz':8}
 #ProsList=['bkg_tt_bbll','bkg_VBF_wz_bbll','bkg_VBF_zz_bbll','bkg_VBF_zz_tatall','ee_VBF_wh_InterOnly','ee_VBF_wh_WOnly','ee_VBF_wh_ZOnly','ee_VBF_zh_InterOnly','ee_VBF_zh_WOnly','ee_VBF_zh_ZOnly']
 #ChannelInfo=[]
 # Following BR information is used for signal process CS calculation
@@ -94,18 +94,7 @@ with open(ProcessesFile,'r') as f:
             continue
         rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
-        if process['BkgSigTag'] == 'bkg':
-            CS=process['CS']['%d'%(sqrts)]
-        else:
-            if decay == 'bbll':
-                BRall = BRhbb
-            else:
-                BRall = BRhtata
-            if process['Abbr'] == 'wh':
-                BRall = BRall*BRWlv
-            else:
-                BRall = BRall*BRZll
-            CS=process['CS']['%d'%(sqrts)]*BRall
+        CS=process['CS']['%d'%(sqrts)]
         if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
             continue
         if case_str == 'Full':
@@ -116,15 +105,15 @@ with open(ProcessesFile,'r') as f:
             RandomID=(filename.split('.')[0]).split('_')[-2:]
             OutfilePrefix = '_'.join([process['Abbr'],process['BkgSigTag'],decay,RandomID[0],RandomID[1]])
             outfilename=GenerateFileName(Outdir,OutfilePrefix)
-            subprocess.call('%s %s %s %s %d %f %d'%(Analysis,rootfile,Outdir,outfilename,processID,CS,mode_int),shell=True)
-            with open(Outdir+'/events_proc_%d.dat'%(processID),'r') as log:
+            subprocess.call('%s %s %s %s %s %s %d %s %d %s %d %s %d %f'%(Analysis,rootfile,Outdir,outfilename,process['Name'],process['Abbr'],process['ProcessID'],process['BkgSigTag'],process['SorB'],decay,Decays[decay],mode_str,mode_int,CS),shell=True)
+            with open(Outdir+'/events_proc_%s.dat'%(process['Name']),'r') as log:
                 nevents = log.read()
             process['NEvents']+=int(nevents)
             try:
-                os.remove(Outdir+'/events_proc_%d.dat'%(processID))
+                os.remove(Outdir+'/events_proc_%s.dat'%(process['Name']))
             except OSError:
                 pass
         if process['NEvents'] != 0:
-            ProcessesInfo['%d'%(processID)] = process
+            ProcessesInfo['%s'%(process['Name'])] = process
     with open(Outdir+'/processes_in_this_dict.json','w') as logall:
         simplejson.dump(ProcessesInfo,logall)
