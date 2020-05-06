@@ -7,11 +7,11 @@
                 // printf("Value %f\n", value);
                 if (SorB==1)
                 {
-                    bid=Hsig[id][i]->Fill(valueX);
+                    bid=Hsig[id][i]->Fill(valueX,weight);
                 }
                 else
                 {
-                    bid=Hbkg[id][i]->Fill(valueX);
+                    bid=Hbkg[id][i]->Fill(valueX,weight);
                 }
             }
             else
@@ -21,11 +21,11 @@
                 // printf("Value %f vs %f\n", valueX,valueY);
                 if (SorB==1)
                 {
-                    bid=Hsig2[id][i]->Fill(valueX,valueY);
+                    bid=Hsig2[id][i]->Fill(valueX,valueY,weight);
                 }
                 else
                 {
-                    bid=Hbkg2[id][i]->Fill(valueX,valueY);
+                    bid=Hbkg2[id][i]->Fill(valueX,valueY,weight);
                 }
             }
         }

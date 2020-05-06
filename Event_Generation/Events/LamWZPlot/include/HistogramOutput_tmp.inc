@@ -38,8 +38,11 @@
             if(TwoDQ_==0)
             {
                 // sprintf(temp,"Events/( %3.1f )",Hbkg[j][i]->GetBinWidth(1));
-                normfactor = Hbkg[j][i]->Integral();
-                Hbkg[j][i]->Scale(1.0/normfactor);
+                if (Renormal == 1)
+                {
+                    normfactor = Hbkg[j][i]->Integral();
+                    Hbkg[j][i]->Scale(1.0/normfactor);
+                }
                 Hbkg[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
                 Hbkg[j][i]->GetXaxis()->SetTitle(bn->titleX[i].c_str());
                 Hbkg[j][i]->SetLineColor(bkgcolor[j]);
@@ -66,8 +69,11 @@
             if(TwoDQ_==0)
             {
                 // sprintf(temp,"Events/( %3.1f )",Hsig[j][i]->GetBinWidth(1));
-                normfactor = Hsig[j][i]->Integral();
-                Hsig[j][i]->Scale(1.0/normfactor);
+                if (Renormal == 1)
+                {
+                    normfactor = Hsig[j][i]->Integral();
+                    Hsig[j][i]->Scale(1.0/normfactor);
+                }
                 Hsig[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
                 Hsig[j][i]->GetXaxis()->SetTitle(bn->titleX[i].c_str());
                 Hsig[j][i]->SetLineColor(sigcolor[j]);

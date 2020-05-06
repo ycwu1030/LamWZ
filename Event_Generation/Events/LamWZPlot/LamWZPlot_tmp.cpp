@@ -35,6 +35,7 @@ int main(int argc, char const *argv[])
 
     string InputDir(argv[1]);
     string tag(argv[2]);
+    int Renormal = atoi(argv[3]); //0 keep the weight, 1: renormalize to 1.
 
     LoadingRootFile(ch,InputDir);
     LamWZPreAna *LamWZch = new LamWZPreAna(ch);
@@ -51,6 +52,7 @@ int main(int argc, char const *argv[])
     double valueX,valueY;
     int SorB, id;
     int bid,cat;
+    double weight;
     printf("%d entries to be processed!\n",nentries);
     for (Int_t entry = 0; entry < nentries; ++entry)
     {
@@ -60,6 +62,14 @@ int main(int argc, char const *argv[])
         // cout<<entry<<endl;
         SorB = LamWZch->SorB;
         id = LamWZch->processID;
+        if (SorB == 1)
+        {
+            weight = LamWZch->CS*LUMINOSITY/((double)Sig_NTOTAL[id]);
+        }
+        else
+        {
+            weight = LamWZch->CS*LUMINOSITY/((double)Bkg_NTOTAL[id]);
+        }
         #include "HistogramFilling.inc"
     }
     cout<<"All Events have been processed..."<<endl;
