@@ -26,7 +26,15 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
-   Int_t           Cate;
+   Int_t           SorB;
+   Char_t          SigBkgTag[15];
+   Int_t           processID;
+   Char_t          processAbbr[8];
+   Int_t           decayID;
+   Char_t          decayName[10];
+   Int_t           analysisID;
+   Char_t          analysisName[5];
+   Char_t          processFullName[50];
    Double_t        CS;
    Int_t           NEVENTS;
    Int_t           NEle;
@@ -72,7 +80,15 @@ public :
    Double_t        shat;
 
    // List of branches
-   TBranch        *b_Cate;   //!
+   TBranch        *b_SorB;   //!
+   TBranch        *b_SigBkgTag;   //!
+   TBranch        *b_processID;   //!
+   TBranch        *b_processAbbr;   //!
+   TBranch        *b_decayID;   //!
+   TBranch        *b_decayName;   //!
+   TBranch        *b_analysisID;   //!
+   TBranch        *b_analysisName;   //!
+   TBranch        *b_processFullName;   //!
    TBranch        *b_CS;   //!
    TBranch        *b_NEVENTS;   //!
    TBranch        *b_NEle;   //!
@@ -160,13 +176,15 @@ LamWZPreAna::~LamWZPreAna()
 
 void LamWZPreAna::GetCate()
 {
-   if (Cate<300)
+   if (SorB == 1)
    {
-      CateIndicator = Cate%10-1;
+      // Signal
+      CateIndicator = 0;
    }
-   else if (Cate > 300)
+   else if (SorB == 0)
    {
-      CateIndicator = Cate/100;
+      // Background
+      CateIndicator = processID + 1;
    }
 }
 
@@ -225,7 +243,15 @@ void LamWZPreAna::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("Cate", &Cate, &b_Cate);
+   fChain->SetBranchAddress("SorB", &SorB, &b_SorB);
+   fChain->SetBranchAddress("SigBkgTag", SigBkgTag, &b_SigBkgTag);
+   fChain->SetBranchAddress("processID", &processID, &b_processID);
+   fChain->SetBranchAddress("processAbbr", processAbbr, &b_processAbbr);
+   fChain->SetBranchAddress("decayID", &decayID, &b_decayID);
+   fChain->SetBranchAddress("decayName", decayName, &b_decayName);
+   fChain->SetBranchAddress("analysisID", &analysisID, &b_analysisID);
+   fChain->SetBranchAddress("analysisName", analysisName, &b_analysisName);
+   fChain->SetBranchAddress("processFullName", processFullName, &b_processFullName);
    fChain->SetBranchAddress("CS", &CS, &b_CS);
    fChain->SetBranchAddress("NEVENTS", &NEVENTS, &b_NEVENTS);
    fChain->SetBranchAddress("NEle", &NEle, &b_NEle);
