@@ -49,6 +49,8 @@ renorm=args.renorm
 Lumi=Lumi_map['%d'%(sqrts)]
 nsig=0
 nbkg=0
+sigid=[]
+bkgid=[]
 signame=[]
 bkgname=[]
 siglabel=[]
@@ -63,15 +65,27 @@ with open(ProcessesFile,'r') as f:
         process=ProcessesList[key]
         print("Adding process: ",process['Name'])
         if process['SorB'] == 0:
+            bkgid.append(process['processID'])
             bkgname.append(process['Abbr'])
             bkglabel.append(process['Name'])
             bkgneve.append(str(process['NEvents']))
             nbkg+=1
         else:
+            sigid.append(process['processID'])
             signame.append(process['Abbr'])
             siglabel.append(process['Name'])
             signeve.append(str(process['NEvents']))
             nsig+=1
+
+bkgid_n = np.array(bkgid[::-1])
+bkgname=np.array(bkgname)[bkgid_n]
+bkglabel=np.array(bkglabel)[bkgid_n]
+bkgneve=np.array(bkgneve)[bkgid_n]
+
+sigid_n = np.array(sigid[::-1])
+signame=np.array(signame)[sigid_n]
+siglabel=np.array(siglabel)[sigid_n]
+signeve=np.array(signeve)[sigid_n]
 
 
 signame_str='\",\"'.join(signame)
