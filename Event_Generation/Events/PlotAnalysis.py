@@ -54,8 +54,9 @@ bkgneve=[]
 
 
 with open(ProcessesFile,'r') as f:
-    ProcessesList = (simplejson.load(f))['Processes']
-    for process in ProcessesList:
+    ProcessesList = (simplejson.load(f))
+    for key in ProcessesList.keys():
+        process=ProcessesList[key]
         print("Adding process: ",process['Name'])
         if process['SorB'] == 0:
             bkgname.append(process['Abbr'])
