@@ -77,15 +77,15 @@ with open(ProcessesFile,'r') as f:
             signeve.append(str(process['NEvents']))
             nsig+=1
 
-bkgid_n = np.array(bkgid[::-1])
-bkgname=np.array(bkgname)[bkgid_n]
-bkglabel=np.array(bkglabel)[bkgid_n]
-bkgneve=np.array(bkgneve)[bkgid_n]
+bkgid_n = np.array(bkgid)
+bkgname=np.array(bkgname)[bkgid_n][::-1]
+bkglabel=np.array(bkglabel)[bkgid_n][::-1]
+bkgneve=np.array(bkgneve)[bkgid_n][::-1]
 
-sigid_n = np.array(sigid[::-1])
-signame=np.array(signame)[sigid_n]
-siglabel=np.array(siglabel)[sigid_n]
-signeve=np.array(signeve)[sigid_n]
+sigid_n = np.array(sigid)
+signame=np.array(signame)[sigid_n][::-1]
+siglabel=np.array(siglabel)[sigid_n][::-1]
+signeve=np.array(signeve)[sigid_n][::-1]
 
 
 signame_str='\",\"'.join(signame)
