@@ -33,7 +33,6 @@ int main(int argc, char const *argv[])
     SetPlotStyle();
     TChain *ch = new TChain("LamWZPreAna");
 
-    if (argc != 5) return -1;
     string InputDir(argv[1]);
     string tag(argv[2]);
 
