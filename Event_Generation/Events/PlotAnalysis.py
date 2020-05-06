@@ -77,4 +77,4 @@ bkglabel_str=','.join(bkglabel)
 signeve_str=','.join(signeve)
 bkgneve_str=','.join(bkgneve)
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' > %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,SRCDIR,PlotsNAME,SRCDIR,PlotsNAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,SRCDIR,PlotsNAME,SRCDIR,PlotsNAME),shell=True)
