@@ -65,13 +65,13 @@ with open(ProcessesFile,'r') as f:
         process=ProcessesList[key]
         print("Adding process: ",process['Name'])
         if process['SorB'] == 0:
-            bkgid.append(process['processID'])
+            bkgid.append(process['ProcessID'])
             bkgname.append(process['Abbr'])
             bkglabel.append(process['Name'])
             bkgneve.append(str(process['NEvents']))
             nbkg+=1
         else:
-            sigid.append(process['processID'])
+            sigid.append(process['ProcessID'])
             signame.append(process['Abbr'])
             siglabel.append(process['Name'])
             signeve.append(str(process['NEvents']))
