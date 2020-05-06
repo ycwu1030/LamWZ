@@ -39,15 +39,7 @@ ProcessesFile=args.inputdir + '/' + args.processfile
 SRCDIR='/data/data068/ycwu/LamWZ/Event_Generation/Events/LamWZPlot'
 PlotsNAME='LamWZPlot'
 sqrts = args.sqrts
-case_str=args.case
-if case_str == 'Full':
-    case_int = 1
-else:
-    case_int = 0
-selection = args.selection
 
-if not os.path.exists(Outdir):
-    os.makedirs(Outdir)
 
 # Link required signal and background processes information 
 Lumi=Lumi_map['%d'%(sqrts)]
