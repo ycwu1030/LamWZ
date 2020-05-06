@@ -79,17 +79,17 @@ with open(ProcessesFile,'r') as f:
 
 print(bkgid,bkgname,bkglabel)
 
-bkgid_n = np.array(bkgid)
-bkgname=np.array(bkgname)[bkgid_n][::-1]
-bkglabel=np.array(bkglabel)[bkgid_n][::-1]
-bkgneve=np.array(bkgneve)[bkgid_n][::-1]
+p = np.array(bkgid).argsort()
+bkgname=np.array(bkgname)[p]
+bkglabel=np.array(bkglabel)[p]
+bkgneve=np.array(bkgneve)[p]
 
 print(bkgname,bkglabel,bkgneve)
 
-sigid_n = np.array(sigid)
-signame=np.array(signame)[sigid_n][::-1]
-siglabel=np.array(siglabel)[sigid_n][::-1]
-signeve=np.array(signeve)[sigid_n][::-1]
+p = np.array(sigid)
+signame=np.array(signame)[p]
+siglabel=np.array(siglabel)[p]
+signeve=np.array(signeve)[p]
 
 
 signame_str='\",\"'.join(signame)
