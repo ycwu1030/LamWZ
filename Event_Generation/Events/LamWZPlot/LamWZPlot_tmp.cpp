@@ -79,7 +79,7 @@ int main(int argc, char const *argv[])
     sst>>dir;
     createdir(dir.c_str());
 
-    #include "HistogramOutput.inc"
+    #include "HistogramOutput_tmp.inc"
 
     cout<<"Program Exit!"<<endl;
     cout<<"========================>>"<<endl;
