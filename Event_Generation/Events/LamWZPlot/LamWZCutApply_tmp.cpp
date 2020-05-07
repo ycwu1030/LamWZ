@@ -113,12 +113,12 @@ int main(int argc, char const *argv[])
         EventsBkgSA[i] = 0;
     }
 
-    int cat;
+    int ProcessID;
     int SorB;
     double Weight;
     Float_t F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
 
-    t2->Branch("Cate",&cat,"Cate/I");
+    t2->Branch("ProcessID",&ProcessID,"ProcessID/I");
     t2->Branch("SorB",&SorB,"SorB/I");
     t2->Branch("Weight",&Weight,"Weight/D");
     t2->Branch("FLepEta",&F_FLepEta,"FLepEta/F");
@@ -136,7 +136,7 @@ int main(int argc, char const *argv[])
     t2->Branch("CUTSAcate",CUTSAcate,"CUTSAcate[N_EffS]/I");
 
     auto hardcut = [&](){
-        return (F_Mll > 98.0)&&(F_Mbb < 140)&&(F_MET > 20 && F_MET < 300);
+        return (F_Mll > 98.0)&&(F_Mbb > 95 && F_Mbb < 140)&&(F_MET > 20 && F_MET < 300)&&(F_FLepEta < -1 || F_FLepEta > 1.2);
     };
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
@@ -185,9 +185,8 @@ int main(int argc, char const *argv[])
         ch->GetEntry(entry);
         Good = (ch->NBJet == 2 && ch->NLep_Af==2);
         if(!Good) continue;
-        GetHistID(cat,SorB,id);
         SorB = ch->SorB;
-        id = ch->processID;
+        ProcessID = ch->processID;
         if (SorB == 1)
         {
             Weight = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[id]);
