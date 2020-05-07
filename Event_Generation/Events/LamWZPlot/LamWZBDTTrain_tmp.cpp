@@ -114,7 +114,7 @@ int main(int argc, char const *argv[])
     dataloader->PrepareTrainingAndTestTree( precuts, precuts,
                                         "SplitMode=Random:NormMode=None:!V" );
     factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
-                           "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
+                           "!H:!V:NTrees=1000:MinNodeSize=2.5%:MaxDepth=5:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=30" );
     // Train MVAs using the set of training events
     factory->TrainAllMethods();
 
