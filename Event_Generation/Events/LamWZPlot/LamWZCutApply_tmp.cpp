@@ -38,7 +38,6 @@ int main(int argc, char const *argv[])
 {
     SetPlotStyle();
 
-    if (argc != 6) return -1;
     string InputDir(argv[1]);
     string tag(argv[2]);
     int channelID = atoi(argv[3]);
