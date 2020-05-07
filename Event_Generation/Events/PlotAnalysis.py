@@ -29,7 +29,8 @@ BRhtata=0.06256
 
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
 parser.add_argument('-input_dir',dest='inputdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna_wh_3000_Full')
-parser.add_argument('-p',dest='Plots',action='store_true')
+parser.add_argument('-rm',dest='rmode',default='p') # running mode, 
+# p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt
 parser.add_argument('-am',dest='amode',default='wh') # analysis mode
 parser.add_argument('-i',dest='processfile',default='processes_in_this_dict.json')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
@@ -40,10 +41,31 @@ args = parser.parse_args()
 ProcessesFile=args.inputdir + '/' + args.processfile
 SRCDIR='/data/data068/ycwu/LamWZ/Event_Generation/Events/LamWZPlot'
 PlotsNAME='LamWZPlot'
+CutTrainNAME='LamWZCutTrain'
+CutApplyNAME='LamWZCutApply'
+BDTTrainNAME='LamWZBDTTrain'
+BDTApplyNAME='LamWZBDTApply'
+rmode=args.rmode
 sqrts = args.sqrts
 tag=args.tag
 renorm=args.renorm
+amode=args.amode
 
+if amode == 'wh':
+    channelID = 1
+elif amode == 'zh':
+    channelID = 2
+
+if rmode == 'p':
+    EXENAME=PlotsNAME
+elif rmode == 'ct':
+    EXENAME=CutTrainNAME
+elif rmode == 'ca':
+    EXENAME=CutApplyNAME
+elif rmode == 'bt':
+    EXENAME=BDTTrainNAME
+elif rmode == 'ba':
+    EXENAME=BDTApplyNAME
 
 # Link required signal and background processes information 
 Lumi=Lumi_map['%d'%(sqrts)]
@@ -77,14 +99,14 @@ with open(ProcessesFile,'r') as f:
             signeve.append(str(process['NEvents']))
             nsig+=1
 
-print(bkgid,bkgname,bkglabel)
+# print(bkgid,bkgname,bkglabel)
 
 p = np.array(bkgid).argsort()
 bkgname=np.array(bkgname)[p]
 bkglabel=np.array(bkglabel)[p]
 bkgneve=np.array(bkgneve)[p]
 
-print(bkgname,bkglabel,bkgneve)
+# print(bkgname,bkglabel,bkgneve)
 
 p = np.array(sigid)
 signame=np.array(signame)[p]
@@ -100,8 +122,11 @@ signeve_str=','.join(signeve)
 bkgneve_str=','.join(bkgneve)
 
 
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,SRCDIR,PlotsNAME,SRCDIR,PlotsNAME),shell=True)
 
-subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,PlotsNAME),shell=True)
-subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,PlotsNAME,args.inputdir,tag,renorm),shell=True)
+if rmode == 'p':
+    subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
+if rmode == 'ct' or rmode == 'ca':
+    subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
