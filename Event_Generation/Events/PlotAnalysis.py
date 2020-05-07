@@ -30,7 +30,7 @@ BRhtata=0.06256
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
 parser.add_argument('-input_dir',dest='inputdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna_wh_3000_Full')
 parser.add_argument('-rm',dest='rmode',default='p') # running mode, 
-# p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt
+# p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt, br: BDT results
 parser.add_argument('-am',dest='amode',default='wh') # analysis mode
 parser.add_argument('-i',dest='processfile',default='processes_in_this_dict.json')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
@@ -45,6 +45,7 @@ CutTrainNAME='LamWZCutTrain'
 CutApplyNAME='LamWZCutApply'
 BDTTrainNAME='LamWZBDTTrain'
 BDTApplyNAME='LamWZBDTApply'
+BDTResultNAME='LamWZBDTResults'
 rmode=args.rmode
 sqrts = args.sqrts
 tag=args.tag
@@ -66,6 +67,8 @@ elif rmode == 'bt':
     EXENAME=BDTTrainNAME
 elif rmode == 'ba':
     EXENAME=BDTApplyNAME
+elif rmode == 'br':
+    EXENAME=BDTResultNAME
 
 # Link required signal and background processes information 
 Lumi=Lumi_map['%d'%(sqrts)]
@@ -130,5 +133,5 @@ if rmode == 'p':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
 elif rmode == 'ct' or rmode == 'ca':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
-elif rmode == 'bt' or rmode == 'ba':
+elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
