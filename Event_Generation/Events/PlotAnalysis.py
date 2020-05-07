@@ -128,5 +128,7 @@ subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
 if rmode == 'p':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
-if rmode == 'ct' or rmode == 'ca':
+elif rmode == 'ct' or rmode == 'ca':
+    subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
+elif rmode == 'bt' or rmode == 'ba':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
