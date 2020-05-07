@@ -155,7 +155,7 @@ int main(int argc, char const *argv[])
     hsigma->SetLineColor(kBlue);
     hsigma->SetLineWidth(2);
     hsigma->Scale(scale);
-    hsigma->Draw("HIST DRAW");
+    hsigma->Draw("HIST SAME");
     TLine *lmax = new TLine();
     lmax->SetLineColor(kGray);
     lmax->SetLineStyle(9);
