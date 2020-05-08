@@ -160,12 +160,12 @@ GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > inde
 
 if rmode == 'p':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
-    subprocess.call("cd Plots; %s; cd -; cd Plots/Plots_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/Plots_LamWZ_%s; %s; cd -;"%(GEINDEX,tag,GEINDEX),shell=True)
 elif rmode == 'ct' or rmode == 'ca':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
-    subprocess.call("cd Plots; %s; cd -; cd Plots/CUT_Train_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/CUT_Train_LamWZ_%s; %s; cd -;"%(GEINDEX,tag,GEINDEX),shell=True)
 elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
-    subprocess.call("cd Plots; %s; cd -; cd Plots/BDT_Train_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/BDT_Train_LamWZ_%s; %s; cd -;"%(GEINDEX,tag,GEINDEX),shell=True)
 
 subprocess.call('echo "Tag is: %s"'%(tag),shell=True)
