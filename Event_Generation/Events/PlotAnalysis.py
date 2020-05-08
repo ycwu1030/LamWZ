@@ -134,7 +134,7 @@ with open(cutfile,'r') as fcut:
         var=cutsinfo[key]
         varname=var['Name']
         varstr=''
-        linksym= '&&'
+        linksym= '\&\&'
         if var['Relation'] == 'OR':
             linksym = '||'
         if var['Min'] is None and var['Max'] is None:
