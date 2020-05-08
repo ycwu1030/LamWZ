@@ -156,15 +156,16 @@ cuts_str='\&\&'.join(cutslist)
 subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
+GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"
 
 if rmode == 'p':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
-    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/Plots_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/Plots_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
 elif rmode == 'ct' or rmode == 'ca':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
-    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/CUT_Train_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/CUT_Train_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
 elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
-    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/BDT_Train_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/BDT_Train_LamWZ_%s; GEINDEX; cd -;"%(GEINDEX,tag),shell=True)
 
 subprocess.call('echo "Tag is: %s"'%(tag),shell=True)
