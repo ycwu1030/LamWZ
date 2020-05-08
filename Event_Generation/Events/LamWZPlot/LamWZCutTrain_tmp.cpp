@@ -59,7 +59,9 @@ int main(int argc, char const *argv[])
     TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
                                                "!V:Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
     TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
-
+    string OptVarMin;
+    string OptVarMax;
+    string OptVarCut;
     if (channelID == 1)
     {
         dataloader->AddVariable( "MovedEta := FLepEta<0?FLepEta+5:FLepEta", 'F' );
@@ -69,6 +71,9 @@ int main(int argc, char const *argv[])
         dataloader->AddVariable( "Mll", 'F' );
         // dataloader->AddVariable( "AnglebV", 'F' );
         dataloader->AddVariable( "shat", 'F' );
+        OptVarMin = "CutRangeMin[0]=0:CutRangeMin[1]=0:CutRangeMin[2]=20:CutRangeMin[3]=80:CutRangeMin[4]=90:CutRangeMin[5]=0";
+        OptVarMax = "CutRangeMax[0]=5:CutRangeMax[1]=1500:CutRangeMax[2]=600:CutRangeMax[3]=150:CutRangeMax[4]=-1:CutRangeMax[5]=1500";
+        OptVarCut = "VarProp[0]=FSmart:VarProp[1]=FSmart:VarProp[2]=FSmart:VarProp[3]=FSmart:VarProp[4]=FMin:VarProp[5]=FSmart";
     }
     else if (channelID == 2)
     {
@@ -76,8 +81,11 @@ int main(int argc, char const *argv[])
         dataloader->AddVariable( "MET", 'F' );
         dataloader->AddVariable( "Mbb", 'F' );
         dataloader->AddVariable( "Mll", 'F' );
-        dataloader->AddVariable( "AnglebV", 'F' );
+        // dataloader->AddVariable( "AnglebV", 'F' );
         dataloader->AddVariable( "shat", 'F' );
+        OptVarMin = "CutRangeMin[0]=0:CutRangeMin[1]=20:CutRangeMin[2]=80:CutRangeMin[3]=70:CutRangeMin[4]=0";
+        OptVarMax = "CutRangeMax[0]=1500:CutRangeMax[1]=600:CutRangeMax[2]=150:CutRangeMax[3]=120:CutRangeMax[4]=1500";
+        OptVarCut = "VarProp[0]=FSmart:VarProp[1]=FSmart:VarProp[2]=FSmart:VarProp[3]=FSmart:VarProp[4]=FSmart";
     }
 
     TChain *ChainSIG[N_SIGCAT];
@@ -113,14 +121,22 @@ int main(int argc, char const *argv[])
         dataloader->AddBackgroundTree(ChainBKG[i],WeightBKG[i]);
     }
     TCut precuts = "NBJet==2&&NLep_Af==2";
+    string OptGASpec="FitMethod=GA:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95";
+    string OptMCSpec="FitMethod=MC:SampleSize=200000";
+    string OptSASpec="FitMethod=SA:MaxCalls=150000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale";
+    string OptOverAll="!H:!V:EffSel";
     dataloader->PrepareTrainingAndTestTree( precuts, precuts,
                                         "SplitMode=Random:NormMode=None:!V" );
+    char options[500];
+    sprintf(options,"%s:%s:%s:%s:%s",OptOverAll.c_str(),OptGASpec.c_str(),OptVarMin.c_str(),OptVarMax.c_str(),OptVarCut.c_str());
     factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsGA",
-                           "!H:!V:FitMethod=GA:EffSel:VarProp=FSmart:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95" );
+                           options );
+    sprintf(options,"%s:%s:%s:%s:%s",OptOverAll.c_str(),OptMCSpec.c_str(),OptVarMin.c_str(),OptVarMax.c_str(),OptVarCut.c_str());
     factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsMC",
-                           "!H:!V:FitMethod=MC:EffSel:VarProp=FSmart:SampleSize=200000" );
+                           options );
+    sprintf(options,"%s:%s:%s:%s:%s",OptOverAll.c_str(),OptSASpec.c_str(),OptVarMin.c_str(),OptVarMax.c_str(),OptVarCut.c_str());
     factory->BookMethod( dataloader, TMVA::Types::kCuts, "CutsSA",
-                           "!H:!V:FitMethod=SA:EffSel:VarProp=FSmart:MaxCalls=150000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale");
+                           options );
     // Train MVAs using the set of training events
     factory->TrainAllMethods();
 

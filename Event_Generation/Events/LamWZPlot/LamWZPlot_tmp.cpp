@@ -53,6 +53,11 @@ int main(int argc, char const *argv[])
     int SorB, id;
     int bid,cat;
     double weight;
+    Float_t F_NB, F_NL, F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    auto hardcut = [&](){
+        return __CUTS__;
+    };
+    bool good;
     printf("%d entries to be processed!\n",nentries);
     for (Int_t entry = 0; entry < nentries; ++entry)
     {
@@ -62,6 +67,18 @@ int main(int argc, char const *argv[])
         // cout<<entry<<endl;
         SorB = LamWZch->SorB;
         id = LamWZch->processID;
+        F_NB = LamWZch->NBJet;
+        F_NL = LamWZch->NLep_Af;
+        F_FLepEta = LamWZch->FLepEta;
+        F_MovedEta = F_FLepEta<0?F_FLepEta+6:F_FLepEta;
+        F_HT = LamWZch->HT;
+        F_MET = LamWZch->MET;
+        F_Mll = LamWZch->Mll;
+        F_Mbb = LamWZch->Mbb;
+        F_AnglebV = LamWZch->AnglebV;
+        F_shat = LamWZch->shat;
+        good = hardcut();
+        if (!good) continue;
         if (SorB == 1)
         {
             weight = LamWZch->CS*LUMINOSITY/((double)Sig_NTOTAL[id]);

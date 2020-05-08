@@ -1,0 +1,58 @@
+{
+    "HARD_CUTS":{
+        "NB":{
+            "Name": "F_NB",
+            "Min": 2,
+            "Max": 2,
+            "Relation": "AND"
+        },
+        "NL":{
+            "Name": "F_NL",
+            "Min": 2,
+            "Max": 2,
+            "Relation": "AND"
+        },
+        "FLepEta":{
+            "Name": "F_FLepEta",
+            "Min": 1.2,
+            "Max": -1,
+            "Relation": "OR"
+        },
+        "HT":{
+            "Name": "F_HT",
+            "Min": 0,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "MET":{
+            "Name": "F_MET",
+            "Min": 20,
+            "Max": 300,
+            "Relation": "AND"
+        },
+        "Mbb":{
+            "Name": "F_Mbb",
+            "Min": 95,
+            "Max": 140,
+            "Relation": "AND"
+        },
+        "Mll":{
+            "Name": "F_Mll",
+            "Min": 98,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "AnglebV":{
+            "Name": "F_AnglebV",
+            "Min": null,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "shat":{
+            "Name": "F_shat",
+            "Min": null,
+            "Max": null,
+            "Relation": "AND"
+        }
+    }
+}

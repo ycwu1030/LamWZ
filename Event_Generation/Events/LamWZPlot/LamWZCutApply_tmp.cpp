@@ -131,6 +131,7 @@ int main(int argc, char const *argv[])
     t2->Branch("shat",&F_shat,"shat/F");
     t2->Branch("N_EffS",&N_EffS,"N_EffS/I");
     t2->Branch("EffSignals",EffSignals,"EffSignals[N_EffS]/D");
+    t2->Branch("CUTHardcate",&CUTHardcate,"CUTHardcate/I");
     t2->Branch("CUTGAcate",CUTGAcate,"CUTGAcate[N_EffS]/I");
     t2->Branch("CUTMCcate",CUTMCcate,"CUTMCcate[N_EffS]/I");
     t2->Branch("CUTSAcate",CUTSAcate,"CUTSAcate[N_EffS]/I");

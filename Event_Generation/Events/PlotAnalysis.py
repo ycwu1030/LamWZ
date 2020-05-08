@@ -33,11 +33,13 @@ parser.add_argument('-rm',dest='rmode',default='p') # running mode,
 # p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt, br: BDT results
 parser.add_argument('-am',dest='amode',default='wh') # analysis mode
 parser.add_argument('-i',dest='processfile',default='processes_in_this_dict.json')
+parser.add_argument('-ic',dest='cutfile',default='HARD_CUTS.json')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 parser.add_argument('-t',dest='tag',default='wh_0506_1756')
 parser.add_argument('-r',dest='renorm',default=1,type=int)
 args = parser.parse_args()
 
+cutfile=args.cutfile
 ProcessesFile=args.inputdir + '/' + args.processfile
 SRCDIR='/data/data068/ycwu/LamWZ/Event_Generation/Events/LamWZPlot'
 PlotsNAME='LamWZPlot'
@@ -125,7 +127,30 @@ signeve_str=','.join(signeve)
 bkgneve_str=','.join(bkgneve)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+cutslist=['true']
+with open(cutfile,'r') as fcut:
+    cutsinfo=(simplejson.load(fcut))['HARD_CUTS']
+    for key in cutsinfo.keys():
+        var=cutsinfo[key]
+        varname=var['Name']
+        varstr=''
+        linksym= '&&'
+        if var['Relation'] == 'OR':
+            linksym = '||'
+        if var['Min'] is None and var['Max'] is None:
+            continue
+        elif var['Min'] is None:
+            varstr='(%s<=%f)'%(varname,var['Max'])
+        elif var['Max'] is None:
+            varstr='(%f<=%s)'%(var['Min'],varname)
+        else:
+            varstr='(%f<=%s %s %s<=%f)'%(var['Min'],varname,linksym,varname,var['Max'])
+        cutslist.append(varstr)
+
+cuts_str='&&'.join(cutslist)
+
+
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
 

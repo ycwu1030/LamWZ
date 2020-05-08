@@ -63,7 +63,6 @@ int main(int argc, char const *argv[])
     int processID;
     int SorB;
     double Weight;
-
     t2->SetBranchAddress("processID",&processID);
     t2->SetBranchAddress("SorB",&SorB);
     t2->SetBranchAddress("Weight",&Weight);
