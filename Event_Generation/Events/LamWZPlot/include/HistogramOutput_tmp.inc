@@ -104,7 +104,7 @@
                 Hsig[j][i]->Write();
                 HSK[i]->Add((TH1*)Hsig[j][i]);
                 if (out_stat_q) continue;
-                tmpE = Hsig[j][i]->Integral()
+                tmpE = Hsig[j][i]->Integral();
                 fstat<<SIG_NAME[j]<<"\t"<<tmpE<<"\t"<<Hsig[j][i]->GetEntries()<<endl;
                 Esigs+=tmpE;
             }
@@ -144,7 +144,7 @@
             sprintf(temp,"Canv_var%d_%s",i+1,(bn->VarNameX[i]).c_str());
             CV[i] = new TCanvas(temp,"",800,800);
             HSK[i]->Draw("nostack hist");
-            if (Renorm == 1)
+            if (Renormal == 1)
             {
                 sprintf(temp,"Events/bin");
             }
