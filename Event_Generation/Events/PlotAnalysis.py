@@ -93,7 +93,8 @@ if amode == 'zh':
     signame = ['']
     siglabel = ['']
     signeve = [1]
-    
+    nsig+=1
+
 with open(ProcessesFile,'r') as f:
     ProcessesList = (simplejson.load(f))
     for key in ProcessesList.keys():
