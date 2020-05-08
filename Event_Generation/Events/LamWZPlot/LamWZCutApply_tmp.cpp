@@ -78,7 +78,7 @@ int main(int argc, char const *argv[])
     TFile *f2 = new TFile(temp,"RECREATE");
     TTree *t2 = new TTree("CUTResult","The results from CUT");
 
-    sprintf(temp,"%s/Statistics.dat",dir.c_tr());
+    sprintf(temp,"%s/Statistics.dat",dir.c_str());
     ofstream fstat(temp);
     int CUTHardcate;
     double EventsSigHard=0;
