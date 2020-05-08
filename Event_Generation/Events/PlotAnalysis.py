@@ -167,4 +167,4 @@ elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
     subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/BDT_Train_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
 
-subprocess.cal('echo "Tag is: %s"'%(tag),shell=True)
+subprocess.call('echo "Tag is: %s"'%(tag),shell=True)
