@@ -88,7 +88,12 @@ bkglabel=[]
 signeve=[]
 bkgneve=[]
 
-
+if amode == 'zh':
+    sigid = [0]
+    signame = ['']
+    siglabel = ['']
+    signeve = [1]
+    
 with open(ProcessesFile,'r') as f:
     ProcessesList = (simplejson.load(f))
     for key in ProcessesList.keys():
