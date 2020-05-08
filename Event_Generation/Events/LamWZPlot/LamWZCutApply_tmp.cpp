@@ -144,7 +144,7 @@ int main(int argc, char const *argv[])
 
     if (channelID == 1)
     {
-        reader->AddVariable( "MovedEta := FLepEta<0?FLepEta+6:FLepEta", &F_MovedEta );
+        reader->AddVariable( "MovedEta := FLepEta<0?FLepEta+5:FLepEta", &F_MovedEta );
         reader->AddVariable( "HT", &F_HT );
         reader->AddVariable( "MET", &F_MET );
         reader->AddVariable( "Mbb", &F_Mbb );
