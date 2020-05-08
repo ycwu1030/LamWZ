@@ -77,6 +77,9 @@ int main(int argc, char const *argv[])
     sprintf(temp,"%s/CUTResult.root",dir.c_str());
     TFile *f2 = new TFile(temp,"RECREATE");
     TTree *t2 = new TTree("CUTResult","The results from CUT");
+
+    sprintf(temp,"%s/Statistics.dat",dir.c_tr());
+    ofstream fstat(temp);
     int CUTHardcate;
     double EventsSigHard=0;
     double EventsBkgHard=0;
@@ -164,6 +167,7 @@ int main(int argc, char const *argv[])
     auto hardcut = [&](){
         return __CUTS__;
     };
+    string CUTS_STR = "__CUTS__";
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
@@ -366,28 +370,29 @@ int main(int argc, char const *argv[])
         }
     }
     SignificanceHard = EventsSigHard/sqrt(EventsSigHard+EventsBkgHard + 0*EventsBkgHard*EventsBkgHard);//5% systematic
-    cout<<"Hard Maximum Significance is: "<<SignificanceHard<<endl;
-    cout<<"\t"<<"SigEve: "<<EventsSigHard<<"\tBkgEve: "<<EventsBkgHard<<endl;
+    fstat<<"Hard Maximum Significance is: "<<SignificanceHard<<endl;
+    fstat<<"\t"<<"SigEve: "<<EventsSigHard<<"\tBkgEve: "<<EventsBkgHard<<endl;
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigHard[isig]<<endl;
+        fstat<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigHard[isig]<<endl;
     }
     for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
     {
-        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgHard[ibkg]<<endl;
+        fstat<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgHard[ibkg]<<endl;
     }
+    fstat<<CUTS_STR<<endl;
     
     
-    cout<<"GA Maximum Significance is: "<<sigmaxGA<<endl;
-    cout<<"Achieved at EffS = "<<EffSmaxGA<<endl;
-    cout<<"\t"<<"SigEve: "<<EventsSigGA[idGA]<<"\tBkgEve: "<<EventsBkgGA[idGA]<<endl;
+    fstat<<"GA Maximum Significance is: "<<sigmaxGA<<endl;
+    fstat<<"Achieved at EffS = "<<EffSmaxGA<<endl;
+    fstat<<"\t"<<"SigEve: "<<EventsSigGA[idGA]<<"\tBkgEve: "<<EventsBkgGA[idGA]<<endl;
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigGA[isig][idGA]<<endl;
+        fstat<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigGA[isig][idGA]<<endl;
     }
     for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
     {
-        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgGA[ibkg][idGA]<<endl;
+        fstat<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgGA[ibkg][idGA]<<endl;
     }
     TMVA::MethodCuts* mcutsGA = reader->FindCutsMVA("CutsGA method");
     if (mcutsGA)
@@ -395,29 +400,29 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
         mcutsGA->GetCuts( EffSmaxGA, cutsMin, cutsMax );
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxGA<<" from Reader" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- Retrieve cut values for signal efficiency of "<<EffSmaxGA<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
-        std::cout << "... Cut: "
+        fstat << "... Cut: "
                     << cutsMin[ivar]
                     << " < \""
                     << mcutsGA->GetInputVar(ivar)
                     << "\" <= "
                     << cutsMax[ivar] << std::endl;
         }
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
     }
 
-    cout<<"MC Maximum Significance is: "<<sigmaxMC<<endl;
-    cout<<"Achieved at EffS = "<<EffSmaxMC<<endl;
-    cout<<"\t"<<"SigEve: "<<EventsSigMC[idMC]<<"\tBkgEve: "<<EventsBkgMC[idMC]<<endl;
+    fstat<<"MC Maximum Significance is: "<<sigmaxMC<<endl;
+    fstat<<"Achieved at EffS = "<<EffSmaxMC<<endl;
+    fstat<<"\t"<<"SigEve: "<<EventsSigMC[idMC]<<"\tBkgEve: "<<EventsBkgMC[idMC]<<endl;
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigMC[isig][idMC]<<endl;
+        fstat<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigMC[isig][idMC]<<endl;
     }
     for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
     {
-        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgMC[ibkg][idMC]<<endl;
+        fstat<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgMC[ibkg][idMC]<<endl;
     }
     TMVA::MethodCuts* mcutsMC = reader->FindCutsMVA("CutsMC method");
     if (mcutsMC)
@@ -425,29 +430,29 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
         mcutsMC->GetCuts( EffSmaxMC, cutsMin, cutsMax );
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxMC<<" from Reader" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- Retrieve cut values for signal efficiency of "<<EffSmaxMC<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
-        std::cout << "... Cut: "
+        fstat << "... Cut: "
                     << cutsMin[ivar]
                     << " < \""
                     << mcutsMC->GetInputVar(ivar)
                     << "\" <= "
                     << cutsMax[ivar] << std::endl;
         }
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
     }
 
-    cout<<"SA Maximum Significance is: "<<sigmaxSA<<endl;
-    cout<<"Achieved at EffS = "<<EffSmaxSA<<endl;
-    cout<<"\t"<<"SigEve: "<<EventsSigSA[idSA]<<"\tBkgEve: "<<EventsBkgSA[idSA]<<endl;
+    fstat<<"SA Maximum Significance is: "<<sigmaxSA<<endl;
+    fstat<<"Achieved at EffS = "<<EffSmaxSA<<endl;
+    fstat<<"\t"<<"SigEve: "<<EventsSigSA[idSA]<<"\tBkgEve: "<<EventsBkgSA[idSA]<<endl;
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigSA[isig][idSA]<<endl;
+        fstat<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigSA[isig][idSA]<<endl;
     }
     for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
     {
-        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgSA[ibkg][idSA]<<endl;
+        fstat<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgSA[ibkg][idSA]<<endl;
     }
     TMVA::MethodCuts* mcutsSA = reader->FindCutsMVA("CutsSA method");
     if (mcutsSA)
@@ -455,17 +460,17 @@ int main(int argc, char const *argv[])
         std::vector<Double_t> cutsMin;
         std::vector<Double_t> cutsMax;
         mcutsSA->GetCuts( EffSmaxSA, cutsMin, cutsMax );
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
-        std::cout << "--- Retrieve cut values for signal efficiency of "<<EffSmaxSA<<" from Reader" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- Retrieve cut values for signal efficiency of "<<EffSmaxSA<<" from Reader" << std::endl;
         for (UInt_t ivar=0; ivar<cutsMin.size(); ivar++) {
-        std::cout << "... Cut: "
+        fstat << "... Cut: "
                     << cutsMin[ivar]
                     << " < \""
                     << mcutsSA->GetInputVar(ivar)
                     << "\" <= "
                     << cutsMax[ivar] << std::endl;
         }
-        std::cout << "--- -------------------------------------------------------------" << std::endl;
+        fstat << "--- -------------------------------------------------------------" << std::endl;
     }
     
     TGraph *gsigGA = new TGraph(N_EffS_samples,EffSignals,SignificanceGA);

@@ -35,7 +35,7 @@ parser.add_argument('-am',dest='amode',default='wh') # analysis mode
 parser.add_argument('-i',dest='processfile',default='processes_in_this_dict.json')
 parser.add_argument('-ic',dest='cutfile',default='HARD_CUTS.json')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
-parser.add_argument('-t',dest='tag',default='wh_0506_1756')
+parser.add_argument('-t',dest='tag',default='wh_0508_1557')
 parser.add_argument('-r',dest='renorm',default=1,type=int)
 args = parser.parse_args()
 
@@ -50,9 +50,9 @@ BDTApplyNAME='LamWZBDTApply'
 BDTResultNAME='LamWZBDTResults'
 rmode=args.rmode
 sqrts = args.sqrts
-tag=args.tag
 renorm=args.renorm
 amode=args.amode
+tag=amode+'_%d_'%(sqrts)+time.strftime("%m%d_%H%M")
 
 if amode == 'wh':
     channelID = 1
@@ -65,12 +65,15 @@ elif rmode == 'ct':
     EXENAME=CutTrainNAME
 elif rmode == 'ca':
     EXENAME=CutApplyNAME
+    tag = args.tag
 elif rmode == 'bt':
     EXENAME=BDTTrainNAME
 elif rmode == 'ba':
     EXENAME=BDTApplyNAME
+    tag = args.tag
 elif rmode == 'br':
     EXENAME=BDTResultNAME
+    tag = args.tag
 
 # Link required signal and background processes information 
 Lumi=Lumi_map['%d'%(sqrts)]
@@ -129,7 +132,7 @@ bkgneve_str=','.join(bkgneve)
 
 cutslist=['true']
 with open(cutfile,'r') as fcut:
-    cutsinfo=(simplejson.load(fcut))['HARD_CUTS']
+    cutsinfo=(simplejson.load(fcut))['HARD_CUTS'][amode]
     for key in cutsinfo.keys():
         var=cutsinfo[key]
         varname=var['Name']
@@ -156,7 +159,12 @@ subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
 if rmode == 'p':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,renorm),shell=True)
+    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/Plots_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
 elif rmode == 'ct' or rmode == 'ca':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
+    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/CUT_Train_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
 elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
+    subprocess.call("cd Plots; GEINDEX; cd -; cd Plots/BDT_Train_LamWZ_%s; GEINDEX; cd -;"%(tag),shell=True)
+
+subprocess.cal('echo "Tag is: %s"'%(tag),shell=True)
