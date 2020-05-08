@@ -80,6 +80,8 @@ int main(int argc, char const *argv[])
     int CUTHardcate;
     double EventsSigHard=0;
     double EventsBkgHard=0;
+    int MCEventsSigHard[N_SIGCAT];
+    int MCEventsBkgHard[N_BKGCAT];
     double SignificanceHard;
     const int N_EffS_samples = 21;
     int N_EffS = N_EffS_samples;
@@ -87,16 +89,22 @@ int main(int argc, char const *argv[])
     int CUTGAcate[N_EffS_samples];
     double EventsSigGA[N_EffS_samples];
     double EventsBkgGA[N_EffS_samples];
+    int MCEventsSigGA[N_SIGCAT][N_EffS_samples];
+    int MCEventsBkgGA[N_BKGCAT][N_EffS_samples];
     double SignificanceGA[N_EffS_samples];
 
     int CUTMCcate[N_EffS_samples];
     double EventsSigMC[N_EffS_samples];
     double EventsBkgMC[N_EffS_samples];
+    int MCEventsSigMC[N_SIGCAT][N_EffS_samples];
+    int MCEventsBkgMC[N_BKGCAT][N_EffS_samples];
     double SignificanceMC[N_EffS_samples];
 
     int CUTSAcate[N_EffS_samples];
     double EventsSigSA[N_EffS_samples];
     double EventsBkgSA[N_EffS_samples];
+    int MCEventsSigSA[N_SIGCAT][N_EffS_samples];
+    int MCEventsBkgSA[N_BKGCAT][N_EffS_samples];
     double SignificanceSA[N_EffS_samples];
     bool TMVARes;
     double EffSigStart = 0.1, EffSigEnd = 0.9;
@@ -111,6 +119,21 @@ int main(int argc, char const *argv[])
 
         EventsSigSA[i] = 0;
         EventsBkgSA[i] = 0;
+        for (int j = 0; j < N_SIGCAT; j++)
+        {
+            MCEventsSigHard[j] = 0;
+            MCEventsSigGA[j][i] = 0;
+            MCEventsSigMC[j][i] = 0;
+            MCEventsSigSA[j][i] = 0;
+        }
+        for (int j = 0; j < N_BKGCAT; j++)
+        {
+            MCEventsBkgHard[j] = 0;
+            MCEventsBkgGA[j][i] = 0;
+            MCEventsBkgMC[j][i] = 0;
+            MCEventsBkgSA[j][i] = 0;
+        }
+        
     }
 
     int ProcessID;
@@ -229,10 +252,12 @@ int main(int argc, char const *argv[])
             if (SorB == 1)
             {
                 EventsSigHard += Weight;
+                MCEventsSigHard[ProcessID] += 1;
             }
             else
             {
                 EventsBkgHard += Weight;
+                MCEventsBkgHard[ProcessID] += 1;
             }
         }
         else
@@ -250,12 +275,13 @@ int main(int argc, char const *argv[])
                 if (SorB == 1)
                 {
                     EventsSigGA[ieffs] += Weight;
+                    MCEventsSigGA[ProcessID][ieffs] += 1;
                 }
                 else
                 {
                     EventsBkgGA[ieffs] += Weight;
+                    MCEventsBkgGA[ProcessID][ieffs] += 1;
                 }
-                
             }
             else
             {
@@ -268,10 +294,12 @@ int main(int argc, char const *argv[])
                 if (SorB == 1)
                 {
                     EventsSigMC[ieffs] += Weight;
+                    MCEventsSigMC[ProcessID][ieffs] += 1;
                 }
                 else
                 {
                     EventsBkgMC[ieffs] += Weight;
+                    MCEventsBkgMC[ProcessID][ieffs] += 1;
                 }
                 
             }
@@ -286,10 +314,12 @@ int main(int argc, char const *argv[])
                 if (SorB == 1)
                 {
                     EventsSigSA[ieffs] += Weight;
+                    MCEventsSigSA[ProcessID][ieffs] += 1;
                 }
                 else
                 {
                     EventsBkgSA[ieffs] += Weight;
+                    MCEventsBkgSA[ProcessID][ieffs] += 1;
                 }
                 
             }
@@ -301,12 +331,15 @@ int main(int argc, char const *argv[])
         // BDTScore = reader->EvaluateMVA("CutsGA method",);
         t2->Fill();
     }
+    int idGA;
     double sigmaxGA = -1;
     double EffSmaxGA;
 
+    int idMC;
     double sigmaxMC = -1;
     double EffSmaxMC;
 
+    int idSA;
     double sigmaxSA = -1;
     double EffSmaxSA;
     for (int i = 0; i < N_EffS_samples; i++)
@@ -315,24 +348,47 @@ int main(int argc, char const *argv[])
         if (SignificanceGA[i] > sigmaxGA) { 
             sigmaxGA = SignificanceGA[i]; 
             EffSmaxGA = EffSignals[i];
+            idGA = i;
         }
 
         SignificanceMC[i] = EventsSigMC[i]/sqrt(EventsSigMC[i]+EventsBkgMC[i] + 0*EventsBkgMC[i]*EventsBkgMC[i]);//5% systematic
         if (SignificanceMC[i] > sigmaxMC) { 
             sigmaxMC = SignificanceMC[i]; 
             EffSmaxMC = EffSignals[i];
+            idMC = i;
         }
 
         SignificanceSA[i] = EventsSigSA[i]/sqrt(EventsSigSA[i]+EventsBkgSA[i] + 0*EventsBkgSA[i]*EventsBkgSA[i]);//5% systematic
         if (SignificanceSA[i] > sigmaxSA) { 
             sigmaxSA = SignificanceSA[i]; 
             EffSmaxSA = EffSignals[i];
+            idSA = i;
         }
     }
     SignificanceHard = EventsSigHard/sqrt(EventsSigHard+EventsBkgHard + 0*EventsBkgHard*EventsBkgHard);//5% systematic
     cout<<"Hard Maximum Significance is: "<<SignificanceHard<<endl;
+    cout<<"\t"<<"SigEve: "<<EventsSigHard<<"\tBkgEve: "<<EventsBkgHard<<endl;
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigHard[isig]<<endl;
+    }
+    for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
+    {
+        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgHard[ibkg]<<endl;
+    }
+    
+    
     cout<<"GA Maximum Significance is: "<<sigmaxGA<<endl;
     cout<<"Achieved at EffS = "<<EffSmaxGA<<endl;
+    cout<<"\t"<<"SigEve: "<<EventsSigGA[idGA]<<"\tBkgEve: "<<EventsBkgGA[idGA]<<endl;
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigGA[isig][idGA]<<endl;
+    }
+    for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
+    {
+        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgGA[ibkg][idGA]<<endl;
+    }
     TMVA::MethodCuts* mcutsGA = reader->FindCutsMVA("CutsGA method");
     if (mcutsGA)
     {
@@ -354,6 +410,15 @@ int main(int argc, char const *argv[])
 
     cout<<"MC Maximum Significance is: "<<sigmaxMC<<endl;
     cout<<"Achieved at EffS = "<<EffSmaxMC<<endl;
+    cout<<"\t"<<"SigEve: "<<EventsSigMC[idMC]<<"\tBkgEve: "<<EventsBkgMC[idMC]<<endl;
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigMC[isig][idMC]<<endl;
+    }
+    for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
+    {
+        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgMC[ibkg][idMC]<<endl;
+    }
     TMVA::MethodCuts* mcutsMC = reader->FindCutsMVA("CutsMC method");
     if (mcutsMC)
     {
@@ -375,6 +440,15 @@ int main(int argc, char const *argv[])
 
     cout<<"SA Maximum Significance is: "<<sigmaxSA<<endl;
     cout<<"Achieved at EffS = "<<EffSmaxSA<<endl;
+    cout<<"\t"<<"SigEve: "<<EventsSigSA[idSA]<<"\tBkgEve: "<<EventsBkgSA[idSA]<<endl;
+    for (int isig = 0; isig < N_SIGCAT; isig++)
+    {
+        cout<<"\t"<<SIG_NAME[isig]<<"\t"<<MCEventsSigSA[isig][idSA]<<endl;
+    }
+    for (int ibkg = 0; ibkg < N_BKGCAT; ibkg++)
+    {
+        cout<<"\t"<<BKG_NAME[ibkg]<<"\t"<<MCEventsBkgSA[ibkg][idSA]<<endl;
+    }
     TMVA::MethodCuts* mcutsSA = reader->FindCutsMVA("CutsSA method");
     if (mcutsSA)
     {
