@@ -57,6 +57,7 @@ int main(int argc, char const *argv[])
     auto hardcut = [&](){
         return __CUTS__;
     };
+    string CUTS_STR = "__CUTS__";
     bool good;
     printf("%d entries to be processed!\n",nentries);
     for (Int_t entry = 0; entry < nentries; ++entry)

@@ -2,6 +2,13 @@
     double normfactor;
     sprintf(temp,"%s/Plots.root",dir.c_str());
     TFile *fPlots = new TFile(temp,"RECREATE");
+    sprintf(temp,"%s/Statistics.dat",dir.c_str());
+    ofstream fstat(temp);
+    fstat<<CUTS_STR<<endl;
+    bool out_stat_q=false;
+    double tmpE;
+    double Esigs=0;
+    double Ebkgs=0;
     for (int i = 0; i < bn->nvar; ++i)
     {
         TwoDQ_=bn->TwoDQ[i];
@@ -37,13 +44,18 @@
         {
             if(TwoDQ_==0)
             {
-                // sprintf(temp,"Events/( %3.1f )",Hbkg[j][i]->GetBinWidth(1));
+                
                 if (Renormal == 1)
                 {
                     normfactor = Hbkg[j][i]->Integral();
                     Hbkg[j][i]->Scale(1.0/normfactor);
+                    Hbkg[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
                 }
-                Hbkg[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
+                else
+                {
+                    sprintf(temp,"Events/( %3.1f )",Hbkg[j][i]->GetBinWidth(1));
+                    Hbkg[j][i]->GetYaxis()->SetTitle(temp);
+                }
                 Hbkg[j][i]->GetXaxis()->SetTitle(bn->titleX[i].c_str());
                 Hbkg[j][i]->SetLineColor(bkgcolor[j]);
                 Hbkg[j][i]->SetLineWidth(2);
@@ -51,6 +63,10 @@
                 fPlots->cd();
                 Hbkg[j][i]->Write();
                 HSK[i]->Add((TH1*)Hbkg[j][i]);
+                if (out_stat_q) continue;
+                tmpE = Hbkg[j][i]->Integral();
+                fstat<<BKG_NAME[j]<<"\t"<<tmpE<<"\t"<<Hbkg[j][i]->GetEntries()<<endl;
+                Ebkgs+=tmpE;
             }
             else
             {
@@ -68,13 +84,18 @@
         {
             if(TwoDQ_==0)
             {
-                // sprintf(temp,"Events/( %3.1f )",Hsig[j][i]->GetBinWidth(1));
                 if (Renormal == 1)
                 {
                     normfactor = Hsig[j][i]->Integral();
                     Hsig[j][i]->Scale(1.0/normfactor);
+                    Hsig[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
                 }
-                Hsig[j][i]->GetYaxis()->SetTitle("Arbitrary Unit");
+                else
+                {
+                    sprintf(temp,"Events/( %3.1f )",Hsig[j][i]->GetBinWidth(1));
+                    Hsig[j][i]->GetYaxis()->SetTitle(temp);
+                }
+                
                 Hsig[j][i]->GetXaxis()->SetTitle(bn->titleX[i].c_str());
                 Hsig[j][i]->SetLineColor(sigcolor[j]);
                 Hsig[j][i]->SetLineWidth(2);
@@ -82,6 +103,10 @@
                 fPlots->cd();
                 Hsig[j][i]->Write();
                 HSK[i]->Add((TH1*)Hsig[j][i]);
+                if (out_stat_q) continue;
+                tmpE = Hsig[j][i]->Integral()
+                fstat<<SIG_NAME[j]<<"\t"<<tmpE<<"\t"<<Hsig[j][i]->GetEntries()<<endl;
+                Esigs+=tmpE;
             }
             else
             {
@@ -119,7 +144,14 @@
             sprintf(temp,"Canv_var%d_%s",i+1,(bn->VarNameX[i]).c_str());
             CV[i] = new TCanvas(temp,"",800,800);
             HSK[i]->Draw("nostack hist");
-            sprintf(temp,"Arbitrary Unit");
+            if (Renorm == 1)
+            {
+                sprintf(temp,"Events/bin");
+            }
+            else
+            {
+                sprintf(temp,"Arbitrary Unit");
+            }
             HSK[i]->GetYaxis()->SetTitle(temp);
 
             // cout<<"HSK Done"<<endl;
@@ -166,7 +198,7 @@
             lg->Draw("same");
             sprintf(temp,"%s/C_var%d_%s.png",dir.c_str(),i+1,(bn->VarNameX[i]).c_str());
             CV[i]->SaveAs(temp);
-
+            out_stat_q=true;
             // CVBEST[i]->cd();
             // lgBEST->Draw("same");
             // sprintf(temp,"%s/CBEST_var%d_%s.png",dir.c_str(),i+1,(bn->VarNameX[i]).c_str());
@@ -200,5 +232,10 @@
         // CVSBEST[i]->Write();
     
     }
+    fstat<<"Total Events: "<<endl;
+    fstat<<"Sig: "<<Esigs<<endl;
+    fstat<<"Bkg: "<<Ebkgs<<endl;
+    fstat<<"Significance: "<<Esigs/sqrt(Esigs+Ebkgs)<<endl;
+    fstat.close();
     fPlots->Close();
     cout<<"All Plots have been saved to desired directory."<<endl;
