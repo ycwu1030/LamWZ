@@ -116,11 +116,13 @@ int main(int argc, char const *argv[])
     int ProcessID;
     int SorB;
     double Weight;
-    Float_t F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    Float_t F_NB, F_NL, F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
 
     t2->Branch("ProcessID",&ProcessID,"ProcessID/I");
     t2->Branch("SorB",&SorB,"SorB/I");
     t2->Branch("Weight",&Weight,"Weight/D");
+    t2->Branch("NB",&F_NB,"NB/I");
+    t2->Branch("NL",&F_NL,"NL/I");
     t2->Branch("FLepEta",&F_FLepEta,"FLepEta/F");
     t2->Branch("FMovedEta",&F_MovedEta,"FmovedEta/F");
     t2->Branch("HT",&F_HT,"HT/F");
@@ -137,7 +139,7 @@ int main(int argc, char const *argv[])
     t2->Branch("CUTSAcate",CUTSAcate,"CUTSAcate[N_EffS]/I");
 
     auto hardcut = [&](){
-        return (F_Mll > 98.0)&&(F_Mbb > 95 && F_Mbb < 140)&&(F_MET > 20 && F_MET < 300)&&(F_FLepEta < -1 || F_FLepEta > 1.2);
+        return __CUTS__;
     };
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
@@ -198,6 +200,8 @@ int main(int argc, char const *argv[])
         }
         if (channelID == 1)
         {
+            F_NB = ch->NBJet;
+            F_NL = ch->NLep_Af;
             F_FLepEta = ch->FLepEta;
             F_MovedEta = F_FLepEta<0?F_FLepEta+6:F_FLepEta;
             F_HT = ch->HT;
@@ -209,6 +213,8 @@ int main(int argc, char const *argv[])
         }
         else if (channelID == 2)
         {
+            F_NB = ch->NBJet;
+            F_NL = ch->NLep_Af;
             F_HT = ch->HT;
             F_MET = ch->MET;
             F_Mll = ch->Mll;
