@@ -184,7 +184,7 @@ void LamWZPreAna::GetCate()
    else if (SorB == 0)
    {
       // Background
-      CateIndicator = processID + 1;
+      CateIndicator = processID + 3;
    }
 }
 

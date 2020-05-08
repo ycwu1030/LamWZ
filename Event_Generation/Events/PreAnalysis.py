@@ -92,11 +92,13 @@ with open(ProcessesFile,'r') as f:
         if not MATCH:
             print('Skip: ',Process['Name'],MATCH)
             continue
+        if not os.path.exists(process['Name']+'/Delphes/' + '%d'%(sqrts)):
+            continue
         rootfiles = ListRootFiles(process['Name']+'/Delphes/' + '%d'%(sqrts), decay)
         # processID = 100*Process[process['Abbr']]+10*Decays[decay]+BkgSigTag[process['BkgSigTag']]
         CS=process['CS']['%d'%(sqrts)]
-        if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
-            continue
+        # if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
+        #     continue
         if case_str == 'Full':
             if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != 'Full':
                 continue
