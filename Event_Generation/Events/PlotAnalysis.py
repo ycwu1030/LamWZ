@@ -160,7 +160,7 @@ if os.path.exists(cutfile):
             varmax = ReadJsonValue(var['Max'],amode,'%d'%(sqrts))
             if varmin is None and varmax is None:
                 continue
-            elif varmix is None:
+            elif varmin is None:
                 varstr='(%s<=%f)'%(varname,varmax)
             elif varmax is None:
                 varstr='(%f<=%s)'%(varmin,varname)
