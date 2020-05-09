@@ -147,25 +147,26 @@ def ReadJsonValue(entry,mode,s):
             return entry[mode][s]
 
 cutslist=['true']
-with open(cutfile,'r') as fcut:
-    cutsinfo=(simplejson.load(fcut))['HARD_CUTS']
-    for key in cutsinfo.keys():
-        var=cutsinfo[key]
-        varname=var['Name']
-        varstr=''
-        relationtype = ReadJsonValue(var['Relation'],amode,'%d'%(sqrts))
-        linksym = '\&\&' if relationtype == 'AND' else '||'
-        varmin = ReadJsonValue(var['Min'],amode,'%d'%(sqrts))
-        varmax = ReadJsonValue(var['Max'],amode,'%d'%(sqrts))
-        if varmin is None and varmax is None:
-            continue
-        elif varmix is None:
-            varstr='(%s<=%f)'%(varname,varmax)
-        elif varmax is None:
-            varstr='(%f<=%s)'%(varmin,varname)
-        else:
-            varstr='(%f<=%s %s %s<=%f)'%(varmin,varname,linksym,varname,varmax)
-        cutslist.append(varstr)
+if os.path.exists(cutfile):
+    with open(cutfile,'r') as fcut:
+        cutsinfo=(simplejson.load(fcut))['HARD_CUTS']
+        for key in cutsinfo.keys():
+            var=cutsinfo[key]
+            varname=var['Name']
+            varstr=''
+            relationtype = ReadJsonValue(var['Relation'],amode,'%d'%(sqrts))
+            linksym = '\&\&' if relationtype == 'AND' else '||'
+            varmin = ReadJsonValue(var['Min'],amode,'%d'%(sqrts))
+            varmax = ReadJsonValue(var['Max'],amode,'%d'%(sqrts))
+            if varmin is None and varmax is None:
+                continue
+            elif varmix is None:
+                varstr='(%s<=%f)'%(varname,varmax)
+            elif varmax is None:
+                varstr='(%f<=%s)'%(varmin,varname)
+            else:
+                varstr='(%f<=%s %s %s<=%f)'%(varmin,varname,linksym,varname,varmax)
+            cutslist.append(varstr)
 
 cuts_str='\&\&'.join(cutslist)
 colorlist=[]
