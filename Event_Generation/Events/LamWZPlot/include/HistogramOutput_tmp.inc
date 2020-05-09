@@ -120,7 +120,7 @@
         // cout<<"SIG Done"<<endl;
         if(i==0)
         {
-            lg= new TLegend(0.70,0.70,0.95,0.95,"");
+            lg= new TLegend(0.70,0.50,0.95,0.95,"");
             lg->SetBorderSize(0);
             lg->SetMargin(0.25);
             // lg[j]->SetFillColor(kWhite);
@@ -128,13 +128,14 @@
             lg->SetFillStyle(0);
             for (int ii = 0; ii < N_BKGCAT; ++ii)
             {
-                lg->AddEntry(Hbkg[ii][i],BKG_LABEL[ii].c_str(),"F");
+                sprintf(temp,"Background(%s)",BKG_LABEL[ii].c_str());
+                lg->AddEntry(Hbkg[ii][i],temp,"l");
             }
             for (int ii = 0; ii < N_SIGCAT; ++ii)
             {
                 if (Hsig[ii][i]->GetEntries()<=0) continue;
                 sprintf(temp,"Signal(%s)",SIG_LABEL[ii].c_str());
-                lg->AddEntry(Hsig[ii][i],temp,"F");
+                lg->AddEntry(Hsig[ii][i],temp,"l");
             }
             // cout<<"Legend Done!"<<endl;
         }
@@ -144,7 +145,7 @@
             sprintf(temp,"Canv_var%d_%s",i+1,(bn->VarNameX[i]).c_str());
             CV[i] = new TCanvas(temp,"",800,800);
             HSK[i]->Draw("nostack hist");
-            if (Renormal == 1)
+            if (Renormal == 0)
             {
                 sprintf(temp,"Events/bin");
             }

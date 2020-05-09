@@ -104,13 +104,13 @@ with open(ProcessesFile,'r') as f:
         if process['SorB'] == 0:
             bkgid.append(process['ProcessID'])
             bkgname.append(process['Abbr'])
-            bkglabel.append(process['Name'])
+            bkglabel.append(process['Abbr'])
             bkgneve.append(str(process['NEvents']))
             nbkg+=1
         else:
             sigid.append(process['ProcessID'])
             signame.append(process['Abbr'])
-            siglabel.append(process['Name'])
+            siglabel.append(process['Abbr'])
             signeve.append(str(process['NEvents']))
             nsig+=1
 

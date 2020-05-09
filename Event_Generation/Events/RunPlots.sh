@@ -13,6 +13,6 @@ for mode in 'wh' 'zh'
 
 cd Plots
 tar -czvf Cuts_Results_Plots.tar.gz Plots_*
-GEINDEX
+tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html
 cd -
 
