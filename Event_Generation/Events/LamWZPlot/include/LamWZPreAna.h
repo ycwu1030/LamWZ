@@ -191,11 +191,11 @@ void LamWZPreAna::GetCate()
 void LamWZPreAna::initialize(binning *bn,int sqrts)
 {
    bn->add(10,0,10,"NEvents","Events Category",&CateIndicator);
-   bn->add(10,0,5,"NBJet","N_{B-jet}",&NBJet);
-   bn->add(10,0,5,"NLep","N_{l}",&NLep_Af);
-   bn->add(10,0,5,"NEle","N_{e}",&NEle_Af);
+   bn->add(5,0,5,"NBJet","N_{B-jet}",&NBJet);
+   bn->add(5,0,5,"NLep","N_{l}",&NLep_Af);
+   bn->add(5,0,5,"NEle","N_{e}",&NEle_Af);
    bn->add(30,-3,3,"EtaLep","#eta_{l}",&FLepEta);
-   bn->add(50,100,sqrts==3000?2000:1500,"HT","H_{T} [GeV]",&HT);
+   bn->add(50,100,sqrts==3000?3100:1600,"HT","H_{T} [GeV]",&HT);
    bn->add(50,0,sqrts==3000?1000:600,"MET","MET [GeV]",&MET);
    bn->add(50,0,400,"Mbb","M_{bb} [GeV]",&Mbb);
    bn->add(50,0,400,"Mll","M_{ll} [GeV]",&Mll);
