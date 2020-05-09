@@ -107,7 +107,7 @@
             },
             "shat":{
                 "Name": "F_shat",
-                "Min": null,
+                "Min": 2400,
                 "Max": null,
                 "Relation": "AND"
             }
