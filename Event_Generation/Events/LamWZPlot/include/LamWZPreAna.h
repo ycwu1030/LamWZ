@@ -179,7 +179,7 @@ void LamWZPreAna::GetCate()
    if (SorB == 1)
    {
       // Signal
-      CateIndicator = 0;
+      CateIndicator = processID;
    }
    else if (SorB == 0)
    {
@@ -188,20 +188,20 @@ void LamWZPreAna::GetCate()
    }
 }
 
-void LamWZPreAna::initialize(binning *bn)
+void LamWZPreAna::initialize(binning *bn,int sqrts=3000)
 {
    bn->add(10,0,10,"NEvents","Events Category",&CateIndicator);
-   bn->add(10,0,10,"NBJet","N_{B-jet}",&NBJet);
-   bn->add(10,0,10,"NLep","N_{l}",&NLep_Af);
-   bn->add(10,0,10,"NEle","N_{e}",&NEle_Af);
+   bn->add(10,0,5,"NBJet","N_{B-jet}",&NBJet);
+   bn->add(10,0,5,"NLep","N_{l}",&NLep_Af);
+   bn->add(10,0,5,"NEle","N_{e}",&NEle_Af);
    bn->add(30,-3,3,"EtaLep","#eta_{l}",&FLepEta);
-   bn->add(50,100,1500,"HT","H_{T} [GeV]",&HT);
-   bn->add(50,0,600,"MET","MET [GeV]",&MET);
+   bn->add(50,100,sqrts==3000?2000:1500,"HT","H_{T} [GeV]",&HT);
+   bn->add(50,0,sqrts==3000?1000:600,"MET","MET [GeV]",&MET);
    bn->add(50,0,400,"Mbb","M_{bb} [GeV]",&Mbb);
    bn->add(50,0,400,"Mll","M_{ll} [GeV]",&Mll);
    bn->add(50,0,3.1415926,"Anglebl","#theta_{bl}",&AnglebV);
-   bn->add(50,0,10,"dRbl","#Delta R_{bl}",&dRbV);
-   bn->add(50,0,3000,"shat","#sqrt{#hat{s}} [GeV]",&shat);
+   bn->add(50,0,7,"dRbl","#Delta R_{bl}",&dRbV);
+   bn->add(50,0,sqrts,"shat","#sqrt{#hat{s}} [GeV]",&shat);
 
 }
 
