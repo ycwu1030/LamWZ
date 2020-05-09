@@ -53,7 +53,7 @@ rmode=args.rmode
 sqrts = args.sqrts
 renorm=args.renorm
 amode=args.amode
-tag=amode+'_%d_'%(sqrts)+time.strftime("%m%d_%H%M")
+tag=amode+'_%d_'%(sqrts)+time.strftime("%m%d_%H%M%S")
 
 if amode == 'wh':
     channelID = 1
