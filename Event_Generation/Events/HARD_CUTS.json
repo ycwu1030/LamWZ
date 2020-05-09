@@ -15,6 +15,12 @@
         "FLepEta":{
             "Name": "FLepEta",
             "Min": null,
+            "Max": null,
+            "Relation": "OR"
+        },
+        "HT":{
+            "Name": "HT",
+            "Min": null,
             "Max": {
                 "wh": null,
                 "zh": {
@@ -22,12 +28,6 @@
                     "1500": 700
                 }
             },
-            "Relation": "OR"
-        },
-        "HT":{
-            "Name": "HT",
-            "Min": null,
-            "Max": null,
             "Relation": "AND"
         },
         "MET":{
@@ -87,8 +87,8 @@
             "Max": {
                 "wh": null,
                 "zh": {
-                    "3000": null,//2400,
-                    "1500": null,//1100
+                    "3000": null,
+                    "1500": null
                 }
             },
             "Relation": {
