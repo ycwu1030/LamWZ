@@ -89,15 +89,15 @@
             },
             "Mbb":{
                 "Name": "F_Mbb",
-                "Min": null,
-                "Max": null,
+                "Min": 95,
+                "Max": 140,
                 "Relation": "AND"
             },
             "Mll":{
                 "Name": "F_Mll",
-                "Min": null,
-                "Max": null,
-                "Relation": "OR"
+                "Min": 80,
+                "Max": 100,
+                "Relation": "AND"
             },
             "AnglebV":{
                 "Name": "F_AnglebV",
