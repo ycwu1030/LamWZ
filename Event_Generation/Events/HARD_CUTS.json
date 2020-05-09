@@ -89,13 +89,13 @@
             },
             "Mbb":{
                 "Name": "F_Mbb",
-                "Min": 95,
+                "Min": 90,
                 "Max": 140,
                 "Relation": "AND"
             },
             "Mll":{
                 "Name": "F_Mll",
-                "Min": 80,
+                "Min": 75,
                 "Max": 100,
                 "Relation": "AND"
             },
