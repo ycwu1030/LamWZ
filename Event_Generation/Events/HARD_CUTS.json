@@ -1,115 +1,99 @@
 {
     "HARD_CUTS":{
-        "wh":{
-            "NB":{
-                "Name": "F_NB",
-                "Min": 2,
-                "Max": 2,
-                "Relation": "AND"
+        "NB":{
+            "Name": "F_NB",
+            "Min": 2,
+            "Max": 2,
+            "Relation": "AND"
+        },
+        "NL":{
+            "Name": "F_NL",
+            "Min": 2,
+            "Max": 2,
+            "Relation": "AND"
+        },
+        "FLepEta":{
+            "Name": "F_FLepEta",
+            "Min": null,
+            "Max": null,
+            "Relation": "OR"
+        },
+        "HT":{
+            "Name": "F_HT",
+            "Min": null,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "MET":{
+            "Name": "F_MET",
+            "Min": null,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "Mbb":{
+            "Name": "F_Mbb",
+            "Min": 95,
+            "Max": 140,
+            "Relation": "AND"
+        },
+        "Mll":{
+            "Name": "F_Mll",
+            "Min": {
+                "wh": {
+                    "3000": 98,
+                    "1500": 98
+                },
+                "zh": {
+                    "3000": 75,
+                    "1500": 75
+                }
             },
-            "NL":{
-                "Name": "F_NL",
-                "Min": 2,
-                "Max": 2,
-                "Relation": "AND"
+            "Max": {
+                "wh": {
+                    "3000": 80,
+                    "1500": 80
+                },
+                "zh": {
+                    "3000": 100,
+                    "1500": 100
+                }
             },
-            "FLepEta":{
-                "Name": "F_FLepEta",
-                "Min": null,
-                "Max": null,
-                "Relation": "OR"
-            },
-            "HT":{
-                "Name": "F_HT",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "MET":{
-                "Name": "F_MET",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "Mbb":{
-                "Name": "F_Mbb",
-                "Min": 95,
-                "Max": 140,
-                "Relation": "AND"
-            },
-            "Mll":{
-                "Name": "F_Mll",
-                "Min": 98,
-                "Max": 80,
-                "Relation": "OR"
-            },
-            "AnglebV":{
-                "Name": "F_AnglebV",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "shat":{
-                "Name": "F_shat",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
+            "Relation": {
+                "wh": {
+                    "3000": "OR",
+                    "1500": "OR"
+                },
+                "zh": {
+                    "3000": "AND",
+                    "1500": "AND"
+                }
             }
         },
-        "zh":{
-            "NB":{
-                "Name": "F_NB",
-                "Min": 2,
-                "Max": 2,
-                "Relation": "AND"
+        "AnglebV":{
+            "Name": "F_AnglebV",
+            "Min": null,
+            "Max": null,
+            "Relation": "AND"
+        },
+        "shat":{
+            "Name": "F_shat",
+            "Min": null,
+            "Max": {
+                "wh": null,
+                "zh": {
+                    "3000": 2400,
+                    "1500": null
+                }
             },
-            "NL":{
-                "Name": "F_NL",
-                "Min": 2,
-                "Max": 2,
-                "Relation": "AND"
-            },
-            "FLepEta":{
-                "Name": "F_FLepEta",
-                "Min": null,
-                "Max": null,
-                "Relation": "OR"
-            },
-            "HT":{
-                "Name": "F_HT",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "MET":{
-                "Name": "F_MET",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "Mbb":{
-                "Name": "F_Mbb",
-                "Min": 95,
-                "Max": 140,
-                "Relation": "AND"
-            },
-            "Mll":{
-                "Name": "F_Mll",
-                "Min": 75,
-                "Max": 100,
-                "Relation": "AND"
-            },
-            "AnglebV":{
-                "Name": "F_AnglebV",
-                "Min": null,
-                "Max": null,
-                "Relation": "AND"
-            },
-            "shat":{
-                "Name": "F_shat",
-                "Min": null,
-                "Max": 2400,
-                "Relation": "AND"
+            "Relation": {
+                "wh": {
+                    "3000": "AND",
+                    "1500": "AND"
+                },
+                "zh": {
+                    "3000": "AND",
+                    "1500": "AND"
+                }
             }
         }
     }

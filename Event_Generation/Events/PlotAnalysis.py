@@ -137,24 +137,34 @@ signeve_str=','.join(signeve)
 bkgneve_str=','.join(bkgneve)
 
 
+def ReadJsonValue(entry,mode,s):
+    if type(entry) != dict:
+        return entry
+    else:
+        if type(entry[mode]) != dict:
+            return entry[mode]
+        else:
+            return entry[mode][s]
+
 cutslist=['true']
 with open(cutfile,'r') as fcut:
-    cutsinfo=(simplejson.load(fcut))['HARD_CUTS'][amode]
+    cutsinfo=(simplejson.load(fcut))['HARD_CUTS']
     for key in cutsinfo.keys():
         var=cutsinfo[key]
         varname=var['Name']
         varstr=''
-        linksym= '\&\&'
-        if var['Relation'] == 'OR':
-            linksym = '||'
-        if var['Min'] is None and var['Max'] is None:
+        relationtype = ReadJsonValue(var['Relation'],amode,'%d'%(sqrts))
+        linksym = '\&\&' if relationtype == 'AND' else '||'
+        varmin = ReadJsonValue(var['Min'],amode,'%d'%(sqrts))
+        varmax = ReadJsonValue(var['Max'],amode,'%d'%(sqrts))
+        if varmin is None and varmax is None:
             continue
-        elif var['Min'] is None:
-            varstr='(%s<=%f)'%(varname,var['Max'])
-        elif var['Max'] is None:
-            varstr='(%f<=%s)'%(var['Min'],varname)
+        elif varmix is None:
+            varstr='(%s<=%f)'%(varname,varmax)
+        elif varmax is None:
+            varstr='(%f<=%s)'%(varmin,varname)
         else:
-            varstr='(%f<=%s %s %s<=%f)'%(var['Min'],varname,linksym,varname,var['Max'])
+            varstr='(%f<=%s %s %s<=%f)'%(varmin,varname,linksym,varname,varmax)
         cutslist.append(varstr)
 
 cuts_str='\&\&'.join(cutslist)
