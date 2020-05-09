@@ -89,7 +89,7 @@
             },
             "Mbb":{
                 "Name": "F_Mbb",
-                "Min": 90,
+                "Min": 95,
                 "Max": 140,
                 "Relation": "AND"
             },
