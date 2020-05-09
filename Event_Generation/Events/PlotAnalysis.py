@@ -180,7 +180,7 @@ else:
 color_str=','.join(colorlist)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s; make clean; make %s.x; cd -"%(SRCDIR,EXENAME),shell=True)
 
 GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"

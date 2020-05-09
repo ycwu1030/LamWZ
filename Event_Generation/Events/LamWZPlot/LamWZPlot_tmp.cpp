@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
 
     // Initial the Ploting System;
     binning *bn = new binning();
-    LamWZch->initialize(bn);
+    LamWZch->initialize(bn,__SQRTS__);
 
     #include "HistogramDeclare_tmp.inc"
 

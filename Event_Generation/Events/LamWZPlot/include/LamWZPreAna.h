@@ -143,7 +143,7 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
-   void initialize(binning *bn);
+   void initialize(binning *bn, int sqrts);
    void GetCate();
 
    int CateIndicator;
@@ -188,7 +188,7 @@ void LamWZPreAna::GetCate()
    }
 }
 
-void LamWZPreAna::initialize(binning *bn,int sqrts=3000)
+void LamWZPreAna::initialize(binning *bn,int sqrts)
 {
    bn->add(10,0,10,"NEvents","Events Category",&CateIndicator);
    bn->add(10,0,5,"NBJet","N_{B-jet}",&NBJet);
