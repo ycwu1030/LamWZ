@@ -110,7 +110,7 @@ int main(int argc, char const *argv[])
         // delete ch;
         dataloader->AddBackgroundTree(ChainBKG[i],WeightBKG[i]);
     }
-    TCut precuts = "NBJet==2&&NLep_Af==2";
+    TCut precuts = "NBJet==2&&NLep_Af==2&&__CUTS__";
     dataloader->PrepareTrainingAndTestTree( precuts, precuts,
                                         "SplitMode=Random:NormMode=None:!V" );
     factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",

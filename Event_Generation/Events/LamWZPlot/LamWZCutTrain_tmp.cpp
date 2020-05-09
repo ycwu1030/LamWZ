@@ -120,7 +120,7 @@ int main(int argc, char const *argv[])
         // delete ch;
         dataloader->AddBackgroundTree(ChainBKG[i],WeightBKG[i]);
     }
-    TCut precuts = "NBJet==2&&NLep_Af==2";
+    TCut precuts = "NBJet==2&&NLep_Af==2&&__CUTS__";
     string OptGASpec="FitMethod=GA:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95";
     string OptMCSpec="FitMethod=MC:SampleSize=200000";
     string OptSASpec="FitMethod=SA:MaxCalls=150000:KernelTemp=IncAdaptive:InitialTemp=1e+6:MinTemp=1e-6:Eps=1e-10:UseDefaultScale";

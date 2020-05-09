@@ -142,21 +142,22 @@ int main(int argc, char const *argv[])
     int ProcessID;
     int SorB;
     double Weight;
-    Float_t F_NB, F_NL, F_FLepEta, F_MovedEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    Int_t NBJet, NLep_Af;
+    Float_t FLepEta, MovedEta, HT, MET, Mbb, Mll, AnglebV, shat;
 
     t2->Branch("ProcessID",&ProcessID,"ProcessID/I");
     t2->Branch("SorB",&SorB,"SorB/I");
     t2->Branch("Weight",&Weight,"Weight/D");
-    t2->Branch("NB",&F_NB,"NB/I");
-    t2->Branch("NL",&F_NL,"NL/I");
-    t2->Branch("FLepEta",&F_FLepEta,"FLepEta/F");
-    t2->Branch("FMovedEta",&F_MovedEta,"FmovedEta/F");
-    t2->Branch("HT",&F_HT,"HT/F");
-    t2->Branch("MET",&F_MET,"MET/F");
-    t2->Branch("Mbb",&F_Mbb,"Mbb/F");
-    t2->Branch("Mll",&F_Mll, "Mll/F");
-    t2->Branch("AnglebV",&F_AnglebV,"AnglebV/F");
-    t2->Branch("shat",&F_shat,"shat/F");
+    t2->Branch("NB",&NBJet,"NB/I");
+    t2->Branch("NL",&NLep_Af,"NL/I");
+    t2->Branch("FLepEta",&FLepEta,"FLepEta/F");
+    t2->Branch("FMovedEta",&MovedEta,"FmovedEta/F");
+    t2->Branch("HT",&HT,"HT/F");
+    t2->Branch("MET",&MET,"MET/F");
+    t2->Branch("Mbb",&Mbb,"Mbb/F");
+    t2->Branch("Mll",&Mll, "Mll/F");
+    t2->Branch("AnglebV",&AnglebV,"AnglebV/F");
+    t2->Branch("shat",&shat,"shat/F");
     t2->Branch("N_EffS",&N_EffS,"N_EffS/I");
     t2->Branch("EffSignals",EffSignals,"EffSignals[N_EffS]/D");
     t2->Branch("CUTHardcate",&CUTHardcate,"CUTHardcate/I");
@@ -174,22 +175,22 @@ int main(int argc, char const *argv[])
 
     if (channelID == 1)
     {
-        reader->AddVariable( "MovedEta := FLepEta<0?FLepEta+5:FLepEta", &F_MovedEta );
-        reader->AddVariable( "HT", &F_HT );
-        reader->AddVariable( "MET", &F_MET );
-        reader->AddVariable( "Mbb", &F_Mbb );
-        reader->AddVariable( "Mll", &F_Mll );
-        // reader->AddVariable( "AnglebV", &F_AnglebV );
-        reader->AddVariable( "shat", &F_shat );
+        reader->AddVariable( "MovedEta := FLepEta<0?FLepEta+5:FLepEta", &MovedEta );
+        reader->AddVariable( "HT", &HT );
+        reader->AddVariable( "MET", &MET );
+        reader->AddVariable( "Mbb", &Mbb );
+        reader->AddVariable( "Mll", &Mll );
+        // reader->AddVariable( "AnglebV", &AnglebV );
+        reader->AddVariable( "shat", &shat );
     }
     else if (channelID == 2)
     {
-        reader->AddVariable( "HT", &F_HT );
-        reader->AddVariable( "MET", &F_MET );
-        reader->AddVariable( "Mbb", &F_Mbb );
-        reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
-        reader->AddVariable( "shat", &F_shat );
+        reader->AddVariable( "HT", &HT );
+        reader->AddVariable( "MET", &MET );
+        reader->AddVariable( "Mbb", &Mbb );
+        reader->AddVariable( "Mll", &Mll );
+        reader->AddVariable( "AnglebV", &AnglebV );
+        reader->AddVariable( "shat", &shat );
     }
     
     TCut precuts = "NBJet==2&&NLep_Af==2";
@@ -213,8 +214,6 @@ int main(int argc, char const *argv[])
     {
         if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
         ch->GetEntry(entry);
-        Good = (ch->NBJet == 2 && ch->NLep_Af==2);
-        if(!Good) continue;
         SorB = ch->SorB;
         ProcessID = ch->processID;
         if (SorB == 1)
@@ -227,28 +226,30 @@ int main(int argc, char const *argv[])
         }
         if (channelID == 1)
         {
-            F_NB = ch->NBJet;
-            F_NL = ch->NLep_Af;
-            F_FLepEta = ch->FLepEta;
-            F_MovedEta = F_FLepEta<0?F_FLepEta+6:F_FLepEta;
-            F_HT = ch->HT;
-            F_MET = ch->MET;
-            F_Mll = ch->Mll;
-            F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
-            F_shat = ch->shat;
+            NBJet = ch->NBJet;
+            NLep_Af = ch->NLep_Af;
+            FLepEta = ch->FLepEta;
+            MovedEta = FLepEta<0?FLepEta+6:FLepEta;
+            HT = ch->HT;
+            MET = ch->MET;
+            Mll = ch->Mll;
+            Mbb = ch->Mbb;
+            AnglebV = ch->AnglebV;
+            shat = ch->shat;
         }
         else if (channelID == 2)
         {
-            F_NB = ch->NBJet;
-            F_NL = ch->NLep_Af;
-            F_HT = ch->HT;
-            F_MET = ch->MET;
-            F_Mll = ch->Mll;
-            F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
-            F_shat = ch->shat;
+            NBJet = ch->NBJet;
+            NLep_Af = ch->NLep_Af;
+            HT = ch->HT;
+            MET = ch->MET;
+            Mll = ch->Mll;
+            Mbb = ch->Mbb;
+            AnglebV = ch->AnglebV;
+            shat = ch->shat;
         }
+        Good = (ch->NBJet == 2 && ch->NLep_Af==2)&&hardcut();
+        if(!Good) continue;
         TMVARes = hardcut();
         if (TMVARes)
         {

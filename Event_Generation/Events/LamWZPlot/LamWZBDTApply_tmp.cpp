@@ -87,26 +87,32 @@ int main(int argc, char const *argv[])
 
     TMVA::Reader *reader = new TMVA::Reader("!Color:Silent");
 
-    Float_t F_FLepEta, F_HT, F_MET, F_Mbb, F_Mll, F_AnglebV, F_shat;
+    Int_t NBJet, NLep_Af;
+    Float_t FLepEta, HT, MET, Mbb, Mll, AnglebV, shat;
+
+    auto hardcut = [&](){
+        return __CUTS__;
+    };
+    string CUTS_STR = "__CUTS__";
 
     if (channelID == 1)
     {
-        reader->AddVariable( "FLepEta", &F_FLepEta );
-        reader->AddVariable( "HT", &F_HT );
-        reader->AddVariable( "MET", &F_MET );
-        reader->AddVariable( "Mbb", &F_Mbb );
-        reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
-        reader->AddVariable( "shat", &F_shat );
+        reader->AddVariable( "FLepEta", &FLepEta );
+        reader->AddVariable( "HT", &HT );
+        reader->AddVariable( "MET", &MET );
+        reader->AddVariable( "Mbb", &Mbb );
+        reader->AddVariable( "Mll", &Mll );
+        reader->AddVariable( "AnglebV", &AnglebV );
+        reader->AddVariable( "shat", &shat );
     }
     else if (channelID == 2)
     {
-        reader->AddVariable( "HT", &F_HT );
-        reader->AddVariable( "MET", &F_MET );
-        reader->AddVariable( "Mbb", &F_Mbb );
-        reader->AddVariable( "Mll", &F_Mll );
-        reader->AddVariable( "AnglebV", &F_AnglebV );
-        reader->AddVariable( "shat", &F_shat );
+        reader->AddVariable( "HT", &HT );
+        reader->AddVariable( "MET", &MET );
+        reader->AddVariable( "Mbb", &Mbb );
+        reader->AddVariable( "Mll", &Mll );
+        reader->AddVariable( "AnglebV", &AnglebV );
+        reader->AddVariable( "shat", &shat );
     }
     
     TCut precuts = "NBJet==2&&NLep_Af==2";
@@ -124,8 +130,6 @@ int main(int argc, char const *argv[])
     {
         if((entry+1)%100000==0) {cout<<entry+1<<" entries processed...\r"; cout.flush();}
         ch->GetEntry(entry);
-        Good = (ch->NBJet == 2 && ch->NLep_Af==2);
-        if(!Good) continue;
         SorB = ch->SorB;
         processID = ch->processID;
         if (SorB == 1)
@@ -138,23 +142,29 @@ int main(int argc, char const *argv[])
         }
         if (channelID == 1)
         {
-            F_FLepEta = ch->FLepEta;
-            F_HT = ch->HT;
-            F_MET = ch->MET;
-            F_Mll = ch->Mll;
-            F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
-            F_shat = ch->shat;
+            NBJet = ch->NBJet;
+            NLep_Af = ch->NLep_Af;
+            FLepEta = ch->FLepEta;
+            HT = ch->HT;
+            MET = ch->MET;
+            Mll = ch->Mll;
+            Mbb = ch->Mbb;
+            AnglebV = ch->AnglebV;
+            shat = ch->shat;
         }
         else if (channelID == 2)
         {
-            F_HT = ch->HT;
-            F_MET = ch->MET;
-            F_Mll = ch->Mll;
-            F_Mbb = ch->Mbb;
-            F_AnglebV = ch->AnglebV;
-            F_shat = ch->shat;
+            NBJet = ch->NBJet;
+            NLep_Af = ch->NLep_Af;
+            HT = ch->HT;
+            MET = ch->MET;
+            Mll = ch->Mll;
+            Mbb = ch->Mbb;
+            AnglebV = ch->AnglebV;
+            shat = ch->shat;
         }
+        Good = (ch->NBJet == 2 && ch->NLep_Af==2)&&hardcut();
+        if(!Good) continue;
         BDTScore = reader->EvaluateMVA("BDT method");
         t2->Fill();
     }
