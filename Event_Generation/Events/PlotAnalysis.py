@@ -146,7 +146,7 @@ def ReadJsonValue(entry,mode,s):
         else:
             return entry[mode][s]
 
-cutslist=['true']
+cutslist=['1==1']
 if os.path.exists(cutfile):
     with open(cutfile,'r') as fcut:
         cutsinfo=(simplejson.load(fcut))['HARD_CUTS']

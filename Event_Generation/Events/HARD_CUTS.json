@@ -1,43 +1,43 @@
 {
     "HARD_CUTS":{
         "NB":{
-            "Name": "F_NB",
+            "Name": "NBJet",
             "Min": 2,
             "Max": 2,
             "Relation": "AND"
         },
         "NL":{
-            "Name": "F_NL",
+            "Name": "NLep_Af",
             "Min": 2,
             "Max": 2,
             "Relation": "AND"
         },
         "FLepEta":{
-            "Name": "F_FLepEta",
+            "Name": "FLepEta",
             "Min": null,
             "Max": null,
             "Relation": "OR"
         },
         "HT":{
-            "Name": "F_HT",
+            "Name": "HT",
             "Min": null,
             "Max": null,
             "Relation": "AND"
         },
         "MET":{
-            "Name": "F_MET",
+            "Name": "MET",
             "Min": null,
             "Max": null,
             "Relation": "AND"
         },
         "Mbb":{
-            "Name": "F_Mbb",
+            "Name": "Mbb",
             "Min": 95,
             "Max": 130,
             "Relation": "AND"
         },
         "Mll":{
-            "Name": "F_Mll",
+            "Name": "Mll",
             "Min": {
                 "wh": {
                     "3000": 98,
@@ -70,13 +70,13 @@
             }
         },
         "AnglebV":{
-            "Name": "F_AnglebV",
+            "Name": "AnglebV",
             "Min": null,
             "Max": null,
             "Relation": "AND"
         },
         "shat":{
-            "Name": "F_shat",
+            "Name": "shat",
             "Min": null,
             "Max": {
                 "wh": null,
