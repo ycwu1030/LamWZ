@@ -17,6 +17,7 @@ import simplejson
 
 Decays={'bbll':1,'tatall':2}
 Lumi_map={'3000':4000,'1500':2000}
+SIGCOLOR=["kBlue+4","kBlue+3","kBlue+2","kBlue+1","kBlue","kBlue-4","kBlue-7","kBlue-9","kBlue-10"]
 #ProsList=['bkg_tt_bbll','bkg_VBF_wz_bbll','bkg_VBF_zz_bbll','bkg_VBF_zz_tatall','ee_VBF_wh_InterOnly','ee_VBF_wh_WOnly','ee_VBF_wh_ZOnly','ee_VBF_zh_InterOnly','ee_VBF_zh_WOnly','ee_VBF_zh_ZOnly']
 #ChannelInfo=[]
 # Following BR information is used for signal process CS calculation
@@ -157,9 +158,18 @@ with open(cutfile,'r') as fcut:
         cutslist.append(varstr)
 
 cuts_str='\&\&'.join(cutslist)
+colorlist=[]
+if nsig == 2:
+    colorlist=[SIGCOLOR[0],SIGCOLOR[4]]
+elif nsig == 3:
+    colorlist=[SIGCOLOR[0],SIGCOLOR[4],SIGCOLOR[-1]]
+else:
+    colorlist=SIGCOLOR
+
+color_str=','.join(colorlist)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s;make %s.x;cd -"%(SRCDIR,EXENAME),shell=True)
 
 GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"
