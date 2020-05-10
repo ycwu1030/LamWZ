@@ -148,33 +148,25 @@ if flag_r:
     for i in range(len(ProcessesList)):
         tag=time.strftime("%m%d_%H")
         Process=ProcessesList[i]
-        # SECS=selection.keys()
-        # MATCH=True
-        # if len(SECS) == 0:
-        #     MATCH=True
-        # else:
-        #     for key in SECS:
-        #         if Process[key] == selection[key]:
-        #             MATCH*=True
-        #         else:
-        #             MATCH*=False
-        # if not MATCH:
-        #     print('Skip: ',Process['Name'],MATCH)
-        #     continue
         if not SELECT_PROCESS(Process,selection):
             print('Skip: ',Process['Name'])
             continue
         if Process['Decay'] == 'None':
             Process['Decay'] = decays
         with open('tmp_madevent.dat','w') as MECOM:
-            if Process['Abbr'] == 'zh' and Process['BkgSigTag'] != 'Full':
-                MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + '\n')
-                MECOM.write('done\n')
-                MECOM.write('set mmll 80.0\n')
-                MECOM.write('set mmllmax 100.0\n')
-                MECOM.write('done\n')
-            else:
-                MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + ' -f \n')
+            MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + '\n')
+            MECOM.write('done\n')
+            if 'lamwz' in Process.keys():
+                MECOM.write('set kz %f\n'%(1.0/Process['lamwz']))
+            MECOM.write('done\n')
+            # if Process['Abbr'] == 'zh' and Process['BkgSigTag'] != 'Full':
+            #     MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + '\n')
+            #     MECOM.write('done\n')
+            #     MECOM.write('set mmll 80.0\n')
+            #     MECOM.write('set mmllmax 100.0\n')
+            #     MECOM.write('done\n')
+            # else:
+            #     MECOM.write('generate_events run_' + '%d'%(sqrts) + "_" + tag + ' -f \n')
         if sqrts == 3000:
             shutil.copyfile(work_dir + '/Cards_tmp/run_card.dat', work_dir + '/' + Process['Name'] + '/Cards/run_card.dat')
         elif sqrts == 1500:
@@ -184,17 +176,17 @@ if flag_r:
         shutil.copyfile(work_dir + '/Cards_tmp/param_card.dat', work_dir + '/' + Process['Name'] + '/Cards/param_card.dat')
         shutil.copyfile(work_dir + '/Cards_tmp/me5_configuration.txt', work_dir + '/' + Process['Name'] + '/Cards/me5_configuration.txt')
 	#print Process['Name'],Process['BkgSigTag']
-        if Process['BkgSigTag'] != 'bkg' and Process['BkgSigTag'] != 'Full':
-            #print 'Signal'
-            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + '%d'%(sqrts) + "_" + tag + "_decayed_1"
-            shutil.copyfile(work_dir + '/Cards_tmp/madspin_card_' + decays + '.dat', work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
-        else:
-            #print 'Bkg'
-            gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + '%d'%(sqrts) + "_" + tag
-            try:
-                os.remove(work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
-            except OSError:
-                pass
+        # if Process['BkgSigTag'] != 'bkg' and Process['BkgSigTag'] != 'Full':
+        #     #print 'Signal'
+        #     gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + '%d'%(sqrts) + "_" + tag + "_decayed_1"
+        #     shutil.copyfile(work_dir + '/Cards_tmp/madspin_card_' + decays + '.dat', work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
+        # else:
+        #     #print 'Bkg'
+        gene_dir = work_dir + '/' + Process['Name'] + '/Events/run_' + '%d'%(sqrts) + "_" + tag
+        try:
+            os.remove(work_dir + '/' + Process['Name'] + '/Cards/madspin_card.dat')
+        except OSError:
+            pass
         if flag_delphes: 
             store_dir = Event_dir + '/' + Process['Name'] + '/Delphes/' + '%d'%(sqrts)
             filein = 'tag_1_delphes_events.root'
