@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
     TFile *f2 = new TFile(temp);
     sprintf(temp,"%s/Diff_LamWZ_Results_PDF.root",dir.c_str());
     TFile *f3 = new TFile(temp,"RECREATE");
-    int NBINS = 20;
+    int NBINS = 50;
     RooRealVar roo_shat("shat","shat",SHATRANGE[0],SHATRANGE[1]);
     roo_shat.setBins(NBINS);
     // RooRealVar roo_weight("Weight","Weight",0,1);

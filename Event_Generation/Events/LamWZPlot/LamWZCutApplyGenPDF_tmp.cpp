@@ -80,8 +80,17 @@ int main(int argc, char const *argv[])
     LamWZPreAna *chbkg;
     TTree *tshat_SIG[N_SIGCAT];
     TTree *tshat_BKG;
-    double shat;
+
+    int ProcessID;
+    int SorB;
     double Weight;
+    Int_t NBJet, NLep_Af;
+    Float_t FLepEta, MovedEta, HT, MET, Mbb, Mll, AnglebV, shat;
+
+    auto hardcut = [&](){
+        return __CUTS__;
+    };
+    string CUTS_STR = "__CUTS__";
     // TChain *Chaintotal = new TChain("LamWZPreAna");
     for (int i = 0; i < N_BKGCAT; ++i)
     {
@@ -91,8 +100,8 @@ int main(int argc, char const *argv[])
     chbkg = new LamWZPreAna(ChainBKG);
     // sprintf(temp,"BDTResult_BKG_Diff_%s",SIG_NAME[channelID-1][i].c_str());
     tshat_BKG = new TTree("CutResult_BKG_Diff","shat storage for different lamWZ");
-    tshat_BKG->Branch("shat",&shat,"shat/D");
-    tshat_BKG->Branch("Weight",&Weight,"Weight/D");
+    tshat_BKG->Branch("shat",&shat,"shat/F");
+    tshat_BKG->Branch("Weight",&Weight,"Weight/F");
     for (int i = 0; i < N_SIGCAT; i++)
     {
         NEVENTS_BKG[i] = 0;
@@ -109,8 +118,8 @@ int main(int argc, char const *argv[])
         ch[i] = new LamWZPreAna(Chaintotal[i]);
         sprintf(temp,"CutResult_SIG_Diff_%s",SIG_NAME[i].c_str());
         tshat_SIG[i] = new TTree(temp,"shat storage for different lamWZ");
-        tshat_SIG[i]->Branch("shat",&shat,"shat/D");
-        tshat_SIG[i]->Branch("Weight",&Weight,"Weight/D");
+        tshat_SIG[i]->Branch("shat",&shat,"shat/F");
+        tshat_SIG[i]->Branch("Weight",&Weight,"Weight/F");
         NEVENTS_SIG[i] = 0;
         sprintf(temp,"Hist_SIG_%s",SIG_NAME[i].c_str());
         HistSHAT_SIG[i] = new TH1F(temp,"",50,SHATRANGE[0],SHATRANGE[1]);
@@ -119,16 +128,6 @@ int main(int argc, char const *argv[])
     sprintf(temp,"%s/Diff_LamWZ_Results.root",dir.c_str());
     TFile *f2 = new TFile(temp,"RECREATE");
 
-    int ProcessID;
-    int SorB;
-    double Weight;
-    Int_t NBJet, NLep_Af;
-    Float_t FLepEta, MovedEta, HT, MET, Mbb, Mll, AnglebV, shat;
-
-    auto hardcut = [&](){
-        return __CUTS__;
-    };
-    string CUTS_STR = "__CUTS__";
     
     // --------------------------------------------------------------
     Int_t Good=true;
