@@ -45,7 +45,7 @@ int Bkg_NTOTAL[N_BKGCAT] = {__BKGNEVE__};
 // double BDTScoreCuts1500[2] = {0.035,0.115};
 // double SHATMIN3000[2] = {100,100};
 // double SHATMAX3000[2] = {1200,1800};
-double SHATRANGE[2] = {__SHATRANGE__};
+double SHATRANGE[2] = {100,__SQRTS__};
 double lwzValue[N_SIGCAT] = {__SIGLWZ__};
 int CENTERID = __CENTERID__;
 

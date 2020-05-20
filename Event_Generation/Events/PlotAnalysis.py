@@ -31,7 +31,7 @@ BRhtata=0.06256
 parser = argparse.ArgumentParser(prog='PreAnalysis',description='PreAnalysis of Lambda WZ events.')
 parser.add_argument('-input_dir',dest='inputdir',default='/data/data068/ycwu/LamWZ/Event_Generation/Events/PreAna_wh_3000_Full')
 parser.add_argument('-rm',dest='rmode',default='p') # running mode, 
-# p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt, br: BDT results
+# p: plot, ct: train cuts, ca: apply cuts, bt: train bdt, ba: apply bdt, br: BDT results, dg: generate PDF for different lwz, dc: calculate NLL for different lwz.
 parser.add_argument('-am',dest='amode',default='wh') # analysis mode
 parser.add_argument('-i',dest='processfile',default='processes_in_this_dict.json')
 parser.add_argument('-ic',dest='cutfile',default='HARD_CUTS.json')
@@ -49,6 +49,8 @@ CutApplyNAME='LamWZCutApply'
 BDTTrainNAME='LamWZBDTTrain'
 BDTApplyNAME='LamWZBDTApply'
 BDTResultNAME='LamWZBDTResults'
+GenPDFNAME='LamWZCutApplyGenPDF'
+CalcNLLNAME='LamWZCutApplyCalcNLL'
 rmode=args.rmode
 sqrts = args.sqrts
 renorm=args.renorm
@@ -75,6 +77,11 @@ elif rmode == 'ba':
 elif rmode == 'br':
     EXENAME=BDTResultNAME
     tag = args.tag
+elif rmode == 'dg':
+    EXENAME=GenPDFNAME
+elif rmode == 'dc':
+    EXENAME=CalcNLLNAME
+    tag = args.tag
 
 # Link required signal and background processes information 
 Lumi=Lumi_map['%d'%(sqrts)]
@@ -88,6 +95,7 @@ siglabel=[]
 bkglabel=[]
 signeve=[]
 bkgneve=[]
+siglwz=[]
 
 # if amode == 'zh':
 #     sigid = [0]
@@ -112,6 +120,8 @@ with open(ProcessesFile,'r') as f:
             signame.append(process['Abbr'])
             siglabel.append(process['Abbr'])
             signeve.append(str(process['NEvents']))
+            if 'lamwz' in process.keys():
+                siglwz.append(str(process['lamwz']))
             nsig+=1
 
 # print(bkgid,bkgname,bkglabel)
@@ -123,11 +133,14 @@ bkgneve=np.array(bkgneve)[p]
 
 # print(bkgname,bkglabel,bkgneve)
 
-p = np.array(sigid)
+p = np.array(sigid).argsort()
 signame=np.array(signame)[p]
 siglabel=np.array(siglabel)[p]
 signeve=np.array(signeve)[p]
-
+centerid = -1
+if len(siglwz) > 0:
+    siglwz = np.array(siglwz)[p]
+    centerid = np.where((siglwz > 0.9999) & (siglwz < 1.0001))[0][0]
 
 signame_str='\",\"'.join(signame)
 bkgname_str='\",\"'.join(bkgname)
@@ -135,6 +148,7 @@ siglabel_str='\",\"'.join(siglabel)
 bkglabel_str='\",\"'.join(bkglabel)
 signeve_str=','.join(signeve)
 bkgneve_str=','.join(bkgneve)
+siglwz_str=','.join(siglwz)
 
 
 def ReadJsonValue(entry,mode,s):
@@ -180,7 +194,7 @@ else:
 color_str=','.join(colorlist)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/\"%s\"/g' -e 's/__BKGNAME__/\"%s\"/g' -e 's/__SIGLABEL__/\"%s\"/g' -e 's/__BKGLABEL__/\"%s\"/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' -e 's/__SIGLWZ__/%s/g' -e 's/__CENTERID__/%d/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,siglwz_str,centerid,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s; make clean; make %s.x; cd -"%(SRCDIR,EXENAME),shell=True)
 
 GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"
@@ -194,5 +208,8 @@ elif rmode == 'ct' or rmode == 'ca':
 elif rmode == 'bt' or rmode == 'ba' or rmode == 'br':
     subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
     subprocess.call("cd Plots; %s; cd -; cd Plots/BDT_Train_LamWZ_%s; %s; cd -;"%(GEINDEX,tag,GEINDEX),shell=True)
+elif rmode == 'dg' or rmode == 'dc':
+    subprocess.call("%s/%s.x %s %s %d"%(SRCDIR,EXENAME,args.inputdir,tag,channelID),shell=True)
+    subprocess.call("cd Plots; %s; cd -; cd Plots/Diff_LamWZ_Ana_%s; %s; cd -;"%(GEINDEX,tag,GEINDEX),shell=True)
 
 subprocess.call('echo "Tag is: %s"'%(tag),shell=True)

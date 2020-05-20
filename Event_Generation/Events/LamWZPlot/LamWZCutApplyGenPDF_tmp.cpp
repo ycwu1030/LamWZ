@@ -45,7 +45,7 @@ int Bkg_NTOTAL[N_BKGCAT] = {__BKGNEVE__};
 // double BDTScoreCuts1500[2] = {0.035,0.115};
 // double SHATMIN3000[2] = {100,100};
 // double SHATMAX3000[2] = {1200,1800};
-double SHATRANGE[2] = {__SHATRANGE__};
+double SHATRANGE[2] = {100,__SQRTS__};
 double lwzValue[N_SIGCAT] = {__SIGLWZ__};
 int CENTERID = __CENTERID__;
 
@@ -97,9 +97,9 @@ int main(int argc, char const *argv[])
     {
         NEVENTS_BKG[i] = 0;
         sprintf(temp,"Hist_BKG_%s",SIG_NAME[i].c_str());
-        HistSHAT_BKG[i] = new TH1F(temp,"",20,SHATRANGE[0],SHATRANGE[1]);
+        HistSHAT_BKG[i] = new TH1F(temp,"",50,SHATRANGE[0],SHATRANGE[1]);
         sprintf(temp,"Hist_TOT_%s",SIG_NAME[i].c_str());
-        HistSHAT_TOT[i] = new TH1F(temp,"",20,SHATRANGE[0],SHATRANGE[1]);
+        HistSHAT_TOT[i] = new TH1F(temp,"",50,SHATRANGE[0],SHATRANGE[1]);
     }
     for (int i = 0; i < N_SIGCAT; ++i)
     {
@@ -113,7 +113,7 @@ int main(int argc, char const *argv[])
         tshat_SIG[i]->Branch("Weight",&Weight,"Weight/D");
         NEVENTS_SIG[i] = 0;
         sprintf(temp,"Hist_SIG_%s",SIG_NAME[i].c_str());
-        HistSHAT_SIG[i] = new TH1F(temp,"",20,SHATRANGE[0],SHATRANGE[1]);
+        HistSHAT_SIG[i] = new TH1F(temp,"",50,SHATRANGE[0],SHATRANGE[1]);
     }
 
     sprintf(temp,"%s/Diff_LamWZ_Results.root",dir.c_str());
