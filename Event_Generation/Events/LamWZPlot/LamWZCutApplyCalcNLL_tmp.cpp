@@ -95,7 +95,7 @@ int main(int argc, char const *argv[])
     TH1F *roo_Hist_TOT[N_SIGCAT];
     for (int i = 0; i < N_SIGCAT; i++)
     {
-        sprintf(temp,"Hist_SIG_%s",SIG_NAME[channelID-1][i].c_str());
+        sprintf(temp,"Hist_SIG_%s",SIG_NAME[i].c_str());
         roo_Hist_SIG[i] = (TH1F*) f2->Get(temp);
         NEVENTS_SIG[i] = roo_Hist_SIG[i]->Integral();
         // sprintf(temp,"BDTResult_Diff_%s",SIG_NAME[channelID-1][i].c_str());
