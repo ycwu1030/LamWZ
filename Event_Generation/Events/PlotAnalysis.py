@@ -116,12 +116,15 @@ with open(ProcessesFile,'r') as f:
             bkgneve.append(str(process['NEvents']))
             nbkg+=1
         else:
-            sigid.append(process['ProcessID'])
-            signame.append(process['Abbr'])
-            siglabel.append(process['Abbr'])
-            signeve.append(str(process['NEvents']))
             if 'lamwz' in process.keys():
                 siglwz.append(str(process['lamwz']))
+                signame.append(process['Abbr']+'_'+process['BkgSigTag'])
+                siglabel.append(process['Abbr']+'_'+process['BkgSigTag'])
+            else:
+                signame.append(process['Abbr'])
+                siglabel.append(process['Abbr'])
+            sigid.append(process['ProcessID'])
+            signeve.append(str(process['NEvents']))
             nsig+=1
 
 # print(bkgid,bkgname,bkglabel)
