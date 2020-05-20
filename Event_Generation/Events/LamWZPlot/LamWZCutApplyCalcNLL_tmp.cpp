@@ -136,20 +136,20 @@ int main(int argc, char const *argv[])
     RooRealVar *bkg_yeild[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
     {
-        sprintf(temp,"Shape_%s",SIG_NAME[channelID-1][isig].c_str());
+        sprintf(temp,"Shape_%s",SIG_NAME[isig].c_str());
         shapes[isig] = new RooArgList(temp);
         shapes[isig]->add(*roo_pdfhist_SIG[isig]);
         shapes[isig]->add(*roo_pdfhist_BKG[isig]);
-        sprintf(temp,"Yeild_SIG_%s",SIG_NAME[channelID-1][isig].c_str());
+        sprintf(temp,"Yeild_SIG_%s",SIG_NAME[isig].c_str());
         sig_yeild[isig] = new RooRealVar(temp,"",NEVENTS_SIG[isig]);
-        sprintf(temp,"Yeild_BKG_%s",SIG_NAME[channelID-1][isig].c_str());
+        sprintf(temp,"Yeild_BKG_%s",SIG_NAME[isig].c_str());
         bkg_yeild[isig] = new RooRealVar(temp,"",NEVENTS_BKG[isig]);
         cout<<"Sig-"<<isig<<": "<<NEVENTS_SIG[isig]<<", "<<NEVENTS_BKG[isig]<<endl;
-        sprintf(temp,"Yeild_%s",SIG_NAME[channelID-1][isig].c_str());
+        sprintf(temp,"Yeild_%s",SIG_NAME[isig].c_str());
         yields[isig] = new RooArgList(temp);
         yields[isig]->add(*sig_yeild[isig]);
         yields[isig]->add(*bkg_yeild[isig]);
-        sprintf(temp,"Total_PDF_%s",SIG_NAME[channelID-1][isig].c_str());
+        sprintf(temp,"Total_PDF_%s",SIG_NAME[isig].c_str());
         totalPdf[isig] = new RooAddPdf(temp,"",*shapes[isig],*yields[isig]); 
     }
 
