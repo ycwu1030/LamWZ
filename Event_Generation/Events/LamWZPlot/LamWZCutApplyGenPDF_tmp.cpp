@@ -113,7 +113,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N_SIGCAT; ++i)
     {
         Chaintotal[i] = new TChain("LamWZPreAna");
-        sprintf(temp,"%s/%s_Full*.root",InputDir.c_str(),SIG_NAME[i].c_str());
+        sprintf(temp,"%s/%s*.root",InputDir.c_str(),SIG_NAME[i].c_str());
         Chaintotal[i] -> Add(temp);
         ch[i] = new LamWZPreAna(Chaintotal[i]);
         sprintf(temp,"CutResult_SIG_Diff_%s",SIG_NAME[i].c_str());
