@@ -153,7 +153,7 @@ int main(int argc, char const *argv[])
         totalPdf[isig] = new RooAddPdf(temp,"",*shapes[isig],*yields[isig]); 
     }
 
-    int NTRIALS = 500;
+    int NTRIALS = 5000;
     double NLL[N_SIGCAT];
     double Delta_NLL[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
