@@ -141,7 +141,7 @@ centerid = -1
 if len(siglwz) > 0:
     siglwz = np.array(siglwz)[p]
     print(siglwz)
-    centerid = np.where((siglwz > 0.9999) & (siglwz < 1.0001))[0][0]
+    centerid = np.where(siglwz == '1.0')[0][0]
 
 signame_str='\",\"'.join(signame)
 bkgname_str='\",\"'.join(bkgname)
