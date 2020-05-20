@@ -218,11 +218,11 @@ int main(int argc, char const *argv[])
         ProcessID = ch->processID;
         if (SorB == 1)
         {
-            Weight = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[id]);
+            Weight = ch->CS*LUMINOSITY/((double)Sig_NTOTAL[ProcessID]);
         }
         else
         {
-            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[id]);
+            Weight = ch->CS*LUMINOSITY/((double)Bkg_NTOTAL[ProcessID]);
         }
         if (channelID == 1)
         {

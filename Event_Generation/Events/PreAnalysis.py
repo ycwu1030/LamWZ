@@ -54,6 +54,22 @@ else:
     case_int = 0
 selection = args.selection
 
+MATCH=True
+
+def SELECT_PROCESS(Process,SELECTS):
+    if len(SELECTS) == 0:
+        return True
+    
+    match=True
+    for key in SELECTS.keys():
+        wanted = SELECTS[key]
+        if isinstance(wanted,list):
+            match *= Process[key] in wanted
+        else:
+            match *= Process[key] == wanted
+    return match
+
+
 if not os.path.exists(Outdir):
     os.makedirs(Outdir)
 
@@ -79,18 +95,8 @@ with open(ProcessesFile,'r') as f:
     for process in ProcessesList:
         print("Processing process: ",process['Name'])
         process['NEvents']=0
-        SECS=selection.keys()
-        MATCH=True
-        if len(SECS) == 0:
-            MATCH=True
-        else:
-            for key in SECS:
-                if Process[key] in selection[key]:
-                    MATCH*=True
-                else:
-                    MATCH*=False
-        if not MATCH:
-            print('Skip: ',Process['Name'],MATCH)
+        if not SELECT_PROCESS(process,selection):
+            print('Skip: ',process['Name'])
             continue
         if not os.path.exists(process['Name']+'/Delphes/' + '%d'%(sqrts)):
             continue
@@ -99,9 +105,9 @@ with open(ProcessesFile,'r') as f:
         CS=process['CS']['%d'%(sqrts)]
         # if process['BkgSigTag'] != 'bkg' and process['Abbr'] != mode_str:
         #     continue
-        if case_str == 'Full':
-            if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != 'Full':
-                continue
+        # if case_str == 'Full':
+        #     if process['BkgSigTag'] != 'bkg' and process['BkgSigTag'] != 'Full':
+        #         continue
         for rootfile in rootfiles:
             filename=rootfile.split('/')[-1]
             RandomID=(filename.split('.')[0]).split('_')[-2:]
