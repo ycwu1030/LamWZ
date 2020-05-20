@@ -153,7 +153,7 @@ int main(int argc, char const *argv[])
         totalPdf[isig] = new RooAddPdf(temp,"",*shapes[isig],*yields[isig]); 
     }
 
-    int NTRIALS = 5000;
+    int NTRIALS = 10000;
     double NLL[N_SIGCAT];
     double Delta_NLL[N_SIGCAT];
     for (int isig = 0; isig < N_SIGCAT; isig++)
@@ -162,7 +162,7 @@ int main(int argc, char const *argv[])
         cout << "For Signal-"<<isig<<": "<<endl;
         for (int i = 0; i < NTRIALS; i++)
         {
-            if((i+1)%100==0) { cout << "\tTRIALS: "<<(i+1)<<"\r"; cout.flush(); }
+            if((i+1)%500==0) { cout << "\tTRIALS: "<<(i+1)<<"\r"; cout.flush(); }
             RooDataSet* roo_testdata = roo_pdfhist_TOT[CENTERID]->generate(roo_shat,NEVENTS_SIG[CENTERID]+NEVENTS_BKG[CENTERID]);
             NLL[isig] += (totalPdf[isig]->createNLL(*roo_testdata,Extended(true)))->getVal();
             delete roo_testdata;
