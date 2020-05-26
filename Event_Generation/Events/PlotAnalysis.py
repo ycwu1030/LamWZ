@@ -151,13 +151,19 @@ if len(siglwz) > 0:
     centerid = np.where(siglwz == '1.0')[0][0]
 
 signame_str='\",\"'.join(signame)
-bkgname_str='\",\"'.join(bkgname)
+
 siglabel_str='\",\"'.join(siglabel)
-bkglabel_str='\",\"'.join(bkglabel)
 signeve_str=','.join(signeve)
-bkgneve_str=','.join(bkgneve)
 siglwz_str=','.join(siglwz)
 
+bkgname_str='\",\"'.join(bkgname)
+bkglabel_str='\",\"'.join(bkglabel)
+bkgneve_str=','.join(bkgneve)
+
+if nobkg:
+    bkgname_str=''
+    bkglabel_str=''
+    bkgneve_str=''
 
 def ReadJsonValue(entry,mode,s):
     if type(entry) != dict:
