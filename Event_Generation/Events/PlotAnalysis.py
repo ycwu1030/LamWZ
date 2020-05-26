@@ -121,6 +121,9 @@ with open(ProcessesFile,'r') as f:
             nbkg+=1
         else:
             if 'lamwz' in process.keys():
+                if rmode == 'p':
+                    if not process['lamwz'] in [0.8,1.0,1.45]:
+                        continue
                 siglwz.append(str(process['lamwz']))
                 signame.append(process['Abbr']+'_'+process['BkgSigTag'])
                 siglabel.append(process['Abbr']+'_'+process['BkgSigTag'])
