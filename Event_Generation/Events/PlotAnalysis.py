@@ -192,6 +192,8 @@ if nsig == 2:
     colorlist=[SIGCOLOR[0],SIGCOLOR[4]]
 elif nsig == 3:
     colorlist=[SIGCOLOR[0],SIGCOLOR[4],SIGCOLOR[-1]]
+elif nsig == 7:
+    colorlist=[SIGCOLOR[0],SIGCOLOR[1],SIGCOLOR[2],SIGCOLOR[4],SIGCOLOR[5],SIGCOLOR[6],SIGCOLOR[8]]
 else:
     colorlist=SIGCOLOR
 
