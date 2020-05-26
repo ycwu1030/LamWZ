@@ -38,6 +38,7 @@ parser.add_argument('-ic',dest='cutfile',default='HARD_CUTS.json')
 parser.add_argument('-e',dest='sqrts',default=3000,type=int)# in GeV
 parser.add_argument('-t',dest='tag',default='wh_0508_1557')
 parser.add_argument('-r',dest='renorm',default=1,type=int)
+parser.add_argument('-nob',dest='nobkg',action='store_true')
 args = parser.parse_args()
 
 cutfile=args.cutfile
@@ -55,6 +56,7 @@ rmode=args.rmode
 sqrts = args.sqrts
 renorm=args.renorm
 amode=args.amode
+nobkg=args.nobkg
 tag=amode+'_%d_'%(sqrts)+time.strftime("%m%d_%H%M%S")
 
 if amode == 'wh':
@@ -110,6 +112,8 @@ with open(ProcessesFile,'r') as f:
         process=ProcessesList[key]
         print("Adding process: ",process['Name'])
         if process['SorB'] == 0:
+            if nobkg:
+                continue
             bkgid.append(process['ProcessID'])
             bkgname.append(process['Abbr'])
             bkglabel.append(process['Abbr'])
