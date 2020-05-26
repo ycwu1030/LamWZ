@@ -98,6 +98,7 @@ bkglabel=[]
 signeve=[]
 bkgneve=[]
 siglwz=[]
+drawsig=[]
 
 # if amode == 'zh':
 #     sigid = [0]
@@ -123,7 +124,9 @@ with open(ProcessesFile,'r') as f:
             if 'lamwz' in process.keys():
                 if rmode == 'p':
                     if not process['lamwz'] in [0.8,1.0,1.45]:
-                        continue
+                        drawsig.append('false')
+                    else:
+                        drawsig.append('true')
                 siglwz.append(str(process['lamwz']))
                 signame.append(process['Abbr']+'_'+process['BkgSigTag'])
                 siglabel.append(process['Abbr']+'_'+process['BkgSigTag'])
@@ -147,6 +150,7 @@ p = np.array(sigid).argsort()
 signame=np.array(signame)[p]
 siglabel=np.array(siglabel)[p]
 signeve=np.array(signeve)[p]
+drawsig=np.array(drawsig)[p]
 centerid = -1
 if len(siglwz) > 0:
     siglwz = np.array(siglwz)[p]
@@ -157,6 +161,7 @@ signame_str='\"' + '\",\"'.join(signame) + '\"'
 siglabel_str='\"' + '\",\"'.join(siglabel) + '\"'
 signeve_str=','.join(signeve)
 siglwz_str=','.join(siglwz)
+drawsig_str=','.join(drawsig)
 
 bkgname_str='\"' + '\",\"'.join(bkgname) + '\"'
 bkglabel_str='\"' + '\",\"'.join(bkglabel) + '\"'
@@ -217,7 +222,7 @@ else:
 color_str=','.join(colorlist)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/%s/g' -e 's/__BKGNAME__/%s/g' -e 's/__SIGLABEL__/%s/g' -e 's/__BKGLABEL__/%s/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' -e 's/__SIGLWZ__/%s/g' -e 's/__CENTERID__/%d/g' -e 's/__INC_BKG__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,siglwz_str,centerid,includebkg,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/%s/g' -e 's/__BKGNAME__/%s/g' -e 's/__SIGLABEL__/%s/g' -e 's/__BKGLABEL__/%s/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' -e 's/__SIGLWZ__/%s/g' -e 's/__CENTERID__/%d/g' -e 's/__INC_BKG__/%s/g' -e 's/__DRAWSIG__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,siglwz_str,centerid,includebkg,drawsig_str,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s; make clean; make %s.x; cd -"%(SRCDIR,EXENAME),shell=True)
 
 GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"

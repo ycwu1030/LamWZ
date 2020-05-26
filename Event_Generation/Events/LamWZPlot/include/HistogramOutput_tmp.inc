@@ -102,7 +102,7 @@
                 // Hsig[j][i]->SetFillColor(sigcolor[j]);
                 fPlots->cd();
                 Hsig[j][i]->Write();
-                HSK[i]->Add((TH1*)Hsig[j][i]);
+                if (drawsig[j]) HSK[i]->Add((TH1*)Hsig[j][i]);
                 if (out_stat_q) continue;
                 tmpE = Hsig[j][i]->Integral();
                 fstat<<SIG_NAME[j]<<"\t"<<tmpE<<"\t"<<Hsig[j][i]->GetEntries()<<endl;
@@ -114,7 +114,7 @@
                 // Hsig2[j][i]->SetFillColor(sigcolor[j]);
                 fPlots->cd();
                 Hsig2[j][i]->Write();
-                HSK[i]->Add((TH1*)Hsig2[j][i]);
+                if (drawsig[j]) HSK[i]->Add((TH1*)Hsig2[j][i]);
             }
         }
         // cout<<"SIG Done"<<endl;
@@ -134,6 +134,7 @@
             for (int ii = 0; ii < N_SIGCAT; ++ii)
             {
                 if (Hsig[ii][i]->GetEntries()<=0) continue;
+                if (!drawsig[ii]) continue; 
                 sprintf(temp,"Signal(%s)",SIG_LABEL[ii].c_str());
                 lg->AddEntry(Hsig[ii][i],temp,"l");
             }
