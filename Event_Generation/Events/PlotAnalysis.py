@@ -112,8 +112,8 @@ with open(ProcessesFile,'r') as f:
         process=ProcessesList[key]
         print("Adding process: ",process['Name'])
         if process['SorB'] == 0:
-            if nobkg:
-                continue
+            # if nobkg:
+            #     continue
             bkgid.append(process['ProcessID'])
             bkgname.append(process['Abbr'])
             bkglabel.append(process['Abbr'])
@@ -159,10 +159,15 @@ bkgname_str='\"' + '\",\"'.join(bkgname) + '\"'
 bkglabel_str='\"' + '\",\"'.join(bkglabel) + '\"'
 bkgneve_str=','.join(bkgneve)
 
+# if nobkg:
+#     bkgname_str=''
+#     bkglabel_str=''
+#     bkgneve_str=''
+includebkg = "true"
 if nobkg:
-    bkgname_str=''
-    bkglabel_str=''
-    bkgneve_str=''
+    includebkg = "false"
+else:
+    includebkg = "true"
 
 def ReadJsonValue(entry,mode,s):
     if type(entry) != dict:
@@ -209,7 +214,7 @@ else:
 color_str=','.join(colorlist)
 
 
-subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/%s/g' -e 's/__BKGNAME__/%s/g' -e 's/__SIGLABEL__/%s/g' -e 's/__BKGLABEL__/%s/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' -e 's/__SIGLWZ__/%s/g' -e 's/__CENTERID__/%d/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,siglwz_str,centerid,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
+subprocess.call("sed -e 's/__LUMI__/%d/g' -e 's/__NSIG__/%d/g' -e 's/__NBKG__/%d/g' -e 's/__SIGNAME__/%s/g' -e 's/__BKGNAME__/%s/g' -e 's/__SIGLABEL__/%s/g' -e 's/__BKGLABEL__/%s/g' -e 's/__SIGNEVE__/%s/g' -e 's/__BKGNEVE__/%s/g' -e 's/__CUTS__/%s/g' -e 's/__SIGCOLOR__/%s/g' -e 's/__SQRTS__/%d/g' -e 's/__SIGLWZ__/%s/g' -e 's/__CENTERID__/%d/g' -e 's/__INC_BKG__/%s/g' %s/%s_tmp.cpp > %s/%s.cpp "%(Lumi,nsig,nbkg,signame_str,bkgname_str,siglabel_str,bkglabel_str,signeve_str,bkgneve_str,cuts_str,color_str,sqrts,siglwz_str,centerid,includebkg,SRCDIR,EXENAME,SRCDIR,EXENAME),shell=True)
 subprocess.call("cd %s; make clean; make %s.x; cd -"%(SRCDIR,EXENAME),shell=True)
 
 GEINDEX="tree -H . -h -D -v -I index.html --noreport --charset utf-8 -L 1 > index.html"

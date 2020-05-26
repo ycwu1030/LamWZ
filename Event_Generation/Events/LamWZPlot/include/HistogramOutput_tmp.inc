@@ -62,7 +62,7 @@
                 // Hbkg[j][i]->SetFillColor(bkgcolor[j]);
                 fPlots->cd();
                 Hbkg[j][i]->Write();
-                HSK[i]->Add((TH1*)Hbkg[j][i]);
+                if (INCLUDE_BKG) HSK[i]->Add((TH1*)Hbkg[j][i]);
                 if (out_stat_q) continue;
                 tmpE = Hbkg[j][i]->Integral();
                 fstat<<BKG_NAME[j]<<"\t"<<tmpE<<"\t"<<Hbkg[j][i]->GetEntries()<<endl;
@@ -74,7 +74,7 @@
                 // Hbkg2[j][i]->SetFillColor(bkgcolor[j]);
                 fPlots->cd();
                 Hbkg2[j][i]->Write();
-                HSK[i]->Add((TH1*)Hbkg2[j][i]);
+                if (INCLUDE_BKG) HSK[i]->Add((TH1*)Hbkg2[j][i]);
             }
         }
         // cout<<"BKG Done"<<endl;
@@ -126,7 +126,7 @@
             // lg[j]->SetFillColor(kWhite);
             lg->SetFillColor(0);
             lg->SetFillStyle(0);
-            for (int ii = 0; ii < N_BKGCAT; ++ii)
+            for (int ii = 0; ii < N_BKGCAT && INCLUDE_BKG; ++ii)
             {
                 sprintf(temp,"Background(%s)",BKG_LABEL[ii].c_str());
                 lg->AddEntry(Hbkg[ii][i],temp,"l");
