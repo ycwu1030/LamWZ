@@ -128,14 +128,14 @@
             lg->SetFillStyle(0);
             for (int ii = 0; ii < N_BKGCAT && INCLUDE_BKG; ++ii)
             {
-                sprintf(temp,"Background(%s)",BKG_LABEL[ii].c_str());
+                sprintf(temp,"B: %s",BKG_LABEL[ii].c_str());
                 lg->AddEntry(Hbkg[ii][i],temp,"l");
             }
             for (int ii = 0; ii < N_SIGCAT; ++ii)
             {
                 if (Hsig[ii][i]->GetEntries()<=0) continue;
                 if (!drawsig[ii]) continue; 
-                sprintf(temp,"Signal(%s)",SIG_LABEL[ii].c_str());
+                sprintf(temp,"S: %s",SIG_LABEL[ii].c_str());
                 lg->AddEntry(Hsig[ii][i],temp,"l");
             }
             // cout<<"Legend Done!"<<endl;
